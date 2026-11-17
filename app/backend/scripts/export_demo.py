@@ -4,7 +4,7 @@ Creates app/demo/ with:
   lpr.db        copy of the database, cleaned: no AI connections / API keys, schedule off,
                 file paths rewritten to the server's runtime folder (default /data)
   artifacts/    screenshots + product/brand page HTML of the audits (no search pages, no tiles)
-  logos/        uploaded retailer logos
+  logos/        cached retailer logos (shop icons)
 On start, the server copies this snapshot into an empty runtime folder (see lpr/api/__init__.py).
 
 Usage (repo root):  app/.venv/Scripts/python.exe -X utf8 app/backend/scripts/export_demo.py [--target /data]

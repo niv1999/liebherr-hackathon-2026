@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../api.js";
 import { EditIcon, IconButton } from "../../components/icons.jsx";
-import { Button, Field, ListSkeleton, Monogram, RetailerLogo, bumpLogos, inputCls, useToast } from "../../components/ui.jsx";
+import { Button, Field, ListSkeleton, RetailerLogo, bumpLogos, inputCls, useToast } from "../../components/ui.jsx";
 import { useT } from "../../prefs.jsx";
 import { Toggle } from "./CriteriaData.jsx";
 
@@ -77,26 +77,6 @@ function RetailerForm({ initial, onSaved }) {
   const [f, setF] = useState({ name: v("name"), base_url: v("base_url") || "https://", brand_page_url: v("brand_page_url"),
     search_example: "", product_example: "", search_url: v("search_url"), product_link_pattern: v("product_link_pattern"), access_note: v("access_note") });
   const [advanced, setAdvanced] = useState(false);
-  const [logo, setLogo] = useState(null); // null = unchanged | File = new upload | "remove" = back to initials
-  const [hasLogo, setHasLogo] = useState(false); // an uploaded logo is saved for this retailer
-  useEffect(() => {
-    if (!initial.id) return;
-    const img = new Image();
-    img.onload = () => setHasLogo(true);
-    img.onerror = () => setHasLogo(false);
-    img.src = `/api/retailers/${initial.id}/logo?probe=${Date.now()}`;
-  }, [initial.id]);
-  const showSaved = hasLogo && logo !== "remove";
-  const preview = useMemo(() => (logo instanceof File ? URL.createObjectURL(logo) : null), [logo]);
-  useEffect(() => () => preview && URL.revokeObjectURL(preview), [preview]);
-  const fileRef = useRef(null);
-  const pickLogo = (e) => {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file) return;
-    if (file.size > 2_000_000) return toast(t("The logo is too large (max 2 MB)."), "error");
-    setLogo(file);
-  };
   const set = (k) => (e) => {
     const next = { ...f, [k]: e.target.value };
     if (k === "search_example") next.search_url = searchTemplateFrom(e.target.value) || f.search_url;
@@ -108,11 +88,9 @@ function RetailerForm({ initial, onSaved }) {
     const body = { name: f.name.trim(), base_url: f.base_url.trim(), brand_page_url: f.brand_page_url || null,
       search_url: f.search_url || null, product_link_pattern: f.product_link_pattern || null, access_note: f.access_note || null };
     try {
-      const saved = initial.id ? await api.updateRetailer(initial.id, body) : await api.createRetailer(body);
-      const id = initial.id || saved.id;
-      if (logo instanceof File) await api.uploadLogo(id, logo);
-      else if (logo === "remove" && hasLogo) await api.removeLogo(id);
-      if (logo) bumpLogos();
+      if (initial.id) await api.updateRetailer(initial.id, body);
+      else await api.createRetailer(body);
+      if (initial.id && body.base_url !== initial.base_url) bumpLogos(); // new address -> icon fetched again
       onSaved();
     } catch (e) {
       toast(e.message, "error");
@@ -120,24 +98,6 @@ function RetailerForm({ initial, onSaved }) {
   };
   return (
     <div className="card p-5 space-y-4 bg-slate-50">
-      <Field label="Logo" tip={t("PNG, JPG, WebP or SVG, max 2 MB. Without a logo, the initials are shown.")}>
-        <div className="flex items-center gap-3">
-          {preview ? (
-            <div className="w-12 h-12 rounded-md bg-white border border-slate-200 flex items-center justify-center overflow-hidden shrink-0">
-              <img src={preview} alt="" className="w-3/4 h-3/4 object-contain" />
-            </div>
-          ) : showSaved ? (
-            <RetailerLogo retailer={initial} className="w-12 h-12" />
-          ) : (
-            <Monogram name={f.name || "?"} className="w-12 h-12 text-sm" />
-          )}
-          <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" onChange={pickLogo} className="hidden" />
-          <Button variant="ghost" onClick={() => fileRef.current?.click()}>{t(preview || showSaved ? "Change logo" : "Upload logo")}</Button>
-          {(preview || showSaved) && (
-            <Button variant="subtle" onClick={() => setLogo(hasLogo ? "remove" : null)}>{t("Remove logo")}</Button>
-          )}
-        </div>
-      </Field>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Field label="Name" required><input value={f.name} onChange={set("name")} placeholder={t("e.g. Elektroplus")} className={inputCls} /></Field>
         <Field label="Shop website" required><input value={f.base_url} onChange={set("base_url")} placeholder="https://www.shop.de" className={inputCls} /></Field>

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
 from ..db import get_session
@@ -49,10 +49,14 @@ def get_retailer(rid: int, s: Session = Depends(get_session)):
 @router.patch("/{rid}")
 def update_retailer(rid: int, body: RetailerPatch, s: Session = Depends(get_session)):
     r = _get(s, rid)
+    old_url = r.base_url
     for k, v in body.model_dump(exclude_unset=True).items():
         setattr(r, k, v)
     s.add(r)
     s.commit()
+    if r.base_url != old_url:  # other shop address -> fetch its icon again
+        from ..logos import clear_logo
+        clear_logo(r.id)
     return r
 
 
@@ -114,35 +118,13 @@ def delete_product_url(rid: int, uid: int, s: Session = Depends(get_session)):
 
 @router.get("/{rid}/logo")
 def logo(rid: int, s: Session = Depends(get_session)):
-    """The uploaded logo (404 without one: the UI then shows the retailer's initials)."""
+    """The shop's own icon (apple-touch-icon / favicon), fetched once and cached. 404 -> the UI shows initials."""
     from fastapi.responses import FileResponse
 
     from ..logos import retailer_logo
     r = _get(s, rid)
-    path = retailer_logo(r.id)
+    path = retailer_logo(r.id, r.base_url)
     if not path:
-        raise HTTPException(404, "No logo uploaded")
-    # no-cache = browser revalidates (ETag) so a newly uploaded logo shows at once; CSP blocks scripts in SVGs
+        raise HTTPException(404, "No logo found")
+    # no-cache = browser revalidates (ETag) so a re-fetched icon shows at once; CSP blocks scripts in SVGs
     return FileResponse(path, headers={"Cache-Control": "no-cache", "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'"})
-
-
-@router.post("/{rid}/logo")
-async def upload_logo(rid: int, file: UploadFile = File(...), s: Session = Depends(get_session)):
-    """Upload the retailer's logo (replaces the previous one)."""
-    from ..logos import save_logo
-    _get(s, rid)
-    data = await file.read()
-    try:
-        save_logo(rid, data)
-    except ValueError as e:
-        raise HTTPException(400, str(e))
-    return {"ok": True}
-
-
-@router.delete("/{rid}/logo")
-def remove_logo(rid: int, s: Session = Depends(get_session)):
-    """Remove the logo; the UI shows the retailer's initials again."""
-    from ..logos import clear_logo
-    _get(s, rid)
-    clear_logo(rid)
-    return {"ok": True}

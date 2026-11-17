@@ -34,6 +34,17 @@ Useful scripts:
 
 Blocked shops (EURONICS, OTTO) end as `blocked = true` → "needs manual assessment".
 
+## AI engine architecture (`engine.py`, `judges.py`)
+Per product page: **tools first, AI second, human last.**
+1. **Tools** (plain code, free and exact): every `rule` criterion, e.g. feature count, dimensions vs master data, JSON-LD, robots.txt, image fingerprints.
+2. **Tool facts** → the results are handed to the AI judges as trusted facts (they don't redo counting).
+3. **Two specialist AI judges**, each judging *all* its criteria in **one call** (≈2 calls per page instead of 5):
+   - *content judge*: page text (navigation stripped) vs. Liebherr's official feature texts (PDP-05, PDP-17, AIR-09, new text criteria)
+   - *vision judge*: first-screen screenshot (PDP-15, PDP-16, criteria created in the UI)
+4. **Review**: verdict "unsure" or confidence < 0.6 → "needs human". Human overrides/feedback are fed into the next prompts.
+
+Testing without an API key: `LPR_LLM_PROVIDER=file` writes each AI request to `app/runtime/ai_exchange/requests/`; put the answer JSON in `answers/` and run `scripts/rejudge_ai.py <run_id>`.
+
 ## Code map
 | Path | What |
 |---|---|

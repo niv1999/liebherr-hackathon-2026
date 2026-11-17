@@ -1,0 +1,2182 @@
+--- p1
+International Winter School · Twin Transformation and AI in Practice
+Design Thinking
+From the Design Challenge to the Prototype – a structured approach to user-oriented solutions
+Prof. Dr. Daniel Schallmo · November 2026
+
+--- p2
+KEY QUESTION
+How can we develop user-oriented 
+solutions – or solve problems in a 
+structured way?
+Design Thinking Method (DeThiMet)
+2 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+
+--- p3
+Welcome
+Agenda
+3 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Five parts lead from the basics to your own prototype
+1
+Introduction and 
+basics
+Definition, principles, 
+process model
+2
+Examples
+Supermarket for older 
+people and waiting time 
+in hospitals
+3
+Excursus
+Prompting with AI and 
+giving feedback
+4
+Phases 1–5 in detail
+Techniques, templates, 
+examples and tasks
+5
+Summary
+Roadmap and results at 
+a glance
+Learning by doing: each phase combines a short input, an example and a team challenge.
+
+--- p4
+Introduction
+Related concepts
+4 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Design Thinking belongs to a family of human-centered approaches
+Human-centered Design
+Design Thinking
+User Experience
+Service Design
+Prototyping, rapid prototyping
+Co-Creation
+Customer Experience Design
+Brainstorming
+Creative Thinking
+Lean Startup
+Open Innovation
+Business Model Innovation
+Problem-based learning
+Customer Journey Mapping
+Integrated Design
+Sustainability by Design
+Common core: the user and his needs are the starting point – solutions are developed iteratively and tested early.
+
+--- p5
+Agenda
+3 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Five parts lead from the basics to your own prototype
+1
+Introduction and 
+basics
+Definition, principles, 
+process model
+2
+Examples
+Supermarket for older 
+people and waiting time 
+in hospitals
+3
+Excursus
+Prompting with AI and 
+giving feedback
+4
+Phases 1–5 in detail
+Techniques, templates, 
+examples and tasks
+5
+Summary
+Roadmap and results at 
+a glance
+Learning by doing: each phase combines a short input, an example and a team challenge.
+
+--- p6
+1
+Introduction and basics: 
+theoretical foundation
+What is Design Thinking and which principles characterize it?
+5 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+
+--- p7
+Theoretical foundations
+Definition of Design Thinking
+6 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Design Thinking develops new solutions for existing problems
+GOAL
+New solutions
+New solutions for existing 
+problems.
+ORIENTATION
+Users and their needs
+Solutions are consistently 
+oriented to the needs of the 
+users and have a positive 
+influence.
+PROCESS
+Structured and iterative
+The Design Thinking process is 
+structured and iterative.
+TEAM
+Multidisciplinary
+A multidisciplinary team uses 
+techniques within the process.
+Design Thinking = user orientation + structured process + multidisciplinary team + techniques
+
+--- p8
+Theoretical foundations
+Principles of Design Thinking: overview
+7 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Weinberg (2012); Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Design Thinking is characterized by four principles
+Desing 
+Thinking
+
+--- p9
+Principles of Design Thinking
+People as a starting point
+8 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Ideo (2015); Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Design Thinking starts from the person, then checks feasibility and profitability
+STEP 1
+People: desirability
+What do users need? Which problems do they have?
+STEP 2
+Technology: feasibility
+Can the solution be realized technically?
+STEP 3
+Business: profitability
+Can the solution be offered economically?
+
+--- p10
+Principles of Design Thinking
+Multidisciplinary teams
+9 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Plattner et al. (2009); Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Design Thinking teams combine different disciplines and perspectives
+Different backgrounds lead to different perspectives on the same 
+problem – and to better solutions.
+• Mix of disciplines, experiences and cultures
+• Shared responsibility for the result
+• In the Summer School: international and interdisciplinary teams
+
+--- p11
+Principles of Design Thinking
+Team
+10 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Plattner et al. (2009); Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+A design thinker needs different personal characteristics
+Optimism, empathy, integrative thinking, ability to cooperate and joy of experimentation complement each other in the team.
+
+--- p12
+Principles of Design Thinking
+Iterative process
+11 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Plattner et al. (2009); Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Design Thinking follows a structured, iterative process
+Iterations are not a detour but part of the method: every loop sharpens the understanding of the user.
+
+--- p13
+Principles of Design Thinking
+Iterative process
+12 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Ideo (2012); Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Divergent and convergent thinking alternate in the process
+
+--- p14
+Principles of Design Thinking
+Process rules
+13 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: d.school; Ideo (2012); Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Ten rules make Design Thinking sessions productive
+01
+Visualise!
+02
+Listen!
+03
+Experiment!
+04
+Be active!
+05
+Promote ideas!
+06
+Switch off electronic 
+devices!
+07
+Build on ideas!
+08
+Quantity counts!
+09
+Put criticism on the 
+back burner!
+10
+Focus!
+
+--- p15
+Principles of Design Thinking
+How we work in the Summer School
+14 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+High practical relevance and active participation
+• Templates for group work
+• High practical relevance
+• Application and result orientation
+• Use of new methods
+• Active participation of participants
+15 – 25 – 40 – 20
+
+--- p16
+Principles of Design Thinking
+Creative environment
+15 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+A creative environment supports exchange and experimentation
+WHERE
+Flexible spaces
+Open areas, movable furniture, whiteboards 
+and walls for visualization.
+MATERIAL
+Design box
+Sticky notes, paper, cardboard, Lego and 
+markers for fast prototypes.
+
+--- p17
+Agenda
+3 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Five parts lead from the basics to your own prototype
+1
+Introduction and 
+basics
+Definition, principles, 
+process model
+2
+Examples
+Supermarket for older 
+people and waiting time 
+in hospitals
+3
+Excursus
+Prompting with AI and 
+giving feedback
+4
+Phases 1–5 in detail
+Techniques, templates, 
+examples and tasks
+5
+Summary
+Roadmap and results at 
+a glance
+Learning by doing: each phase combines a short input, an example and a team challenge.
+
+--- p18
+2
+Examples
+Which phases lead from the problem to the solution?
+16 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+
+--- p19
+Process model of Design Thinking
+Overview
+17 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Seven phases lead from the problem to the solution
+
+--- p20
+Process model of Design Thinking
+Objectives of the phases
+18 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Each phase has a clear objective
+1
+Define Design 
+Challenge
+Allow a broad field 
+of view and focus 
+on a design 
+challenge
+2
+Understand 
+Design Challenge
+Ensure a common 
+understanding, 
+orientation 
+towards users and 
+building up 
+specialist 
+knowledge
+3
+Define Viewpoints
+Summarize all 
+relevant findings 
+and create typical 
+user profiles
+4
+Generate Ideas
+Acquire numerous 
+ideas and 
+concentrate on 
+relevant ideas
+5
+Develop 
+Prototypes
+Convert relevant 
+ideas into visible 
+solutions
+6
+Test Prototypes
+Select a promising 
+prototype
+7
+Integrate 
+Prototype
+Integrate the 
+prototype into a 
+viable business 
+model
+Each phase defines objectives, activities and results – the following slides show them with the supermarket example.
+
+--- p21
+Example 1
+Shopping experience of older people
+19 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Example 1: improving the shopping experience of older people in supermarkets
+A supermarket is losing sales – and looks for new 
+services for selected customer segments.
+The following seven slides show how the team runs 
+through all phases of the process model.
+
+--- p22
+Process model · Phase 1
+Define Design Challenge
+20 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Phase 1: Define Design Challenge
+OBJECTIVE
+Allow a broad field of view and focus on a design challenge
+ACTIVITIES
+• Derivation and evaluation of different topics
+• Formulation of a design challenge
+• Determination of the project plan
+RESULTS
+• Topic pool with rated topic fields
+• Design challenge with typical users
+• Project plan with deadlines, costs and results
+EXAMPLE: SUPERMARKET
+The managing director of a supermarket has noticed that 
+competition in food retail is increasing sharply and sales are 
+stagnating or even declining. He and his team are looking for 
+new services for selected customer segments. After deriving 
+and discussing different topics, the team defines the design 
+challenge: “How can we improve the shopping experience of 
+older people in supermarkets?”
+
+--- p23
+Process model · Phase 2
+Understand Design Challenge
+21 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Phase 2: Understand Design Challenge
+OBJECTIVE
+Ensure a common understanding, orientation towards users and 
+building up specialist knowledge
+ACTIVITIES
+• Observation of typical users
+• Interviewing typical users
+• Testing of existing solutions
+• Interviewing experts
+• Gathering further information
+RESULTS
+• Observation protocol
+• Interview protocol of typical users
+• Test protocol of existing solutions
+• Interview protocol of experts
+• Evaluated information
+EXAMPLE: SUPERMARKET
+The team asks older people in the supermarket about their 
+shopping experiences – with many open-ended questions; age 
+and previous occupation are recorded. The results are 
+summarized in interview protocols. The team also observes 
+older people shopping and pays special attention to problems 
+such as reaching products on upper or lower shelves or reading 
+the ingredients on the packaging.
+
+--- p24
+Process model · Phase 3
+Define Viewpoints
+22 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Phase 3: Define Viewpoints
+OBJECTIVE
+Summarize all relevant findings and create typical user profiles
+ACTIVITIES
+• Development of user profiles
+• Derivation of needs
+RESULTS
+• User Empathy Map
+• User Journey
+• User Needs
+EXAMPLE: SUPERMARKET
+The insights gained are concretized and recorded in a user 
+profile with characteristics. The profile is then used to derive 
+needs. For example, 72-year-old Hans values social contact 
+when shopping and prefers a short line at the checkout.
+
+--- p25
+Process model · Phase 4
+Generate Ideas
+23 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Phase 4: Generate Ideas
+OBJECTIVE
+Acquire numerous ideas and concentrate on relevant ideas
+ACTIVITIES
+• Derivation of ideas
+• Grouping and revision of ideas
+• Description and evaluation of ideas
+RESULTS
+• Ideas for meeting needs
+• Grouped and revised ideas
+• Described and evaluated ideas
+EXAMPLE: SUPERMARKET
+Because of the social aspect, one team member has the idea of 
+making shopping an experience, with coffee and cake. Another 
+idea: the customer sits comfortably at a counter and the food 
+moves past on a treadmill, like in a running sushi restaurant.
+
+--- p26
+Process model · Phase 5
+Develop Prototypes
+24 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Phase 5: Develop Prototypes
+OBJECTIVE
+Convert relevant ideas into visible solutions
+ACTIVITIES
+• Development of different prototypes based on the relevant ideas
+• Testing, improvement and combination of prototypes
+RESULTS
+• Prototypes in different versions (e.g. sketch, story, movie, model)
+EXAMPLE: SUPERMARKET
+Simple means such as tables (= counter), chairs (= seats) and foil 
+(= treadmill) are used to visualize the ideas. Team members act 
+out the roles of staff and users. This makes it clear, for 
+example, that the treadmill must not be too far away from the 
+user – otherwise the food is difficult to reach.
+
+--- p27
+Process model · Phase 6
+Test Prototypes
+25 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Phase 6: Test Prototypes
+OBJECTIVE
+Select a promising prototype
+ACTIVITIES
+• Testing of prototypes to gain experience
+• Further development of prototypes
+• Evaluation of prototypes
+RESULTS
+• Test protocol of the prototypes
+• Feedback protocol with ideas from users
+• Prototype evaluation protocol
+EXAMPLE: SUPERMARKET
+The improved prototype is presented to older people, who are 
+integrated into the play-through of various situations. This tests 
+whether the concept is generally suitable and where a revision 
+is necessary.
+
+--- p28
+Process model · Phase 7
+Integrate Prototype
+26 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Phase 7: Integrate Prototype
+OBJECTIVE
+Integrate the prototype into a viable business model
+ACTIVITIES
+• Development of a business model on the basis of a standardized grid
+RESULTS
+• Uniform description of the business model based on five dimensions
+EXAMPLE: SUPERMARKET
+The tested and further developed prototype is integrated into 
+the existing supermarket business model: a separate area 
+allows convenient shopping at a treadmill with coffee and cake.
+
+--- p29
+EXAMPLE 2
+Optimization of the waiting 
+time
+Patients in hospitals and doctors’ offices
+
+--- p30
+Example 2 · Waiting time
+1 · Define Design Challenge
+28 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+How can we improve the waiting time of patients in hospitals and doctors’ offices?
+DESIGN CHALLENGE
+“How can we improve the waiting time of 
+patients in hospitals/doctors’ offices?”
+The cartoon caption reads: “Only one more minute and then it’s your turn!”
+
+--- p31
+Example 2 · Waiting time
+2 · Understand Design Challenge
+29 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Observation: the waiting room of an outpatient surgery
+OBSERVATION PROTOCOL
+Waiting room, outpatient surgery – Ulm University Hospital
+• Patients sit bored and rigid on chairs
+• Standing in the entrance area and anxiously observing what is going on
+• Patients in company talk quietly
+• Younger people use cell phone, tablet or book
+• Old lady comes out of the toilet and holds on to the wall
+• Wheelchair user sits in the middle of the room
+• Mother and child sit together unsteadily
+
+--- p32
+Example 2 · Waiting time
+2 · Understand Design Challenge
+30 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+User interview: mother with infant in the waiting room of an outpatient clinic
+USER INTERVIEW – KEY STATEMENTS
+Have been waiting for over 1½ hours
+Were not sufficiently informed
+Gruff staff
+No food and drink
+No possibility to go outside
+Child cannot distract himself
+The mother finds the room scary and unwelcoming, stifling.
+
+--- p33
+Example 2 · Waiting time
+3 · Define Viewpoints
+31 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+User Empathy Map: a busy mother as typical user
+35 years old
+Dances Zumba
+Female
+Confident
+Married
+Well organized
+1 child
+Very busy
+2-room apartment
+Parents’ representative
+
+--- p34
+Example 2 · Waiting time
+4 · Generate Ideas
+32 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Existing solutions inspire new ideas
+EXISTING SOLUTIONS
+Play corners, lounge areas and information systems in other 
+waiting situations are analysed before the team develops its own 
+ideas.
+Look for analogies: where else do people wait – and enjoy it?
+
+--- p35
+Example 2 · Waiting time
+4 · Generate Ideas
+33 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Pool of ideas: two directions for a better waiting time
+Design of the waiting time
+• Room design – TV, WLAN, PC etc.
+• Regular information by medical assistants
+• Play corner
+• Room division, waiting areas
+• Flowers, plants etc.
+• Drinking
+• Measures for sick people – armchairs for resting
+Digital application
+• Indoor and outdoor display panel
+• Draw number
+• App for cell phone or on wristwatch or beeper
+• Store for digital application infrastructure – ensure accessibility
+
+--- p36
+Example 2 · Waiting time
+5 · Develop Prototypes
+34 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Prototype: a waiting-time app as paper model
+PROTOTYPE – APP
+Paper screens show the current waiting number, 
+the remaining time and a navigation function.
+Simple, quick and cheap – ideal for first tests with 
+users.
+
+--- p37
+Example 2 · Waiting time
+6 · Test Prototypes
+35 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Test protocol: patient with wife and small child in the waiting room
+REACTION
+• The app is effective
+• App is better than the watch – the cell phone is always there
+• Navi function is very good
+• Structure and functions are good
+• “We find it good, so you can at least take time out”
+WHAT FOLLOWS?
+Positive feedback confirms the direction. The 
+test protocol documents reactions and 
+suggestions for the next iteration.
+
+--- p38
+Process model of Design Thinking
+Integration in roadmap
+36 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+The process model is the basis for the Design Thinking roadmap
+
+--- p39
+Agenda
+3 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Five parts lead from the basics to your own prototype
+1
+Introduction and 
+basics
+Definition, principles, 
+process model
+2
+Examples
+Supermarket for older 
+people and waiting time 
+in hospitals
+3
+Excursus
+Prompting with AI and 
+giving feedback
+4
+Phases 1–5 in detail
+Techniques, templates, 
+examples and tasks
+5
+Summary
+Roadmap and results at 
+a glance
+Learning by doing: each phase combines a short input, an example and a team challenge.
+
+--- p40
+3
+Excursus: prompting and 
+feedback
+How do we use AI productively – and give each other good 
+feedback?
+37 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+
+--- p41
+Excursus
+Prompting tips (1/2)
+38 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Six tips for effective prompts
+TIP 1
+Be clear and specific
+State clearly what you want; ambiguous 
+prompts lead to unexpected results.
+TIP 2
+Provide context
+Include relevant details so the model 
+understands the scenario.
+TIP 3
+Specify the format
+Say whether you want a list, a paragraph, a 
+table or code.
+TIP 4
+Use examples
+Examples show the kind of information or 
+style you are looking for.
+TIP 5
+Experiment and iterate
+If the first prompt fails, try different wording 
+or approaches.
+TIP 6
+Start with a seed
+A seed sentence sets the tone and guides the 
+direction.
+
+--- p42
+Excursus
+Prompting tips (2/2)
+39 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Four further tips – and refining is trial and error
+TIP 7
+Control the output length
+Ask for a short answer, a 
+detailed explanation or 
+anything in between.
+TIP 8
+Include constraints
+Make limitations explicit, e.g. 
+word count, audience or 
+sources.
+TIP 9
+Think step by step
+For multi-step tasks, ask the 
+model to outline the process.
+TIP 10
+Temperature and max 
+tokens
+Lower temperature (e.g. 0.2) 
+gives focused answers, higher 
+(e.g. 0.8) more variety.
+Refining your prompt often involves trial and error – experiment and adjust based on the results.
+
+--- p43
+Excursus
+Prompting examples (1/3)
+40 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Good prompts are specific about content, scope and format
+Domain
+Bad prompt
+Good prompt
+Content creation
+✕“Write about dogs.”
+✓“Compose a 300-word article on the benefits of adopting rescue dogs, highlighting 
+three heartwarming success stories.”
+Code generation
+✕“Generate code for a 
+calculator.”
+✓“Write a Python function that takes two numbers and returns their product. Include a 
+comment explaining your code.”
+Creative writing
+✕“Write a story.”
+✓“Craft a short story set in a dystopian future where society is regulated by emotions, and 
+a protagonist discovers a forbidden emotion.”
+
+--- p44
+Excursus
+Prompting examples (2/3)
+41 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Good prompts define perspective and expected depth
+Domain
+Bad prompt
+Good prompt
+Problem solving
+✕“Solve the traveling 
+salesman problem.”
+✓“Describe an algorithm to solve the traveling salesman problem and discuss its time 
+complexity. Provide a Python implementation with comments.”
+Business strategy
+✕“Give business advice.”
+✓“Offer strategic recommendations for a tech startup looking to enter emerging 
+markets. Consider potential challenges and propose mitigating strategies.”
+Philosophical inquiry
+✕“Explain consciousness.”
+✓“Explore consciousness from a dualist perspective, compare it with materialist views and 
+provide real-world examples.”
+
+--- p45
+Excursus
+Prompting examples (3/3)
+42 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Good prompts name the audience and the criteria
+Domain
+Bad prompt
+Good prompt
+Learning new topics
+✕“Explain quantum 
+mechanics.”
+✓“Introduce the principles of quantum mechanics in a beginner-friendly manner, with 
+analogies for a high school student.”
+Troubleshooting
+✕“Fix my code.”
+✓“Identify and rectify the syntax error in the following Python code: [code]. Explain the 
+error and your solution step by step.”
+Comparative analysis
+✕“Compare cars.”
+✓“Compare electric and hybrid cars regarding environmental impact, cost of ownership 
+and long-term sustainability.”
+Scenario planning
+✕“Predict the future.”
+✓“Describe potential socio-economic impacts of widespread AI adoption in the next 
+decade – positive and negative.”
+
+--- p46
+Excursus
+Prompt catalogue for Design Thinking
+43 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+AI supports the process – but never replaces real users
+PURPOSE
+• Use AI productively throughout the Design Thinking process
+• AI supports ideation, structuring, reflection and critique – but never 
+replaces user research, team discussion or validation
+• All AI-generated output must be critically reviewed, adapted and 
+validated
+HOW TO USE AI CRITICALLY
+• Generate with AI, then validate with evidence
+• Distinguish evidence-based findings, plausible assumptions and 
+unsupported claims
+• Challenge bias, oversimplification and missing perspectives
+• Document what was generated with AI and what was validated 
+through observation, interviews, tests or expert input
+
+--- p47
+Excursus
+Prompt catalogue: example phase 1
+44 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Example prompts for defining the design challenge
+1.1
+Generate topic areas
+Act as an innovation coach. Generate 20 possible topic areas for a Design 
+Thinking project in the context of [industry]. Present them in a table: topic 
+area, short explanation, why it matters, potential target users.
+1.2
+Narrow down to five
+Evaluate the following topic areas by relevance, user impact, innovation 
+potential, feasibility for student research and suitability for prototyping. Rank 
+them and recommend the best five.
+1.3
+Formulate design challenges
+Based on [topic], formulate 10 possible design challenges as “How might we 
+…” questions – human-centered, neither too broad nor too narrow. 
+Recommend the best three.
+1.4
+Critically improve
+Review the following design challenge critically: [statement]. Is it clear? Is it 
+user-centered? Suggest an improved version.
+
+--- p48
+Excursus
+Giving and receiving feedback
+45 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Feedback helps both sides to develop
+FOR THE PERSON RECEIVING FEEDBACK
+• Becomes aware of their own behaviour
+• Learns to assess how their behaviour affects others
+FOR THE PERSON GIVING FEEDBACK
+• Makes the speaker aware of how his behaviour is experienced –
+positively and negatively
+• Informs about needs and feelings the speaker could consider
+• Shows which changes will have a positive impact on future 
+presentations
+
+--- p49
+Excursus
+Giving feedback
+46 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Formulate descriptively – not personally judgmental
+PROCEDURE
+1 Take notes during the presentation: what did I like, what can be done better, open 
+questions?
+2 Only record behaviour that everyone can understand
+3 Ask whether the person is open to feedback
+4 Describe the overall impression positively
+5 Move from the positive to the negative
+6 Use the “sandwich”: wrap a negative comment in two positive ones
+7 Add a suggestion for improvement to each criticism
+BASIC FORMULATION RULES
+• Always from the “I” perspective: “I feel that 
+…”
+• Descriptive, constructive, concrete
+• Not only negative
+• Do not mention anything irreversible
+
+--- p50
+Excursus
+Receiving feedback
+47 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Listen and let others finish – feedback is a gift
+ACCEPT CRITICISM
+• Don’t take it personally: criticism concerns your behaviour, not you as a 
+person
+• Ask counter-questions: “How could I do that better?”
+• Say thank you for being open
+KEY IDEA
+Receiving feedback 
+is a gift!
+
+--- p51
+Agenda
+3 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Five parts lead from the basics to your own prototype
+1
+Introduction and 
+basics
+Definition, principles, 
+process model
+2
+Examples
+Supermarket for older 
+people and waiting time 
+in hospitals
+3
+Excursus
+Prompting with AI and 
+giving feedback
+4
+Phases 1–5 in detail
+Techniques, templates, 
+examples and tasks
+5
+Summary
+Roadmap and results at 
+a glance
+Learning by doing: each phase combines a short input, an example and a team challenge.
+
+--- p52
+PHASE 1
+Define Design Challenge
+What problem do we want to solve in concrete terms? Or: what 
+is it about?
+48 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+
+--- p53
+Phase 1 · Define Design Challenge
+Formulation of a design challenge
+49 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+A design challenge is derived from wishes and complaints
+TOPIC AREA
+Customer shopping experience
+Wishes
+• Convenient shopping
+• Rest during shopping
+• More social contact
+Complaints
+• Hectic during shopping
+• Not finding your way around the supermarket
+• Too many and heavy purchases
+DESIGN CHALLENGE
+“How do we improve the shopping 
+experience of older people in 
+supermarkets?”
+
+--- p54
+Phase 1 · Define Design Challenge
+Formulation of a design challenge
+50 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Plattner et al. (2009); Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+The formulation follows a uniform structure
+“How do we manage to improve [topic to be covered] of [users for whom the main question 
+is relevant]?”
+EXAMPLES (PLATTNER ET AL. 2009, P. 165 FF.)
+“What alternative uses are available for our existing fairgrounds and how can we use them to create additional revenue streams?”
+“How can private shopping be better designed for young families in terms of simplicity, cost-effectiveness and sustainability?”
+“How can the untapped potential among young people to engage socially be better converted into personal activity?”
+“How can singles be persuaded to save more electricity?”
+“How can the consumption of plastic bags in the EU be reduced from the current 200/year to 40/year by 2025?”
+
+--- p55
+Phase 1 · Define Design Challenge
+Template: Design Challenge
+51 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+The template guides from the topic field to the design challenge
+Topic field
+Which topic field was selected?
+Wishes
+What wishes do potential users have for 
+solutions that do not exist?
+Complaints
+What complaints do potential users have 
+about existing solutions?
+Design Challenge
+Concrete problem: “How do we make [topic] 
+better by [users for whom the main question is 
+relevant]?”
+
+--- p56
+Phase 1 · Define Design Challenge
+Example: Housing & Construction
+52 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Example: a team chooses “Housing & Construction” as focused topic
+Our chosen focused topic
+Housing & 
+Construction
+From a large topic pool the team selects one field and 
+narrows it down step by step.
+Focus: finding the right apartment – and the right 
+tenant.
+
+--- p57
+Phase 1 · Define Design Challenge
+Example: Housing & Construction
+53 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Wishes and complaints of tenants and landlords
+Wishes
+• Verification process for agents
+• Finding the most suited apartment or tenant
+• Support during the process
+Complaints
+• Suitable apartments are hard to find
+• Time-intensive task
+• Contract issues
+• Expensive
+• Doesn’t fit the needs
+
+--- p58
+Phase 1 · Define Design Challenge
+Template with example
+54 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Filled template: Housing & Construction
+Topic field
+Which topic field was selected?
+Housing & Construction
+Wishes
+What wishes do potential users have for 
+solutions that do not exist?
+Verification process for agents · finding the most suited · support
+Complaints
+What complaints do potential users have 
+about existing solutions?
+Suitable apartments are hard to find · time-intensive · contract issues · expensive · doesn’t fit the needs
+Design Challenge
+Concrete problem: “How do we make [topic] 
+better by [users for whom the main question is 
+relevant]?”
+“How do we manage to improve the best-fitting housing option for young professionals and 
+the best fit for landlords in the area of Baden-Württemberg?”
+
+--- p59
+Phase 1 · Define Design Challenge
+CHALLENGE
+
+--- p60
+Phase 1 · Define Design Challenge
+Task for the teams
+56 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Task: Define Design Challenge
+Goal
+Narrow down the company task to one concrete guiding question.
+Sources / tools
+• Guiding questions for the formulation
+• Template “Design Challenge”
+• Optional: SDGs and topic pool
+Steps
+1. Collect and evaluate topic areas around the company task
+2. Select one topic field
+3. Collect wishes and complaints of potential users
+4. Answer: which user group – which problem – in which situation?
+5. Formulate the design challenge as one question
+EXPECTED RESULT
+One concrete guiding question.
+TEMPLATES
+Teams narrow down the company task: for 
+which user group should which problem be 
+solved in which situation?
+
+--- p61
+PHASE 2
+Understand Design Challenge
+How can we understand the problem, its causes and 
+consequences in detail? Or: what is the concrete problem?
+57 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+
+--- p62
+Phase 2 · Understand Design Challenge
+Overview of techniques
+58 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Different techniques and sources help to understand the design challenge
+User observation
+Situations of use and problems
+User interview
+Thoughts, emotions, motivations
+Testing existing solutions
+Characteristics and weaknesses
+Interviewing experts
+Expertise of involved persons
+Gathering more information
+Reports, studies, statistics
+Tech-
+niques
+
+--- p63
+Phase 2 · Understand Design Challenge
+User observation
+59 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+User observation: understand situations where solutions are used or problems occur
+1 Identify the appropriate users and situations
+2 Derive and group the questions to be answered
+3 Observe the users within the situations
+4 Document in an observation protocol
+TIP
+Besides notes, use sketches, photos 
+and videos to document the 
+observation.
+
+--- p64
+Phase 2 · Understand Design Challenge
+Template with example: observation protocol
+60 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Observation protocol: older people shopping in the supermarket
+Date / time
+Location
+Observer
+Activity of the user
+What is the user doing? Situation, photo, video.
+Activity description
+How does the user perform the activity?
+Description of motivation
+Why does the user do it – and why in this form? 
+Make assumptions.
+• Reading the ingredients of food
+• Standing while shopping
+• Use of a magnifying glass
+• Holding on to the shopping cart
+• Small text describing the ingredients; low 
+vision
+• Exhaustion during shopping
+
+--- p65
+Phase 2 · Understand Design Challenge
+User interview
+61 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+User interview: understand thoughts, emotions and motivations in detail
+1 Identify suitable users
+2 Derive and group the questions to be answered
+3 Create an interview guide
+4 Interview the users
+5 Document in an interview protocol
+
+--- p66
+Phase 2 · Understand Design Challenge
+Recommendations for interviews
+62 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: d.school (2010); Curedale (2013); Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Good interviews ask “why” and give users time to reflect
+Do
+✓
+Ask “why” – why users do or say certain things
+✓
+Ask about specific situations: “Tell me, the last time you …”
+✓
+Ask about experiences, opinions, feelings and thoughts
+✓
+Uncover contradictions between statements and activities
+✓
+Pay attention to body language and emotions
+✓
+Allow breaks; interview in pairs or record
+Avoid
+✕
+Providing suggestions for answers
+✕
+Suggestive instead of neutral questions
+✕
+Closed questions with short answers
+✕
+Long questions – maximum ten words
+✕
+Several questions to one person at a time
+
+--- p67
+Phase 2 · Understand Design Challenge
+Template with example: interview guide
+63 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Interview guide for users: three types of questions
+Date / time
+Place
+Interviewer
+User
+General questions
+Open the interview.
+Comprehension questions
+Understand wishes, complaints and motivations.
+Specific questions
+Build a deep understanding of users.
+• How old are you?
+• How often do you go shopping?
+• What do you buy?
+• What do you like most about shopping?
+• What do you miss about shopping?
+• Why do you come here to shop?
+• Tell us about your most memorable shopping 
+experience.
+• What exactly happened? Who was involved?
+• What made you feel good?
+
+--- p68
+Phase 2 · Understand Design Challenge
+Testing of existing solutions
+64 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Testing existing solutions: identify characteristics and problems – and why they exist
+1 Identify providers of existing solutions – from the subject area and other areas
+2 Derive and group the questions to be answered
+3 Conduct the product and service test
+4 Document in a test protocol
+PERFORMANCE TESTING
+Question why existing solutions exist 
+in this form – and what users accept 
+or reject.
+
+--- p69
+Phase 2 · Understand Design Challenge
+Template with example: test protocol
+65 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Test protocol: shopping in a city supermarket
+Service: shopping in a city supermarket
+General questions
+• How big is the supermarket?
+• What are the opening hours?
+Specific questions
+• How is the interior designed?
+• Do people feel comfortable?
+Components
+Which components are present?
+• Parking possibility
+• Home delivery
+Expression
+present – partly present – absent
+• missing
+• missing
+Characteristics
+Which characteristics are present?
+• Fast accessibility
+• Clear presentation of products
+Expression
+fulfilled – partly fulfilled – not fulfilled
+• fulfilled
+• fulfilled
+
+--- p70
+Phase 2 · Understand Design Challenge
+Interviewing experts
+66 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Expert interviews use the knowledge of people involved in providing the service
+1 Identify the appropriate experts
+2 Derive and group the questions to be answered
+3 Prepare an interview guide
+4 Interview the experts
+5 Document in an interview protocol
+WHO IS AN EXPERT?
+Employees, suppliers, consultants, 
+researchers – anyone involved in 
+providing the service.
+
+--- p71
+Phase 2 · Understand Design Challenge
+Template with example: expert interview guide
+67 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Interview guide for experts: market view and user perspective
+Date / time
+Location
+Interviewer
+Expert
+General questions
+Open the interview.
+Comprehension questions
+Understand wishes, complaints and motivations of users.
+• What solutions exist for “shopping in the supermarket”?
+• Which solutions do you consider innovative?
+• What alternatives are there in your view?
+• What are the restrictions on the market?
+• What do you think users like best about shopping?
+• What do you think users miss when shopping?
+• What positive or negative experiences are you aware of?
+
+--- p72
+Phase 2 · Understand Design Challenge
+Gathering more information
+68 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Further information builds up expertise
+• Reports (e.g. media libraries)
+• Studies and press reports (e.g. Die Welt)
+• Statistical surveys (Statista, Federal Statistical Office, Eurostat, 
+Unicef)
+• Industry newsletters (e.g. of the Volksbanks)
+• Industry associations
+• Portals (e.g. Visual Capitalist, World Bank)
+• Factsheets
+
+--- p73
+Phase 2 · Understand Design Challenge
+Gathering more information
+69 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Factsheets condense numbers, data and facts
+Numbers make the problem tangible – and convince stakeholders.
+• Use reliable and current sources
+• Note source and date for every figure
+• Combine data with user insights
+
+--- p74
+Phase 2 · Understand Design Challenge
+Example: Housing & Construction
+70 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+The team combines three techniques
+Two user groups are interviewed – tenants and landlords – and 
+existing platforms are analysed.
+Two groups, one market: both perspectives are needed for a good 
+match.
+
+--- p75
+Phase 2 · Understand Design Challenge
+Example: Housing & Construction
+71 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Interview set-up: sixteen questions, seven interviews
+HOW MANY QUESTIONS?
+16
+• Eight questions for tenants
+• Eight questions for landlords
+• Unique questions, excluding demographic questions
+HOW MANY WERE INTERVIEWED?
+7
+• Four tenants
+• Three landlords
+
+--- p76
+Phase 2 · Understand Design Challenge
+Example: Housing & Construction
+72 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Example questions to landlords and tenants
+Questions to landlords
+• How do you find tenants?
+• What were the main issues in finding a tenant?
+• Is it important for you to know the tenant before renting your 
+place out?
+• What concerns do you have with the current real estate market 
+in the area?
+Questions to tenants
+• What were the main issues you encountered looking for an 
+apartment?
+• Did you use any service to find this apartment? How was the 
+experience? What were the criteria?
+• Is it important for you to get to know the landlord before renting 
+a place? Why?
+
+--- p77
+Phase 2 · Understand Design Challenge
+Example: Housing & Construction
+73 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Interview outtakes: what landlords and tenants told the team
+Landlords
+• Landlords are private, commercial or governmental
+• Private landlords care more about the tenant than commercial ones
+• Tenant criteria: regular income, solvency, credit rating, good 
+occupancy rate
+• Private landlords struggle with regulations
+• They look for recommended tenants to close their knowledge gap on 
+regulations
+Tenants
+• Time-consuming search
+• Profiles on various platforms necessary
+• Student status prevents getting the flat you want (low income)
+• No feedback from landlords upon application
+• Services either cost a fee or are not user friendly
+• Important criteria: price, location, size
+
+--- p78
+Phase 2 · Understand Design Challenge
+Example: Housing & Construction
+74 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Market research: existing platforms for renting
+ImmoScout24
+immowelt
+WG-Gesucht.de
+Airbnb
+Wunderflats
+Homelike
+spotahome
+Mr. Lodge
+meinestadt.de
+eBay Kleinanzeigen
+Facebook
+The test of existing solutions shows: many platforms – but none that solves the matching problem for both sides.
+
+--- p79
+Phase 2 · Understand Design Challenge
+CHALLENGE
+
+--- p80
+Phase 2 · Understand Design Challenge
+Task for the teams
+76 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Task: Understand Design Challenge
+Goal
+Build up traceable insights about users and existing offers.
+Sources / tools
+• User interviews and user observation
+• Test of existing solutions, expert interviews
+• Further information (studies, statistics)
+Steps
+1. Define the main findings to be obtained (guideline)
+2. Choose at least two techniques per team and define sources
+3. Conduct the research – ideally three documented results per technique
+4. Evaluate in sub-teams and compile the insights
+EXPECTED RESULT
+Traceable insights about users and existing offers: min. 2 techniques × 3 documented 
+results.
+TEMPLATES
+Each team uses at least two techniques, 
+ideally with three documented results each.
+
+--- p81
+PHASE 3
+Define Viewpoints
+Who exactly are we talking about and what are the concrete 
+needs? Or: what is specifically required?
+77 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+
+--- p82
+Phase 3 · Define Viewpoints
+Overview
+78 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+The findings of phase 2 are condensed in three steps
+INPUT FROM PHASE 2
+Observation protocol
+Interview protocol user
+Test protocol
+Interview protocol experts
+Evaluated information
+WHO?
+User Empathy Map
+Description of a typical 
+user of the relevant 
+customer segment
+HOW?
+User Journey
+Phases from the user’s 
+point of view with needs, 
+experiences and contact 
+points
+WHAT?
+User Needs
+Functions, requirements 
+and experiences – rated by 
+importance
+
+--- p83
+Phase 3 · Define Viewpoints
+Template: User Empathy Map
+79 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+The User Empathy Map describes a typical user of a relevant segment
+Description
+Age, gender, marital status, hobbies, character
+Relationships
+Social context, partnerships, family
+Influencers
+Family, friends, colleagues
+Seeing
+Environment, offers
+Listening
+What does he hear?
+Thinking / feeling
+What is on his mind?
+Say
+What does he tell others?
+Pleasure / goals
+What gives pleasure? Goals, wishes, motivation
+Job to be done
+What problem needs to be solved?
+Frustration / worries
+Obstacles, fears, risks
+
+--- p84
+Phase 3 · Define Viewpoints
+Example: Housing & Construction
+80 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+User Empathy Map: Naomi Williams, 52 – private landlord
+Naomi Williams, 
+52
+Private landlord
+PROFILE
+• Married, 2 children
+• 3rd grade teacher
+• Conservative, technophobe, likes to call by phone
+• Owns two apartments
+INFLUENCERS
+• Listens a lot to the community, friends and 
+colleagues
+• Reads the local newspaper every day
+“As a landlord, it’s challenging to find the right 
+tenant and I don’t know the regulations.”
+NEEDS AND CONTEXT
+• Cost-saving
+• Stress-free renting
+• Trustworthy tenant
+• Understanding the regulations with ease
+• Short, effective, easy tenant search
+FEAR
+Concerns about the future, the internet and 
+technology
+
+--- p85
+Phase 3 · Define Viewpoints
+Example: Housing & Construction
+81 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+User Empathy Map: Valentina Bianchi, 27 – tenant
+Valentina Bianchi, 
+27
+Young professional, tenant
+PROFILE
+• Single, young professional
+• Junior project manager
+• Searching for a new flat
+• Moving from Milan to Ulm
+INFLUENCERS
+• Social media, community, friends and family
+“As a tenant it’s hard to find a flat which suits 
+my personal needs and doesn’t cost too much.”
+NEEDS AND CONTEXT
+• Tech-savvy
+• Lack of time for finding flats
+• Doesn’t know how long she will stay
+• Doesn’t want to wait for replies
+• Doesn’t know local regulations
+FEAR
+Afraid of not finding an apartment at the right time
+
+--- p86
+Phase 3 · Define Viewpoints
+Analysis of the user journey
+82 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+A generally valid user journey structures the phases from the user’s point of view
+QUESTIONS PER PHASE – EXAMPLE: A TRIP
+Suggestion
+Need for a trip; search for suppliers; get ideas; contact point: internet
+Evaluation
+Quick comparisons; compare offers; friendly contacts
+Purchase & use
+Information about the trip; book train to airport; stress-free trip
+After sales
+Nice memories; collate pictures easily; website with upload function
+
+--- p87
+Phase 3 · Define Viewpoints
+Analysis of the user journey
+83 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Stickdorn and Schneider (2014); Curedale (2013); Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+The user journey (as-is) is developed in four steps
+1 Determine the most important phases from the user’s point of view
+2 Derive the most important needs and tasks per phase
+3 Describe the most important current experiences per phase
+4 Derive the most important contact points per phase
+TEMPLATE ROWS
+• Phases (incl. upstream and 
+downstream)
+• Needs / tasks
+• Experience
+• Contact points
+
+--- p88
+Phase 3 · Define Viewpoints
+Example of a user journey
+84 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+User journey of older people doing their grocery shopping
+1 Preparation
+2 Outward
+3 Shopping
+4 Return
+5 Consumption
+Needs / tasks
+Identify required food; 
+create shopping list
+Fast and easy 
+accessibility
+Food information, social 
+contact, possibilities to 
+rest, toilet
+Carefree transportation 
+home
+Proper storage and 
+processing
+Experience
+No overview of current 
+inventory
+No sufficient signage
+Narrow aisles, lack of 
+clarity, hustle at 
+checkout
+Overcrowded buses, 
+much traffic
+Food spoilage
+Contact points
+Supermarket brochures 
+with offers
+Bus
+Sales room, sales staff
+Bus
+Own kitchen
+
+--- p89
+Phase 3 · Define Viewpoints
+Example: Housing & Construction
+85 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+User journey of the landlord from vacancy to maintenance
+1 Vacancy
+2 Evaluation
+3 Contract
+4 Rent
+5 Maintenance
+Needs
+Building spec sheet; 
+sharing the spec
+Applications
+Send contract; possible 
+edits
+Rent
+Collecting rent; landlord 
+commitments
+Experience
+Writing a contract is 
+stressful – a lot of 
+responsibility
+Concern and intense 
+decision-making in 
+screening
+Some relief when the 
+contract is signed
+Concern whether the 
+tenant pays the rent
+Concern whether 
+responsibilities can be 
+transferred to the tenant
+Contact points
+Personal, platforms, 
+mobile
+SMS, phone, e-mail, 
+portals, personal 
+contact, lawyer
+SMS, phone, e-mail, 
+portals, lawyer
+Banks, mail, utility 
+companies
+Phone, mail, personal 
+contact
+
+--- p90
+Phase 3 · Define Viewpoints
+Derivation of user needs
+86 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+User needs are derived in three categories
+FUNCTIONS
+What functions does the user expect?
+Five most important – e.g. for a cell phone: 
+long battery life, light weight.
+REQUIREMENTS
+What requirements does the user 
+have?
+Five most important – e.g. affordable, easy 
+to understand.
+EXPERIENCES
+What experiences does the user 
+want?
+Five most important – e.g. pleasure, good 
+feeling.
+Basis: User Empathy Map and User Journey. Each need is rated: very important – important – not important.
+
+--- p91
+Phase 3 · Define Viewpoints
+Template with example: user needs
+87 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+User needs template: collect, then rate by importance
+Functions
+What features does the user expect? E.g. fast loading 
+time, high stability.
+• Long battery life
+very important
+• Light weight
+important
+Requirements
+What requirements does the user have? E.g. easy to 
+understand, low consumption.
+• Affordable
+very important
+• Easy to understand
+important
+Experience
+What experience would the user like to have? E.g. 
+pleasure in use, feeling of safety.
+• Pleasure in use
+important
+• Feeling of safety
+very important
+Approx. 20 functions, requirements and experiences are collected and evaluated. Example: cell phone.
+
+--- p92
+Phase 3 · Define Viewpoints
+Example: Housing & Construction
+88 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+User needs of the landlord: priority and secondary
+PRIORITY
+SECONDARY
+Functions
+1. Detailed tenant profile
+2. Embedded regulations for the contract
+3. Comparing tenants, landlords, apartments
+4. Communication with tenant before, during, after
+1. Digital contract
+2. Verification system
+3. In-app calendar for viewings
+Requirements
+1. Good UI/UX
+2. Simplified screening process
+3. Finding trustworthy tenants
+4. Verification of tenants
+5. Support regarding contract and regulations
+1. Easy communication with tenants
+2. Easy access to information
+3. Share across platforms and apps
+4. Connection to common ERP system
+Experience
+1. Trusting the tenant
+2. Stressless
+3. Confidential process
+4. Easy and intuitive use
+5. Easy accessibility
+–
+
+--- p93
+Phase 3 · Define Viewpoints
+CHALLENGE
+
+--- p94
+Phase 3 · Define Viewpoints
+Task for the teams
+90 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Task: Define Viewpoints
+Goal
+Describe one primary user group and derive a justified focus for ideation.
+Sources / tools
+• Results of phase 2
+• Sketches, clippings from magazines
+• Templates: Empathy Map, Journey, Needs
+Steps
+1. Create the User Empathy Map (as-is) for one primary user group
+2. Create the User Journey (as-is)
+3. Brainstorm user needs: functions, requirements, experiences
+4. Prioritize three to five central needs and justify the choice
+EXPECTED RESULT
+A justified focus for ideation: one user group, its journey and 3–5 prioritized needs.
+TEMPLATES
+One primary user group, its journey and 
+three to five prioritized needs.
+
+--- p95
+PHASE 4
+Generate Ideas
+Which solutions can we use to satisfy the user’s needs? Or: 
+what ideas do we have?
+91 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+
+--- p96
+Phase 4 · Generate Ideas
+Derivation of ideas
+92 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+The ideas are collected in a pool of ideas
+Example: pool of ideas for a better shopping experience. Quantity counts – build on the ideas of others.
+
+--- p97
+Phase 4 · Generate Ideas
+Grouping and profiles
+93 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Ideas are grouped – a profile is created for an idea, a cluster or a combination
+Each cluster or idea combination can become an idea profile.
+
+--- p98
+Phase 4 · Generate Ideas
+Template with example: idea profile
+94 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Idea profile: shopping at a treadmill with coffee and cake
+Title of the idea: Offer food on a treadmill and combine it with coffee and cake
+Need
+Which users demand the idea? Which unmet needs does it fulfil?
+• Older people who want interaction and are often exhausted by shopping
+• Socializing while shopping; comfortable shopping without exhaustion
+Solution
+What impact on capabilities and resources? How does it create value and a 
+competitive advantage?
+• Additional sales space and staff needed; coffee and cake must be provided
+• Users interact in a pleasant environment
+Benefit
+What benefit for the user, the company and other stakeholders?
+• Shopping becomes an experience
+• Attracting new and retaining existing customers
+Competition
+Which companies satisfy the need today? How will they respond?
+• Coffee shops could offer a shopping service
+• Other supermarkets could copy the idea
+
+--- p99
+Phase 4 · Generate Ideas
+Example: Housing & Construction
+95 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Generating ideas: seven solution directions
+Robot screening
+• Automatic screening
+• Tenant profile + portfolio 
+verification
+• AI search for the best-fitting 
+tenant
+• Avatars introduce tenant and 
+landlord
+Payment
+• Pay later, live first
+• Own payment method
+• We take care of the deposit
+• Bidding to define rent
+Community
+• Neighbourhood management
+• Digital meeting space for tenant 
+and landlord
+• Portal with online community
+• “LinkedIn” for tenants and 
+landlords
+VR
+• Digital walk-through
+• VR room tour
+• VR experience online
+Contract
+• AI lawyer
+• Easy signing and maintenance via 
+portal
+Real-estate dating
+• “Tinder” for real estate
+• One click and get a home
+• Bidding system
+Buddy program
+• A person who helps to screen
+• Companies work with the owners
+
+--- p100
+Phase 4 · Generate Ideas
+Example: Housing & Construction
+96 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Idea profile: “Bid on tenants”
+Title of the idea: Bid on tenants
+Need
+• Landlords looking for the best fit
+• Faster, easier and stress-free
+Solution
+• More transparency by seeing possible competitors
+• Shift of power – better distribution between both parties
+Benefit
+• Tenants find the best flat; best price
+• Less work for landlords; motivates tenants
+• Landlords are aware of each other
+Competition
+• WG-Gesucht, immowelt
+• Real estate agents, private companies
+
+--- p101
+Phase 4 · Generate Ideas
+Evaluation and selection
+97 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Two idea profiles are compared on three criteria
+Criterion
+Idea profile A
+Idea profile B
+User relevance
+Does the solution fulfil the prioritized needs?
+__ / 5
+__ / 5
+Novelty
+Does it differ from existing solutions?
+__ / 5
+__ / 5
+Feasibility
+Can it be realized with reasonable effort?
+__ / 5
+__ / 5
+Total →selection
+__ / 15
+__ / 15
+The 1–5 scale is a suggestion; justify the selection briefly.
+
+--- p102
+Phase 4 · Generate Ideas
+CHALLENGE
+
+--- p103
+Phase 4 · Generate Ideas
+Task for the teams
+99 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Task: Generate Ideas
+Goal
+Generate numerous ideas that fulfil the prioritized user needs and select one solution.
+Sources / tools
+• User needs and existing solutions
+• Pool of ideas and clustering
+• Template: idea profile
+Steps
+1. Brainstorm ideas in an idea pool
+2. Discuss the ideas and cluster them into solution directions
+3. Elaborate two idea profiles
+4. Select one solution by user relevance, novelty and feasibility
+EXPECTED RESULT
+One selected solution, justified by two idea profiles and three criteria.
+TEMPLATES
+Ideas, solution directions, two idea profiles 
+and a justified selection.
+
+--- p104
+PHASE 5
+Develop Prototypes
+How can the solution approaches be concretized and 
+visualized? Or: how are the solutions designed?
+100 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+
+--- p105
+Phase 5 · Develop Prototype
+Overview
+101 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+The ideas gained are implemented in prototypes (1:n; n:n)
+One idea can lead to several prototypes – and several 
+ideas can be combined in one prototype.
+Prototypes make ideas visible and testable – early, quickly and 
+cheaply.
+Ideas
+
+--- p106
+Phase 5 · Develop Prototype
+Prototype development
+102 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Prototypes can have different shapes – the design box provides the materials
+Sketch
+Draw the solution – a screen, a 
+product or a process.
+Story
+Tell the use as a story: “Hans 
+goes to the supermarket and 
+gets the opportunity to enjoy 
+coffee and cake while sitting 
+down to do his shopping …”
+Model
+Build the solution tangibly – with 
+Lego, cardboard or paper.
+Movie
+Act out and film the situation of 
+use with a smartphone.
+
+--- p107
+Phase 5 · Develop Prototype
+Prototype development
+103 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Sketches on paper are the fastest way to a prototype
+• Paper, pens, sticky notes
+• Screens drawn on paper and placed in a 
+cardboard frame
+• Quickly changeable during tests
+
+--- p108
+Phase 5 · Develop Prototype
+Prototype development
+104 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Digital tools create realistic mock-ups for apps
+MockUPhone
+mockDrop
+MockupsJar
+Proto.io
+From screenshots in device frames to clickable app 
+prototypes.
+
+--- p109
+Phase 5 · Develop Prototype
+Prototype development
+105 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Explainer videos tell the story of a solution
+Tools such as simpleshow create explainer videos in 
+minutes.
+A short movie shows the use situation better than 
+any description.
+
+--- p110
+Phase 5 · Develop Prototype
+Prototype development
+106 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Physical models make solutions tangible
+• Lego, cardboard, paper
+• Play-through of situations with the model
+• Roles: users and staff
+
+--- p111
+Phase 5 · Develop Prototype
+Example: Housing & Construction
+107 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Analysing the current flow: the tenant
+
+--- p112
+Phase 5 · Develop Prototype
+Example: Housing & Construction
+108 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Analysing the current flow: the landlord
+
+--- p113
+Phase 5 · Develop Prototype
+Example: Housing & Construction
+109 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Initial sketches of the app screens for landlord and tenant
+
+--- p114
+Phase 5 · Develop Prototype
+Example: Housing & Construction
+110 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Revised sketches after the first feedback
+TENANT
+LANDLORD
+
+--- p115
+Phase 5 · Develop Prototype
+Example: Housing & Construction
+111 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Storyline: “No need to stress, EZtent”
+TENANT
+“Do you remember that time you were looking for an apartment? Most likely a painful memory. You 
+search for hours, run from viewing to viewing – and still can’t find the right fit.”
+LANDLORD
+“Here we go again … finding a tenant, again. Please … let me find a tenant for the apartment!”
+NARRATOR
+EZtent matches tenants and landlords based on needs and preferences – with a bidding system: 
+landlords filter top tenants and bid with perks; tenants choose the apartment. No need to stress, 
+EZtent.
+
+--- p116
+Phase 5 · Develop Prototypes
+CHALLENGE
+
+--- p117
+Phase 5 · Develop a Prototype
+Task for the teams
+113 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Task: Develop a Prototype
+Goal
+Present the selected solution concretely and understandably.
+Sources / tools
+• Idea pool and idea profiles
+• Sketches, Lego, cardboard, paper, smartphone
+• Mock-up tools
+Steps
+1. Choose the form: clickable interface, storyboard, communication material or modelled process
+2. Build the prototype
+3. Test, improve and combine within the team
+4. Prepare it for the final presentation
+EXPECTED RESULT
+An understandable prototype for the final presentation.
+TEMPLATES
+The selected solution as a clickable 
+interface, storyboard, communication 
+material or modelled process.
+
+--- p118
+Agenda
+3 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Five parts lead from the basics to your own prototype
+1
+Introduction and 
+basics
+Definition, principles, 
+process model
+2
+Examples
+Supermarket for older 
+people and waiting time 
+in hospitals
+3
+Excursus
+Prompting with AI and 
+giving feedback
+4
+Phases 1–5 in detail
+Techniques, templates, 
+examples and tasks
+5
+Summary
+Roadmap and results at 
+a glance
+Learning by doing: each phase combines a short input, an example and a team challenge.
+
+--- p119
+5
+Summary
+What do we take away – and what do we present?
+114 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+
+--- p120
+Summary
+Techniques within the roadmap
+115 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+Source: Based on Schallmo: Design Thinking erfolgreich anwenden, Springer Gabler
+Each phase has its own techniques and templates
+1
+Define Design 
+Challenge
+Topic pool
+Design Challenge
+2
+Understand 
+Design Challenge
+User observation
+User interview
+Test of existing 
+solutions
+Expert interview
+More information
+3
+Define Viewpoints
+User Empathy 
+Map
+User Journey
+User Needs
+4
+Generate Ideas
+Idea pool
+Clustering
+Idea profile
+5
+Develop 
+Prototypes
+Sketch
+Story
+Model
+Movie
+6
+Test Prototypes
+Test protocol
+Feedback 
+protocol
+7
+Integrate 
+Prototype
+Business model
+
+--- p121
+Summary
+Results at a glance
+116 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences
+The final presentation shows the way from the guiding question to the prototype
+1
+Design Challenge
+One concrete guiding 
+question: user group, 
+problem, situation
+2
+Understanding
+Min. two techniques with 
+three documented results 
+each
+3
+Viewpoints
+Empathy Map, User 
+Journey, 3–5 prioritized 
+needs
+4
+Ideas
+Idea pool, clusters, two idea 
+profiles, justified selection
+5
+Prototype
+Understandable 
+presentation of the selected 
+solution
+Common thread: each phase justifies the next – show how your insights about users led to the selected solution.
+
+--- p122
+Thank you!
+Prof. Dr. Daniel Schallmo
+Professor for Digital Transformation and Entrepreneurship
+Institute for Entrepreneurship, Innovation and Sustainability
+Neu-Ulm University of Applied Sciences
+daniel.schallmo@hnu.de
+117 © Prof. Dr. Daniel Schallmo | Neu-Ulm University of Applied Sciences

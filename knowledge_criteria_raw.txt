@@ -1,0 +1,91 @@
+## SVS – criteria for online outlets / SVS  (SVS=relevant SK1=relevant SK2=relevant SK3=relevant)
+SVS – criteria for online outlets | SVS | Sensationalist elements | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | No sensationalist elements in the webshop name? | For example "low price" or "cheap"
+SVS – criteria for online outlets | SVS | Naming | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Preferably the same or a similar name as the physical store? | 
+SVS – criteria for online outlets | SVS | Outlet operator | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | No impression given that Liebherr operates the shop? | E.g. Liebherr Logo big in Shop header.
+SVS – criteria for online outlets | SVS | Physical store company name | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Physical store's company name and address visible in the footer? | 
+SVS – criteria for online outlets | SVS | Shopping cart | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Shopping cart states that the contract products offered can also be purchased and collected at the authorised physical outlet? | 
+SVS – criteria for online outlets | SVS |  | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Shopping cart visible from anywhere and containing essential information? | 
+SVS – criteria for online outlets | SVS | Liebherr logo | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Current Liebherr logo used? | 
+SVS – criteria for online outlets | SVS |  | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Liebherr logo linked to home.liebherr or the Liebherr brand page | 
+SVS – criteria for online outlets | SVS | Contract product sorting | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Contract products grouped and sortable/selectable using filters? | 
+SVS – criteria for online outlets | SVS | Loading times | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Online outlet loads quickly? | 
+SVS – criteria for online outlets | SVS | Purchasing process | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Clear and transparent purchasing process? | 
+SVS – criteria for online outlets | SVS | Data | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Only Liebherr assets or assets approved by Liebherr used? | 
+SVS – criteria for online outlets | SVS | Appliance name | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Contract product name includes Liebherr (e.g. Liebherr CBNsda 5723-20)? | 
+SVS – criteria for online outlets | SVS | Discontinued models | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Discontinued and outdated models always labelled as such? | 
+SVS – criteria for online outlets | SVS | Available contract products | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Only available contract products presented? | 
+SVS – criteria for online outlets | SVS | In-store advice | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Information on advice available at the physical outlet provided? | 
+SVS – criteria for online outlets | SVS | Services | SVS=relevant SK1=relevant SK2=relevant SK3=relevant | Services offered: delivery, connection, commissioning, customer instruction, packaging removal and old appliance collection? | 
+## Visibility / Brand page  (SVS=not relevant SK1=relevant SK2=relevant SK3=relevant)
+Visibility | Brand page | Images & content | SVS=- SK1=relevant SK2=relevant SK3=relevant | Maintained with up-to-date, clear images and content? | 
+Visibility | Brand page | Other brands | SVS=- SK1=relevant SK2=relevant SK3=relevant | No other brands on the brand page? | 
+Visibility | Brand page | Teaser | SVS=- SK1=relevant SK2=relevant SK3=relevant | Teaser featuring the current main promotion or an alternative format? | 
+Visibility | Brand page | Campaigns | SVS=- SK1=relevant SK2=relevant SK3=relevant | Liebherr campaign displayed? | 
+Visibility | Brand page | Product categories | SVS=- SK1=relevant SK2=relevant SK3=relevant | Product categories divided into built-in and freestanding, with subcategories, or refrigeration and freezing, with subcategories? | 
+Visibility | Brand page | Bestsellers | SVS=- SK1=relevant SK2=relevant SK3=relevant | Liebherr bestsellers/highlights displayed? | 
+Visibility | Brand page | Advice | SVS=- SK1=relevant SK2=relevant SK3=relevant | Advice options and availability times displayed? | 
+Visibility | Brand page | Promotions & Brand | SVS=- SK1=relevant SK2=relevant SK3=relevant | Promotions & Brand section populated with additional promotions? | 
+Visibility | Brand page | Technology pages | SVS=- SK1=relevant SK2=relevant SK3=relevant | Key Liebherr technologies presented, including all matching products? | 
+Visibility | Brand page | Technology pages | SVS=- SK1=relevant SK2=relevant SK3=relevant | Teaser/video available? | 
+Visibility | Brand page | Technology pages | SVS=- SK1=relevant SK2=relevant SK3=relevant | Detailed description of the technology available? | 
+Visibility | Brand page | Technology pages | SVS=- SK1=relevant SK2=relevant SK3=relevant | Matching products displayed? | 
+## Visibility / Product detail page – LH content  (SVS=not relevant SK1=relevant SK2=relevant SK3=relevant)
+Visibility | Product detail page – LH content | Presentation | SVS=- SK1=relevant SK2=relevant SK3=relevant | High-quality design | 
+Visibility | Product detail page – LH content | Other brands | SVS=- SK1=relevant SK2=relevant SK3=relevant | No other brands on the PDP? | 
+Visibility | Product detail page – LH content | Logo | SVS=- SK1=relevant SK2=relevant SK3=relevant | Current Liebherr logo on the PDP linked to the brand page? | 
+Visibility | Product detail page – LH content | Product name | SVS=- SK1=relevant SK2=relevant SK3=relevant | Model name including index and short description? | 
+Visibility | Product detail page – LH content | Key features | SVS=- SK1=relevant SK2=relevant SK3=relevant | At least 5 suitable key features displayed? | 
+Visibility | Product detail page – LH content | Images | SVS=- SK1=relevant SK2=relevant SK3=relevant | Only high-quality Liebherr images used? | 
+Visibility | Product detail page – LH content | Zoom | SVS=- SK1=relevant SK2=relevant SK3=relevant | Can individual areas be zoomed in and the entire image enlarged? | 
+Visibility | Product detail page – LH content | Documents | SVS=- SK1=relevant SK2=relevant SK3=relevant | Operating instructions, product data sheet, shipping costs and energy label clearly visible alongside the product? | 
+Visibility | Product detail page – LH content | Content | SVS=- SK1=relevant SK2=relevant SK3=relevant | Available content integrated via Loadbee, Cliplister or manually? | 
+Visibility | Product detail page – LH content | Technical data | SVS=- SK1=relevant SK2=relevant SK3=relevant | Technical specifications clearly presented? | 
+## Visibility / Product videos  (SVS=not relevant SK1=not relevant SK2=relevant SK3=relevant)
+Visibility | Product videos | LH content | SVS=- SK1=not relevant SK2=relevant SK3=relevant | Key-feature videos matching the appliance displayed (at least 5) | 
+## Visibility / Premium product detail page  (SVS=not relevant SK1=not relevant SK2=not relevant SK3=relevant)
+Visibility | Premium product detail page | SK3 presentation | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Exclusive, emotive presentation (lifestyle setting) or high-quality in-house video? | 
+Visibility | Premium product detail page | Other brands | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | No other brands on the PDP? | 
+Visibility | Premium product detail page | Features | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Features presented individually, in detail and with photos. SEO-optimised text? | 
+Visibility | Premium product detail page | Tools | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Provided tools used? (DemoUp, Tradeplace) | 
+Visibility | Premium product detail page | Product name | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Model name including index and short description? | 
+Visibility | Premium product detail page | Shopping cart | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Sticky shopping cart? | 
+Visibility | Premium product detail page | Product detail page SEO | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Product described with SEO-relevant text. Special features of the SK3 product explained? | 
+Visibility | Premium product detail page | Key features | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Key features described in detail with videos and text? | 
+Visibility | Premium product detail page | Liebherr benefits | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Liebherr sustainability and quality benefits presented? | 
+Visibility | Premium product detail page | Technical data | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | All technical details provided? | 
+Visibility | Premium product detail page | Premium product videos | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Liebherr top 10 SK3 appliances: own product videos created and placed on the PDP, and over 200 appliances sold online per year? | 
+## Visibility / SEO  (SVS=not relevant SK1=not relevant SK2=relevant SK3=relevant)
+Visibility | SEO | General SEO | SVS=- SK1=not relevant SK2=relevant SK3=relevant | SEO, SEA and inventory ads used? | 
+Visibility | SEO | Liebherr SEO | SVS=- SK1=not relevant SK2=relevant SK3=relevant | SEO text about Liebherr available on the brand page? | 
+## Visibility / Liebherr brand visibility  (SVS=not relevant SK1=not relevant SK2=relevant SK3=relevant)
+Visibility | Liebherr brand visibility | Webshop navigation | SVS=- SK1=not relevant SK2=relevant SK3=relevant | Does the search term "Liebherr" lead to the Liebherr brand page? | 
+Visibility | Liebherr brand visibility | Search terms | SVS=- SK1=not relevant SK2=relevant SK3=relevant | For these search terms, is at least 1 Liebherr appliance among the top 5 results and is the Liebherr brand page suggested: "refrigerator", "built-in", "built-in refrigerator", "freestanding", "wine cooler", "freezer", "fridge-freezer"? | 
+Visibility | Liebherr brand visibility | Refrigeration & Freezing section | SVS=- SK1=not relevant SK2=relevant SK3=relevant | In the refrigeration and freezing section, is it immediately clear that Liebherr is stocked (visible in filters, logo linking to the brand page, or Liebherr among the first 5 appliances)? | 
+Visibility | Liebherr brand visibility | Product highlights / social commerce | SVS=- SK1=not relevant SK2=relevant SK3=relevant | Are Liebherr appliances highlighted on the brand page and product detail pages 4 times a year, or is one social commerce event held per year? | 
+## Advice / Liebherr buying guide  (SVS=not relevant SK1=not relevant SK2=relevant SK3=relevant)
+Advice | Liebherr buying guide | Buying guide placement | SVS=- SK1=not relevant SK2=relevant SK3=relevant | Liebherr buying guide visible in the viewport on the Liebherr brand page and Liebherr product detail pages? | 
+Advice | Liebherr buying guide | Product filters | SVS=- SK1=not relevant SK2=relevant SK3=relevant | Product filters available on the brand page? | 
+Advice | Liebherr buying guide | High-quality buying guide | SVS=not relevant SK1=not relevant SK2=not relevant SK3=relevant | Customer needs assessment available on the brand page? | 
+## Advice / Telephone  (SVS=not relevant SK1=relevant SK2=relevant SK3=relevant)
+Advice | Telephone | Phone number placement | SVS=- SK1=relevant SK2=relevant SK3=relevant | Phone number visible in the viewport on the Liebherr brand page and product detail page? | 
+Advice | Telephone | Hotline hours | SVS=- SK1=relevant SK2=relevant SK3=relevant | Telephone hotline available for at least 50 hours for up to 200 online sales, or at least 60 hours for over 200 online sales? | 
+## Advice / Video advice  (SVS=not relevant SK1=not relevant SK2=not relevant SK3=relevant)
+Advice | Video advice | Video call placement & alternative | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Video call bookable on the PDP, live at the appliance or on a computer using suitable tools. Visible in the viewport, or alternatively a 12/7 advice hotline? | 
+Advice | Video advice | Video call hours | SVS=- SK1=not relevant SK2=not relevant SK3=relevant | Availability (<200 = at least 30 h/week; >300 = at least 40 h/week)? | 
+## Advice / Training attendance  (SVS=not relevant SK1=relevant SK2=relevant SK3=relevant)
+Advice | Training attendance | Participation | SVS=- SK1=relevant SK2=relevant SK3=relevant | Introductory presentation received, or refresher training provided following staff changes? | 
+## Advice / Customer recommendations  (SVS=not relevant SK1=relevant SK2=relevant SK3=relevant)
+Advice | Customer recommendations | Liebherr only | SVS=- SK1=relevant SK2=relevant SK3=relevant | Only Liebherr appliances shown as alternatives? | 
+Advice | Customer recommendations | Accessories | SVS=- SK1=relevant SK2=relevant SK3=relevant | Matching Liebherr accessories offered for cross-selling? | 
+## Service / Stock level  (SVS=not relevant SK1=relevant SK2=relevant SK3=relevant)
+Service | Stock level |  | SVS=- SK1=relevant SK2=relevant SK3=relevant | 10 bestsellers per SK immediately available? | 
+## Service / Delivery services  (SVS=not relevant SK1=relevant SK2=relevant SK3=relevant)
+Service | Delivery services | Two-person delivery | SVS=- SK1=relevant SK2=relevant SK3=relevant | Two-person delivery with positioning selected by default, with connection, commissioning and packaging removal included? | 
+Service | Delivery services | Delivery times | SVS=- SK1=relevant SK2=relevant SK3=relevant | Appliances marked as immediately available dispatched within 3 working days of order receipt? | 
+Service | Payment methods | Basic | SVS=not relevant SK1=relevant SK2=relevant SK3=relevant | At least 2 payment methods offered (PayPal, Klarna, Giropay, credit card)? | 
+Service | Payment methods | Premium | SVS=not relevant SK1=not relevant SK2=relevant SK3=relevant | Payment by invoice or financing offered? | 
+## Service / Additional services  (SVS=not relevant SK1=relevant SK2=relevant SK3=relevant)
+Service | Additional services | Customer service | SVS=- SK1=relevant SK2=relevant SK3=relevant | Customer enquiries about transport damage or warranty claims handled using Liebherr forms (transport damage report, online repair requests)? | 
+Service | Additional services | Basic shipment tracking | SVS=- SK1=relevant SK2=relevant SK3=relevant | Shipment tracking offered for all B2C deliveries? | 
+Service | Additional services | Delivery checklist | SVS=- SK1=relevant SK2=relevant SK3=relevant | Delivery checklist completed with the customer? | 
+Service | Additional services | Share PDP | SVS=- SK1=relevant SK2=relevant SK3=relevant | Can the product detail page be shared on social media? | 

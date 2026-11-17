@@ -1,0 +1,689 @@
+ 
+ 
+This paper was presented at The ISPIM Innovation Conference – Innovation, The Name of The 
+Game, Stockholm, Sweden on 17-20 June 2018. The publication is available to ISPIM members at 
+www.ispim.org. 
+1 
+ 
+ 
+An Integrated Design Thinking Approach – Literature 
+Review, Basic Principles and Roadmap for Design 
+Thinking 
+Daniel Schallmo* 
+University of Applied Sciences Ulm, Prittwitzstrasse 10, 89075 Ulm, 
+Germany. 
+E-mail: schallmo@hs-ulm.de 
+Christopher A. Williams 
+University of Applied Sciences Neu-Ulm, Wileystrasse 1, 89231 Neu-
+Ulm, Germany 
+E-mail: christopher.williams@hs-neu-ulm.de  
+Klaus Lang 
+University of Applied Sciences Neu-Ulm, Wileystrasse 1, 89231 Neu-
+Ulm, Germany 
+E-mail: klaus.lang@hs-neu-ulm.de  
+* Corresponding author 
+Abstract: The purpose of this paper is to clarify the definition of 
+Design Thinking and to introduce a structured approach with phases, 
+activities and results. Our research is based on a literature review 
+giving insight into the basic understanding of Design Thinking and on 
+existing approaches. The main findings are that although Design 
+Thinking is a widely known concept an approach for a structured 
+development of new solutions a clear definition and approach is 
+missing. This paper offers an integrated approach for Design Thinking 
+including basic principles and a Roadmap.  
+Keywords: Design Thinking, integrated approach, phases and steps, 
+tools.  
+ 
+1 Introduction 
+The consistent orientation of solutions to customers’ requirements and needs is a key 
+success factor for today’s companies. But who are the customers? Who are the users? 
+More importantly, how can requirements and needs be identified and implemented in 
+customer-oriented solutions?   
+ 
+2 
+ 
+ 
+Design Thinking is an approach that helps to answer exactly these questions. In our 
+contribution, the approach of Design Thinking is explained. A seven-phase Roadmap will 
+also be presented, each containing objectives, activities, tools, and examples. 
+At the beginning of the 1960s, it was discovered that collaboration in creative processes 
+between designers, engineers, and representatives of other disciplines was made more 
+difficult, as there was often a different educational background and thus conflicting 
+approaches to solving problems. Intuitively, extensive questions were subdivided into sub 
+questions without grounded theories (Plattner et al., 2009, P. 60).  
+Partial solutions were then developed for the partial questions, which were then 
+combined to form an overall solution. The result was the design process which was used 
+as a common process. The design process includes not only a solution search but also a 
+clear formulation of the problems or questions to be solved. This makes it possible to 
+create a common starting point for all participants, even from different disciplines. This 
+common starting point then serves to jointly generate new knowledge and thus develop 
+new solutions.  
+The design process includes iterations to improve the solutions and increase knowledge. 
+Furthermore, the process is characterized by analytical and synthetic phases (Plattner et 
+al, 2009, p. 60). 
+Based on the literature, Design Thinking has been discussed and applied for several years 
+but our work contributes to existing knowledge of Design Thinking by developing an 
+integrated approach with clear steps and tools which is applicable for companies.  
+In our research, we first focus on existing approaches for Design Thinking by analyzing 
+the existing literature. Based on this, we provide an integrated approach that consist of 
+seven phases with objectives, activities, tools and relevant results. The integrated 
+approach has been applied in academia and practice in order to ensure a validity and 
+relevance. 
+Our contribution is significant to give an overview on existing approaches for Design 
+Thinking. Based on these insights, we deliver our integrated approach for Design 
+Thinking.  
+2 Theoretical Background 
+Defining Design Thinking 
+There is currently no commonly accepted definition for the term Design Thinking. 
+Selected definitions in the context of the Design Thinking are shown in Table 1. 
+ 
+Table 1 Current definitions 
+Author Definition 
+Plattner et al., 
+2009 
+The Design Thinking approach is a systematic, user-oriented 
+approach to solving real-life problems. Instead of focusing on how  
+the problem can be technically solved, the main focus is addressing 
+the user’s needs and requirements. 
+Erbeldinger & 
+Ramge, 2015 
+Design Thinking […] is innovative thinking with a radical, user-
+orientation. It is based on the interdisciplinary principle and 
+connects the attitude of openness with the need of results. 
+Mootee, 2013 „Design Thinking is the search for a magical balance between 
+business and art, structure and chaos, intuition and logic, concept 
+and execution, playfulness and formality, and control and 
+empowerment”.  
+Curedale, 2013 „Design Thinking is a people centered way of solving difficult 
+problems. It follows a collaborative, team based cross disciplinary 
+process. It uses a toolkit of methods and can be applied by anyone 
+from the most seasoned corporate designers and executives to school 
+children”. 
+Ideo, 2012 „Design thinking [sic!] is about believing we can make a difference 
+and having an intentional process in order to get new, relevant 
+solutions that create positive impact. 
+Design Thinking gives you faith in your creative abilities and a 
+process or transforming difficult challenges into opportunities for 
+design”. 
+These definitions all contain the following primary aspects: 
+• Setting Goals: The goal of Design Thinking is to develop new solution for 
+existing or future problems. 
+• Orientation: Design Thinking is geared specifically towards the users. 
+• Process: Design Thinking takes place on the basis of structured and iterative 
+processes. 
+• Participants: Design Thinking should utilize interdisciplinary teams. 
+ 
+Based on the literature, we propose the following definition of Design Thinking for our 
+research: 
+ 
+The approach of Design Thinking pursues the objective of developing new 
+solutions for existing problems. These solutions are consistently oriented 
+towards the needs of users and have a positive influence. The Design Thinking 
+process is structured and iterative. Within the Design Thinking process, a 
+multidisciplinary team uses techniques. 
+Existing Approaches 
+There exist several approaches for Design Thinking within the literature (Brown, 2008; 
+Ideo, 2012; Plattner et al., 2009; d.school, 2010; Liedtka & Ogilvie, 2011) that addresses 
+Design Thinking in a structured way. 
+Tim Brown introduced the Ideo’s Design Thinking approach in his seminal article in the 
+Harvard Business Review. He outlined examples and sketched the Design Thinking  
+ 
+4 
+ 
+ 
+process. In an additional contribution, the Ideo’s approach was further explored 
+specifically in the educational context which the insights gained was incorporated into his 
+own approach. 
+Plattner, Meinel, and Weinberg’s approach outlines vital advancements in the Design 
+Thinking field and was used at the Hasso Plattner Institute in Potsdam and at Stanford 
+University in Palo Alto (2009). 
+The d.school’s approach (2010) exhibits similarities to Plattner et al.‘s approach; 
+therefore a partnership was formed between the two institutes. 
+Liedtka and Ogilvie‘s (2011) approach consists a procedure consisting of four phases and 
+ten techniques which were described in detail. Their approach was developed based on 
+the authors’ practical teaching and consulting experiences  
+Although the existing approaches make valuable contributions, they do not cover a clear 
+picture of Design Thinking and do not deliver an integrated approach with objectives, 
+activities, tools and results. In our contribution, we initiate the basic principles and 
+Roadmap for Design Thinking including several phases. 
+3 Research Questions and Research Design 
+Research questions 
+In the previous section, our brief literature review provided a theoretical foundation of 
+Design Thinking. To serve as a basis for our Roadmap, four existing approaches for 
+Design Thinking were individually selected.  
+Based on the problem described and current understanding, we attempt to answer the 
+following main research questions: 
+• What approaches exist for Design Thinking and how can they be described in a 
+structured way? 
+• What are basic principles for Design Thinking? 
+• How does an integrated approach for Design Thinking look like? 
+• What are the relevant phases for Design Thinking?  
+Research Design 
+In our research, we applied literature review and case study research methods to complete 
+the literature review. Case study research (Benbasat et al., 1987; Eisenhardt, 1989; Yin, 
+2013; Stake, 1995) analyses relevant cases, describes them and develops empirically 
+grounded concepts (Kromrey, 2009).  
+We conducted the literature review to gain insight into current research in Design 
+Thinking. Based on this, we developed an integrated approach for Design Thinking.  
+  
+4 Literature Review on Existing Approaches 
+Brown's approach (2008) 
+Tim Brown presents Ideo's approach to Design Thinking in a Harvard Business Review 
+article. He shows examples and outlines the process of Design Thinking. Another article 
+further explains an Ideo’s approach which is suitable for use in education and its findings 
+are incorporated into the development of its own approach (Ideo, 2012). 
+Principles 
+Brown does not explicitly explain the principles of Design Thinking, but makes 
+recommendations on how Design Thinking can be used within companies (2008, p. 90): 
+• Integration of Design Thinkers: Design Thinkers should be involved in the 
+process right from the start. 
+• User-centricity: Orientation towards the needs, preferences, and behavior of 
+users makes it possible to gain new insights and align solutions to them. 
+• Performing experiments: Experiments should be carried out early and often. 
+• Integrating external knowledge: Users should be integrated into the 
+development. 
+• Track projects of any size: Both incremental, short-term projects revolutionary 
+and long-term concepts should be implemented. 
+• Definition of budgets: Design Thinking can be a fast and meaningful result 
+available in a short time that should be marketed. A suitable budget must be 
+available for this purpose. 
+• Building interdisciplinary teams: To this end, employees should be sought at 
+suitable universities. 
+• Run through the process completely: Only if the process is completed can the 
+hoped-for results be achieved. 
+Procedure model   
+Brown proposes three phases (2008, p. 88 f) which are shown in Figure 1 and explained 
+below. 
+ 
+Figure 1 Ideo’s Procedure model (Brown, 2008, p. 88) 
+ 
+Inspiration: Understanding the environment with its problems and opportunities 
+ 
+ 
+6 
+ 
+ 
+In the first phase, the problem is defined, opportunities and changes identified and users 
+and their environment observed. Existing restrictions within one’s own company are 
+taken into consideration. Different disciplines are remotely linked. 
+Brainstorming: Acquisition, development, and testing of ideas 
+Brainstorming sessions and sketches are carried out within the idea generation process. It 
+must be ensured that customer-oriented work is carried out and that prototypes are 
+constantly tested and further developed. Users are also involved in the tests.  
+Implementation: Preparation for introduction   
+In the final phase, the definitive prototype is implemented. For this purpose, a 
+communication strategy is defined and a business case is created. 
+The phases shown are not linear but interconnected. 
+Techniques and Results 
+Techniques and results are not explained by Brown. However, Ideo's approach to 
+teaching includes numerous techniques. These include, for example, questionnaire 
+structure, field research, expert interviews, storytelling, brainstorming (Ideo, 2012, p. 40). 
+Summary 
+Ideo's approach shows a three-phase procedure model. Recommendations are also given 
+on how Design Thinking can be used within companies. Techniques are not shown. 
+ 
+Plattner, Meinel, and Weinberg’s Approach (2009) 
+Plattner, Meinel and Weinberg's approach represents an experience report on Design 
+Thinking and has already been used at the Hasso-Plattner-Institute in Potsdam and at 
+Stanford University in Palo Alto (2009. p. 8). 
+Principles 
+Plattner et al. discuss principles in two places, which are briefly explained below (2009, 
+p. 104 and p. 127): 
+• Multidisciplinary teams as a necessity for the success of Design Thinking, as the 
+spectrum of expertise, is more diversified. 
+• Not only specialists, because they already know the solution and often reach 
+their limits. 
+• Consideration of different learning styles to promote the Design Thinking 
+process. 
+• Open space with mobile furniture and attractive furnishings to encourage 
+creativity and teamwork.  
+• Repetition in the form of iterations to learn from mistakes and thus take 
+advantage of the opportunity to bring about improvement. A reiteration is not 
+seen as a loss of time, but as a gain in knowledge. 
+• Visualize to make ideas visible in images. Texts and notes are linked with 
+photos, videos, sketches, drawings, and symbols. 
+• Use brainstorming in accordance with certain rules to develop ideas and 
+solutions. 
+• Consideration of time to quickly develop ideas. The definition of time 
+timeframes does not prevent the generation of ideas but promotes spontaneity. 
+Procedure model 
+Plattner proposes six phases (p. 113 ff), which are shown in Figure 2 and explained 
+below. 
+ 
+Figure 2 Procedure model of Plattner et al. (Plattner et al. 2009, p. 113) 
+ 
+Understand: Understanding the problem and its environment 
+This phase describes the task and defines the problem. It represents the most important 
+phase in the procedure model since errors that occur here affect the entire process. The 
+Design Challenge describes the task to be solved with the process. The focus is on user 
+orientation and the question of the target group. Depending on the Design Challenge, a 
+combined understanding should be created within multidisciplinary teams. 
+Observe: Observe concerned users 
+In the second phase, the members of the team must acquire expert knowledge for the task 
+at hand. Existing solutions are analyzed and questioned. Following the precise definition 
+of the users, they are observed and interviewed personally. In the context of observation, 
+the use of products and behaviors must be analyzed.  
+Point of View: Understanding the problem world 
+The knowledge gained is evaluated, interpreted and weighted. The experiences of the 
+entire team are summarized in order to create a common basis. A typical, fictitious person 
+is created, which is described holistically. It is important to separate relevant facts from 
+non-relevant facts. 
+Ideate: Develop, compile and evaluate solutions 
+Brainstorming generates ideas that contain a solution. Following the acquisition of 
+numerous ideas, they are evaluated, selected and described. 
+Prototypes: Create comprehensible solutions for the user. 
+ 
+ 
+8 
+ 
+ 
+By developing prototypes, selected ideas are to be made visible and communicated in 
+order to receive feedback from users. Prototypes do not have to be extremely expensive 
+or perfect. 
+Test: Trying out solutions together with users 
+The prototypes developed are tested by design thinkers and users to learn about the 
+strengths and weaknesses of an idea and learn from the results. 
+The phases shown are iteratively interlinked; feedback is made therefore possible in order 
+to refine the findings and make adjustments. Once the test phase is completed, the Design 
+Thinking process is also completed and the technical, social and economic feasibility is 
+clarified. If feasibility is not achievable, the point of view is redefined and the process is 
+repeated 
+Techniques and Outcomes 
+Techniques and results are not explained in detail but extensively mentioned. Techniques 
+include market research techniques (interviews and observation), persona, storytelling, 
+role-playing, and brainstorming. 
+Summary 
+The approach of Plattner et al (2009) shows basic principles and a procedure model with 
+six phases, which are deposited with exemplary projects (p. 163). Techniques are 
+mentioned, but not explained in detail, as they are usually known. In addition, there are 
+findings on the development of Design Thinking and on the personal characteristics of 
+Design Thinkers, which have already been explained in the theoretical principles of this 
+book. 
+ 
+d. school’s Approach (2010) 
+The approach of each d. school in Stanford is similar to the approach of Plattner et al. as 
+there is a current cooperation.  
+Principles 
+The principles of the d. school’s approach are called mindset and are briefly explained 
+below (2010, p. 3): 
+• Activity: The activity is more important than holding official meetings. 
+• Experiment: Experiments and prototypes are part of the entire process and are 
+used to gain experience. 
+• Empathy: The Empathy for users is important to develop suitable solutions. 
+• Visualization: The Visualization serves to communicate ideas. 
+• Transparency: A common vision is formulated from different problems.  
+• Procedure: The techniques, the goals, and the position must be clear within the 
+process. 
+• Diversification: Collaboration of team members with different backgrounds.  
+Procedure model 
+The procedure model of the d. school is characterized by five phases, which are shown in 
+Figure 18 and explained below (2010, p: 4). 
+Empathize 
+During the first phase, users and their behavior are observed. Furthermore, they are 
+questioned and their own experiences with existing products and services are gained. The 
+objective is to build an understanding of the users and their problems. 
+ 
+Figure 3 Procedure model of the d. school (based on d. school, 2010, p. 4) 
+ 
+Define 
+The insights that were gained in the previous phase are summarized into concrete needs 
+in order to formulate a relevant challenge on this basis. The objective is to develop a 
+more definite understanding of users than in the previous phase and, building on this, to 
+define a common position on the challenge. 
+Ideate 
+In this phase, ideas are gained for the formulated challenge. The objective is to derive 
+many different Ideas for the next phase. 
+Prototype 
+The creation of prototypes makes it possible to turn ideas into tangible solutions. 
+Prototypes can be represented as an exemplary role plays or as models. Prototypes are 
+helpful when the team and users can try them out and gain experience. 
+Test 
+The prototypes created are tested in this phase to make improvements. The tests take 
+place in the context of the users. The tests also provide an opportunity to gain further 
+information about the user and to change the formulation of the challenge if necessary. 
+Analogous to the approach of Plattner et al., the phases of the d. school are iteratively 
+connected.  
+Techniques and Outcomes 
+The approach of d. school contains numerous techniques that are assigned to the 
+ 
+ 
+10 
+ 
+ 
+described phases. The techniques are described with the reasons for the use and the 
+procedure. The techniques include; Assumption of a Beginners Mindset, User Camery 
+Study and Extreme Users (d. school, 2010, p. 9). 
+Summary 
+The approach of d. school (2010) shows basic principles and a procedures model with 
+five phases. Techniques are available for the phases, which are explained with their 
+reasons and the procedure.  
+ 
+Liedtka & Ogilvie’s Approach (2011) 
+The approach described by Liedtka and Ogilvie includes an approach consisting of four 
+phases and ten techniques, which are described in detail. It is based on the experiences of 
+the two authors who have gained them in teaching and consulting.  
+Principles 
+Do not show any explicit principles of Design Thinking within individual techniques, for 
+example, Brainstorming, however, some principles are presented in this regard (Liedtka 
+& Ogilvie, 2011, p. 104). 
+Procedure model 
+Liedtka and Ogilvie propose four phases, which are shown in Figure 4 and explained 
+below (2011, p. 21): 
+ 
+Figure 4 Liedtka & Ogilvie’s Procedure model (based on Liedtka & Ogilvie, 2011) 
+ 
+What is? Analysis of the Current Situation 
+In this phase, the current situation and problems of users are analyzed. The aim is to find 
+out what frustrates users and what disturbs them in their current situation. Journey 
+Mapping builds an understanding of users to assess the potential of a new idea. Value 
+chain analysis is used to check whether your company is capable of implementing the 
+new idea and uncovering gaps. Using mind mapping, all information gained is structured 
+in order to make it available in the next phase. 
+What if? Shaping the future 
+In the second phase, new possibilities and trends are taken into account in order to derive 
+future developments and ideas. Brainstorming is used to winning ideas. Ideas are then 
+grouped and described in the form of concepts. 
+ 
+What wows? Making of Decisions 
+The concepts described are tested within this phase with assumptions in order to 
+concentrate on the most promising concepts. Prototypes are created for the promising 
+concepts, which are then tested with users and partners. 
+What works? Marketing 
+The last phase serves to work on the prototypes and to develop them further. Market 
+introduction is planned for the improved prototypes and further information is obtained. 
+During these phases, divergent and convergent thinking is used in different ways. In the 
+first two phases of the procedure model, a broad field of vision is opened up (divergent) 
+in order to detach oneself from existing solution approaches. In the last two phases of the 
+procedure model, the focus is then placed on the promising options (convergent).  
+Techniques 
+There are ten techniques that are explained in detail and assigned to the four phases. The 
+techniques include (Liedtka & Ogilvie, 2011, p.45): 
+• Visualization: Transformation of information into pictures, sketches, narratives 
+etc. 
+• Journey Mapping: Representation of the interaction of the user, while this 
+contains products or services of the company. 
+• Value Chain Analysis: Analysis of the company's interactions with partners is 
+necessary to create, market and distribute services. 
+• Mind Mapping: Structuring of a large amount of information that was 
+previously collected. 
+• Brainstorming: Gaining ideas, especially alternatives to the status quo. 
+• Concept Development: Selection of the best ideas for brainstorming, description 
+as detailed concepts and evaluation based on users and company criteria. 
+• Assumption Testing: Examination of assumptions regarding the described 
+concepts and selection of promising concepts. 
+• Rapid Prototyping: prototypes are created for selected concepts. Drawings, 
+functional prototypes and market test prototypes can be created. 
+• Customer Co-Creation: Integration of potential users into the development of 
+service offerings. 
+• Learning Launch: open assumptions about the range of services are tested on the 
+market in the form of an experiment.  
+In addition to these techniques, the authors present four tools that are used within a 
+Design Thinking project at the beginning of each phase (Liedtka & Ogilvie, 2011, p.35). 
+• Design Note: Description of the project with goals, resources, deadlines, etc. 
+• Design Criteria: Criteria for evaluating alternative designs; includes user needs  
+ 
+12 
+ 
+ 
+and company requirements. 
+• Napkin Pitch: Description and communication of solution concepts in detail. 
+• Learning Guide: Determining the use of resources to gain further experience. 
+Summary 
+Liedtka and Ogilvie’s approach contains a procedure model with four phases and 
+techniques that are assigned to the respective phases. There are also four tools in the form 
+of formulas to be completed at the beginning of a phase. 
+ 
+5 Integrated approach for Design Thinking  
+In the following section we describe our integrated approach which consists of basic 
+principles and the Roadmap. 
+Basic Principles 
+Design Thinking is characterized by four basic principles: 1. human needs as a starting 
+point, 2. Multidisciplinary teams; 3. Iterative process and 4. Creative environment. The 
+four basic principles are shown in figure 5. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure 5 Basic Principles of Design Thinking 
+ 
+Humans as a starting point 
+Within Design Thinking, people are the source of inspiration for new ideas. The human 
+being and his needs are in the foreground. Once the requirements have been determined, 
+the next step is to check which products and services are technically feasible. Then it is 
+checked which solutions are economical. Since a fundamental orientation towards people 
+and their needs takes place, firstly less extensive marketing is necessary and secondly the 
+flop rate of new products and services is lower (Weinberg, 2012; d. school, 2010; Plattner 
+et al., 2009.; Brown, 2008).  
+Multidisciplinary Teams 
+The second principle is the use of multidisciplinary teams. The focus here is not on the 
+creative capabilities of individuals, but on the creative capabilities of interdisciplinary 
+teams with four to six participants. Care is taken to ensure that 50% of the teams are 
+made up of men and 50% women. It must also be ensured that the disciplines are equally 
+represented (Weinberg, 2012; Plattner, 2009; d. school, 2010; Brown, 2008).   
+Each member of a multidisciplinary team is called a Design Thinker. The personal 
+characteristics of a Design Thinker play a major role and are explained below (Plattner et 
+al., 2009).  
+• Optimism: A Design Thinker should be optimistic about his ability to develop 
+better solutions with Design Thinking. Optimism is common and coupled with 
+enthusiasm.  
+• Empathy: A Design Thinker should have a high degree of empathy to see the 
+world through the eyes of the user and to understand his perception and 
+sensation. Furthermore, the reasons for a certain perception should be analyzed 
+in order to identify unfulfilled wishes and needs of users.  
+• Integrative Thinking: A Design Thinker should be able to analyze products, 
+processes, and systems holistically in order to detect both obvious and hidden 
+defects. In addition, it is necessary either to select the best solution from existing 
+solutions, to develop new solutions or to change existing solutions in such a way 
+that better results are achieved. 
+• Experimentation: A Design Thinker should enjoy trying new things, gaining 
+experience and taking risks, making mistakes and learning from them. 
+Assumptions should also be made and tested.  
+• Cooperation capability: A Design Thinker should be cooperative because 
+complex problems require joint work on solutions. The joint work with people 
+from other disciplines is also relevant here.   
+Iterative process 
+Due to the use of multidisciplinary teams, all participants have different work processes 
+due to their training and experience. For this reason, it is necessary to provide a process 
+that combines analytic with intuition and is understandable for all participants. Iterations 
+are possible within the process in order to improve the solutions.  
+ 
+14 
+ 
+ 
+In addition to the iteration of the process, it is characterized by a variety of divergent and 
+convergent thinking. In the first three phases, a broad field of vision is opened (divergent) 
+in order to gain a lot of input and to concentrate on a few perspectives at the end of the 
+third phase. Ideas for solutions are then generated and prototypes are developed 
+(divergent) in order to focus on one after testing prototypes that are integrated into a 
+business model (convergent). Furthermore, the Design Thinking process leads to ever 
+more concrete results, which is represented by the yellow line (Liedtka & Ogilvie, 2011; 
+Ideo, 2012a).  
+In some phases of the Design Thinking process, brainstorming is used, for which certain 
+rules are relevant (Ideo 2012; d. school, 2010): 
+• Visualize: Problems, ideas, and solution approach are to be visualized by means 
+of sketches. 
+• Only one speaks: only one Design Thinker speaks at a time, as all ideas should 
+be heard. 
+• Promote ideas: unusual ideas should be promoted, even if they initially appear 
+unrealistic. 
+• Postpone critique: there are no bad ideas and there is enough time to elaborate 
+them. 
+• Experiment: experiment throughout the process to develop further ideas and 
+identify weaknesses. 
+• Track activity: Activity in the form of actions is relevant. 
+• Quantity is important: in order to find a good idea, many ideas have to be won. 
+• Focus: all team members should stick to the topic and not lose sight of the main 
+goal. 
+• Building on ideas: derived ideas should be further developed; better "and" than 
+"but". 
+• Turn off electronic devices: all team members participate and focus on the 
+process.  
+Creative Environment 
+The described process takes place in a creative environment that is characterized by an 
+idea-promoting division and institution. 
+In addition to the work environment shown, rooms for workshops can be redesigned to 
+support creative work. In addition, materials that can be used in the Design Thinking 
+process are also relevant.   
+Roadmap 
+A Roadmap is given here based on the presented approaches to Design Thinking and 
+based on existing theories about Design Thinking, the Roadmap for Design Thinking is 
+explained as follows: 
+• Defining Design Challenge: First of all, it is necessary to derive different 
+subject areas. The different subject areas are discussed, in order to then commit 
+oneself to one particular subject area. A Design Challenge is formulated for the 
+selected topic area, which is to be answered. Typical users are also defined. 
+Subsequently, a project plan is drawn up, which includes deadlines, costs, and 
+results.  
+• Understanding Design Challenge: In this phase, it is important to build a 
+common understanding of the Design Challenge to be accomplished. For this 
+purpose, typical users are analyzed in relevant situations and with the problems 
+they have to cope with. This analysis is carried out by means of a survey and 
+observation. Existing solutions that are available on the market are tested and 
+experts are interviewed to build expertise on the Design Challenge. 
+• Defining Perspectives: In this phase, it is important to build a common 
+understanding of the Design Challenge to be accomplished. For this purpose, 
+typical users are analyzed in relevant situations and with the problems they have 
+to cope with. This analysis is carried out by means of a survey and observation. 
+Existing solutions that are available on the market are tested and experts are 
+interviewed to build expertise of the Design Challenge.  
+• Gaining Ideas: In this phase, ideas are gained through the use of creativity 
+techniques that are intended to meet the previously identified needs. These ideas 
+are grouped and revised. The ideas are then described and evaluated.  
+• Developing Prototypes: The ideas gained serve to develop prototypes. A 
+prototype thus represents a solution to the challenge described. Prototypes can 
+be developed in different forms. Following the development of prototypes, these 
+prototypes are improved and combined.  
+• Testing Prototypes: The different prototypes are presented to the users and then 
+tested with them. The aim is to gain important experience, also with regard to 
+the use of prototypes. Prototypes are also tested in the market. The experience 
+gained is then used to improve and further develop the prototypes. Based on the 
+evaluation of the prototypes, a promising prototype is selected.  
+• Integrating Prototypes: In this phase, a uniform grid is used to develop a 
+business model that integrates the prototype for a product or service. Thus, a 
+business model with the following five dimensions is available: customer 
+dimension, user dimension, value-added dimension, partner dimension, financial 
+dimension. 
+ 
+Figure 6 represents the Roadmap to Design Thinking with the various phases and 
+activities.   
+ 
+16 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure 6 Roadmap for Design Thinking 
+ 
+6 Contribution 
+The contribution of this research is initiating the discussion of Design Thinking by 
+providing a literature review, a concise definition and basic principles for Design 
+Thinking. Based on this, we presented an integrated seven-step approach on how to 
+successfully apply Design Thinking. This addresses an existing research gap regarding 
+design thinking, which is linked to innovation management in general.  
+7 Practical Implications 
+Senior managers and business developers will gain from our findings by acquiring a clear 
+definition and the basic principles of Design Thinking. The seven-step Roadmap enables 
+companies to take advantage of Design Thinking’s potential. By applying the Roadmap 
+in a proper way companies are enabled to optimize their current solutions (mainly 
+products and services) and create a distinct competitive advantage by providing new 
+ideas at a lower risk and within a shorter time to the market.  
+8 Limitations 
+The aim of this paper is to report our research results on Design Thinking. The reader 
+should bear in mind that due to practical constraints, the results may not be generalized. 
+Furthermore, some aspects (e.g. broad application of our approach in several industries) 
+needs to be further investigated. Therefore, we recommend interviews with practitioners 
+and longitudinal studies in other circumstances in order to establish a greater 
+understanding of Design Thinking. 
+9 Recommendations for Further Research 
+Further research regarding the impact of Design Thinking would be worthwhile. For 
+example, it would be interesting to create a knowledge building community where 
+researchers and practitioners can compare experiences gained from our approach in 
+different industries and company sizes. Another possible area of future research would be 
+to investigate the role of Design Thinking within innovation management, particularly in 
+the field of business model innovation. Lastly, future studies need to provide quantifiable 
+benefits of Design Thinking.   
+ 
+18 
+ 
+ 
+References  
+Benbasat, I., Goldstein, D. K., & Mead, M. (1987). The case research strategy in studies 
+of information systems. MIS quarterly, 369-386. 
+Brown, T. (2008). Design Thinking. Harvard Business Review. 
+Curedale, R. (2013). Design Thinking. Design Community College. 
+d.school (2010). Bootcamp Bootleg. Hasso Plattner Institute of Design at Stanford. 
+Eisenhardt, K. M. (1989). Building theories from case study research. Academy of 
+management review, 14(4), 532-550. 
+Erbeldinger, J., Ramge, T., & Erbeldinger, R. (2013). Durch die Decke denken: Design 
+thinking in der Praxis. Redline Wirtschaft.. 
+Ideo (2012). Design Thinking for Educators. New York.  
+Kromrey, H. (2009). Empirische Sozialforschung: Modelle und Methoden der 
+standardisierten Datenerhebung und Datenausweitung, UTB Verlag, Stuttgart. 
+Liedtka, J. & Ogilvie, T. (2011). Designing for Growth. Columbia Business School. 
+Mootee, I. (2013).Designing for strategic innovation, Wiley. 
+Plattner, H.; Meinel, Ch. & Weinberg, U. (2009). Design Thinking. Innovation lernen, 
+Ideenwelten öffnen. München. 
+Stake, R. E. (1995). The art of case study research. Sage. 
+Weinberg, U. (2012). Vortrag zum Thema Design Thinking. Verfügbar unter: 
+https://www.youtube.com/watch?v=WDCZ8u6YZ6I (22.05.2015). 
+Yin, R. K. (2013). Case study research: Design and methods. Sage publications. 

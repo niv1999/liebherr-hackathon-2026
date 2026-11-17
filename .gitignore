@@ -1,0 +1,15 @@
+# Big / raw data (keep local only)
+data/
+*.zip
+*.mp4
+*.mov
+*.m4a
+# Duplicate downloads
+* (1).*
+# Python / secrets
+.venv/
+.env
+__pycache__/
+*.pyc
+app/runs/
+app/cache/

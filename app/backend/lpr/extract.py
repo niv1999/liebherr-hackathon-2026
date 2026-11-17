@@ -57,6 +57,29 @@ def visible_text(soup: BeautifulSoup) -> str:
     return re.sub(r"\s+", " ", text)[:MAX_TEXT]
 
 
+CHROME_HINT = re.compile(r"(^|[-_\s])(nav|navigation|menu|megamenu|header|footer|breadcrumb|cookie|consent|"
+                         r"newsletter|flyout|sidebar)([-_\s]|$)", re.I)
+
+
+def content_text(html: str) -> str:
+    """Page text without site navigation, header, footer and cookie layers (what an AI judge should read)."""
+    soup = BeautifulSoup(html or "", "lxml")
+    for tag in soup(["script", "style", "noscript", "svg", "template", "nav", "header", "footer", "form", "iframe"]):
+        tag.decompose()
+    for tag in soup.select('[role="navigation"], [role="banner"], [role="contentinfo"], [aria-modal="true"]'):
+        tag.decompose()
+    for tag in list(soup.find_all(True)):
+        if getattr(tag, "decomposed", False):  # inside an element removed earlier
+            continue
+        attrs = getattr(tag, "attrs", None) or {}
+        ident = " ".join([attrs.get("id") or ""] + list(attrs.get("class") or []))
+        if ident and CHROME_HINT.search(ident) and tag.name not in ("html", "body", "main"):
+            tag.decompose()
+    root = soup.find("main") or soup.body or soup
+    text = re.sub(r"\s+", " ", root.get_text(" ", strip=True))
+    return text[:MAX_TEXT]
+
+
 def extract(html: str, url: str = "") -> dict[str, Any]:
     soup = BeautifulSoup(html or "", "lxml")
     blocks = _jsonld_blocks(soup)
@@ -105,4 +128,5 @@ def extract(html: str, url: str = "") -> dict[str, Any]:
         "pdf_links": sorted({a["href"] for a in soup.find_all("a", href=True) if ".pdf" in a["href"].lower()})[:40],
         "text": text,
         "text_length": len(text),
+        "content_text": content_text(html),  # without navigation/footer: used for AI prompts
     }

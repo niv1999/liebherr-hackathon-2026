@@ -9,7 +9,7 @@ from datetime import date, timedelta
 from sqlmodel import Session, select
 
 from . import settings
-from .checks import REGISTRY, CheckContext, CheckResult
+from .engine import check_page
 from .crawler import Crawler, FetchResult, raw_fetch, robots_txt
 from .db import session_scope
 from .extract import extract, model_core, model_slug, norm
@@ -167,29 +167,10 @@ def _execute(s: Session, run: AuditRun) -> None:
             s.add(snap)
             s.commit()
 
-            for c in criteria:
-                if c.page_type != "product":
-                    continue
-                if not c.applies_to_sk(p.sk):
-                    continue
-                if res.blocked:
-                    r = CheckResult("needs_human", f"Page could not be checked automatically ({res.block_reason}).")
-                elif c.method == "manual":
-                    r = CheckResult("needs_human", "Not visible online: needs a manual check or Liebherr's internal data.",
-                                    source="manual")
-                else:
-                    fn = REGISTRY.get(c.rule_key or "")
-                    if not fn:
-                        r = CheckResult("needs_human", f"No automatic check implemented yet ({c.rule_key}).")
-                    else:
-                        ctx = CheckContext(retailer=retailer, criterion=c, product=p, page=page, raw_page=raw_page,
-                                           raw_status=raw_status, robots_txt=robots, image_info=res.image_info,
-                                           screenshot_path=res.screenshot_path,
-                                           feedback_examples=_feedback_examples(s, c.id) if c.method == "ai" else [])
-                        try:
-                            r = fn(ctx)
-                        except Exception as e:
-                            r = CheckResult("error", f"Check crashed: {type(e).__name__}: {e}")
+            checked = check_page(s, retailer, criteria, p, page, raw_page, raw_status, robots, res.image_info,
+                                 res.screenshot_path, res.block_reason if res.blocked else None,
+                                 feedback_fn=lambda cid: _feedback_examples(s, cid))
+            for c, r in checked:
                 s.add(Verdict(run_id=run.id, criterion_id=c.id, product_id=p.id, page_id=snap.id, status=r.status,
                               source=r.source if c.method != "manual" else "manual", confidence=r.confidence,
                               reasoning=r.reasoning, evidence=r.evidence, screenshot_path=res.screenshot_path,

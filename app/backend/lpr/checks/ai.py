@@ -57,7 +57,7 @@ def run_ai(ctx: CheckContext, extra: str = "", use_screenshot: bool = False, ins
         f"{_feedback_block(ctx)}\n\n"
         f"Retailer page URL: {ctx.page.get('url')}\n"
         f"Retailer page title: {ctx.page.get('h1') or ctx.page.get('title')}\n"
-        f"Retailer page text (German, may be truncated):\n\"\"\"\n{(ctx.page.get('text') or '')[:PAGE_TEXT_LIMIT]}\n\"\"\"\n\n"
+        f"Retailer page text (German, may be truncated):\n\"\"\"\n{(ctx.page.get('content_text') or ctx.page.get('text') or '')[:PAGE_TEXT_LIMIT]}\n\"\"\"\n\n"
         "Answer with verdict pass / fail / unsure, a confidence between 0 and 1, short reasoning in English and evidence quotes."
     )
     images = [Path(ctx.screenshot_path)] if use_screenshot and ctx.screenshot_path else []

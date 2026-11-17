@@ -151,7 +151,7 @@ def simulate(body: SimulateIn, s: Session = Depends(get_session)):
     for p in s.exec(q).all():
         if p.html_path and Path(p.html_path).exists():
             e = extract(Path(p.html_path).read_text(encoding="utf-8"), p.url)
-            texts.append(f"--- Page: {e.get('h1') or p.url}\n{e['text'][:12000]}")
+            texts.append(f"--- Page: {e.get('h1') or p.url}\n{(e.get('content_text') or e['text'])[:12000]}")
     if not texts:
         raise HTTPException(404, "No readable pages in the latest audit")
     answer = simulate_shopper(body.question, "\n\n".join(texts), retailer.name)

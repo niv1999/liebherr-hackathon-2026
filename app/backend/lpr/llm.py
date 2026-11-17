@@ -28,7 +28,7 @@ class Provider(Protocol):
     name: str
     available: bool
 
-    def judge(self, prompt: str, images: list[Path] | None = None) -> AIJudgement: ...
+    def judge(self, prompt: str, images: list[Path] | None = None, schema: type[BaseModel] = AIJudgement): ...
 
     def answer(self, prompt: str) -> str: ...
 
@@ -37,7 +37,7 @@ class NoProvider:
     name = "none"
     available = False
 
-    def judge(self, prompt: str, images: list[Path] | None = None) -> AIJudgement:
+    def judge(self, prompt: str, images: list[Path] | None = None, schema: type[BaseModel] = AIJudgement):
         raise RuntimeError("No AI provider configured (set GEMINI_API_KEY in app/.env).")
 
     def answer(self, prompt: str) -> str:
@@ -78,7 +78,7 @@ class GeminiProvider:
                     continue
                 raise
 
-    def judge(self, prompt: str, images: list[Path] | None = None) -> AIJudgement:
+    def judge(self, prompt: str, images: list[Path] | None = None, schema: type[BaseModel] = AIJudgement):
         from google.genai import types
 
         parts: list = []
@@ -87,11 +87,11 @@ class GeminiProvider:
                 parts.append(types.Part.from_bytes(data=Path(p).read_bytes(), mime_type="image/jpeg"))
         parts.append(prompt)
         cfg = types.GenerateContentConfig(temperature=0, response_mime_type="application/json",
-                                          response_schema=AIJudgement)
+                                          response_schema=schema)
         resp = self._call(parts, cfg)
         if getattr(resp, "parsed", None) is not None:
             return resp.parsed
-        return AIJudgement.model_validate_json(resp.text)
+        return schema.model_validate_json(resp.text)
 
     def answer(self, prompt: str) -> str:
         from google.genai import types
@@ -100,13 +100,58 @@ class GeminiProvider:
         return (resp.text or "").strip()
 
 
+class FileProvider:
+    """Offline judge for testing without an API key (LPR_LLM_PROVIDER=file).
+
+    Each request is written to runtime/ai_exchange/requests/<key>.json (prompt + image paths). A human or
+    Claude Code writes the answer to runtime/ai_exchange/answers/<key>.json:
+      judge:  {"verdict": "pass|fail|unsure", "confidence": 0.9, "reasoning": "...", "evidence": ["..."]}
+      answer: {"text": "..."}
+    Until an answer exists, judge() returns 'unsure' (-> needs human). Re-judge the verdict afterwards.
+    """
+
+    name = "file"
+    available = True
+
+    def __init__(self) -> None:
+        self.dir = settings.RUNTIME_DIR / "ai_exchange"
+        (self.dir / "requests").mkdir(parents=True, exist_ok=True)
+        (self.dir / "answers").mkdir(parents=True, exist_ok=True)
+
+    def _exchange(self, kind: str, prompt: str, images: list[Path] | None) -> dict | None:
+        import hashlib
+        import json
+
+        imgs = [str(p) for p in images or [] if p]
+        key = hashlib.sha1((kind + prompt + "|".join(imgs)).encode("utf-8")).hexdigest()[:16]
+        ans = self.dir / "answers" / f"{key}.json"
+        if ans.exists():
+            return json.loads(ans.read_text(encoding="utf-8"))
+        (self.dir / "requests" / f"{key}.json").write_text(
+            json.dumps({"key": key, "kind": kind, "images": imgs, "prompt": prompt}, ensure_ascii=False, indent=1),
+            encoding="utf-8")
+        return None
+
+    def judge(self, prompt: str, images: list[Path] | None = None, schema: type[BaseModel] = AIJudgement):
+        a = self._exchange("judge", prompt, images)
+        if a is None:
+            raise TimeoutError("Waiting for the offline judge's answer (see runtime/ai_exchange/requests).")
+        return schema.model_validate(a)
+
+    def answer(self, prompt: str) -> str:
+        a = self._exchange("answer", prompt, None)
+        return a["text"] if a else "Waiting for the offline judge's answer."
+
+
 _provider: Provider | None = None
 
 
 def get_provider() -> Provider:
     global _provider
     if _provider is None:
-        if settings.LLM_PROVIDER == "gemini" and settings.GEMINI_API_KEY:
+        if settings.LLM_PROVIDER == "file":
+            _provider = FileProvider()
+        elif settings.LLM_PROVIDER == "gemini" and settings.GEMINI_API_KEY:
             _provider = GeminiProvider(settings.GEMINI_API_KEY, settings.GEMINI_MODEL)
         else:
             _provider = NoProvider()

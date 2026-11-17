@@ -207,3 +207,51 @@ export function Switch({ checked, onChange, label }) {
     </span>
   );
 }
+
+/* ---------------------------------------------------------------- loading skeletons */
+export function Skeleton({ className = "" }) {
+  return <div className={`animate-pulse rounded-md bg-slate-200/70 ${className}`} />;
+}
+
+export function ListSkeleton({ rows = 6 }) {
+  return (
+    <div className="card divide-y divide-slate-100">
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="px-4 py-3.5 flex items-center gap-3">
+          <Skeleton className="w-9 h-9 rounded-xl" />
+          <div className="flex-1 space-y-2"><Skeleton className="h-3 w-1/3" /><Skeleton className="h-2.5 w-1/5" /></div>
+          <Skeleton className="h-5 w-20 rounded-full" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function OverviewSkeleton() {
+  return (
+    <div className="space-y-6">
+      <Skeleton className="h-8 w-40" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[0, 1, 2, 3].map((i) => <div key={i} className="card p-4 space-y-3"><Skeleton className="h-3 w-24" /><Skeleton className="h-7 w-20" /></div>)}
+      </div>
+      <ListSkeleton rows={5} />
+    </div>
+  );
+}
+
+export function ScorecardSkeleton() {
+  return (
+    <div className="space-y-5">
+      <div className="card p-6 grid grid-cols-1 xl:grid-cols-12 gap-6 items-center">
+        <div className="xl:col-span-5 flex gap-4"><Skeleton className="w-14 h-14 rounded-2xl" />
+          <div className="flex-1 space-y-2.5"><Skeleton className="h-6 w-40" /><Skeleton className="h-3 w-56" /><Skeleton className="h-5 w-48" /></div></div>
+        <div className="xl:col-span-3 flex justify-center"><Skeleton className="w-28 h-28 rounded-full" /></div>
+        <div className="xl:col-span-4 grid grid-cols-2 gap-2.5">{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-16 rounded-lg" />)}</div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div className="lg:col-span-8"><ListSkeleton rows={6} /></div>
+        <div className="lg:col-span-4 space-y-5"><Skeleton className="h-44 rounded-xl" /><Skeleton className="h-44 rounded-xl" /></div>
+      </div>
+    </div>
+  );
+}

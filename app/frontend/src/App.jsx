@@ -58,10 +58,10 @@ export default function App() {
             </div>
             <div className="flex items-center gap-2.5">
               {ai && (
-                <Link to="/settings" title={ai.available ? `AI judge: ${ai.provider} · ${ai.model}` : "AI judge off"}
+                <Link to="/settings" title={ai.available ? `AI judge: ${ai.connection || ai.model}` : "No AI connection"}
                   className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-[11px] text-slate-300 hover:text-white">
                   <span className={`w-1.5 h-1.5 rounded-full ${ai.available ? "bg-emerald-400" : "bg-amber-400"}`} />
-                  {ai.available ? `AI: ${ai.provider === "claude" ? "Claude" : "Gemini"}` : "AI off"}
+                  {ai.available ? `AI: ${ai.provider === "claude" ? "Claude" : "Gemini"}` : "No AI"}
                 </Link>
               )}
               <Notifications refreshKey={refreshKey} />

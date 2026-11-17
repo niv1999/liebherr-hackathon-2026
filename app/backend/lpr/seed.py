@@ -72,4 +72,35 @@ def seed_all(s: Session) -> dict:
         "criteria_added": seed_criteria(s),
         "retailers_added": seed_retailers(s),
         "settings": seed_settings(s) or "ok",
+        "ai": migrate_env_ai_keys(s) or "ok",
     }
+
+
+def migrate_env_ai_keys(s: Session) -> None:
+    """One-time: API keys from the old settings (app/.env) become saved AI connections."""
+    import os
+    from datetime import date
+
+    from .models import AIConnection
+
+    if s.exec(select(AIConnection)).first():
+        return
+    names = {"gemini-2.5-flash": "Gemini 2.5 Flash", "claude-opus-5-5": "Claude Opus 5.5",
+             "claude-sonnet-5-5": "Claude Sonnet 5.5", "claude-haiku-5-5": "Claude Haiku 5.5"}
+    today = date.today().strftime("%d %b %Y")
+    made = {}
+    if os.getenv("GEMINI_API_KEY"):
+        m = os.getenv("GEMINI_MODEL", settings.GEMINI_MODEL)
+        made["gemini"] = AIConnection(name=f"{names.get(m, m)} · {today}", provider="gemini", model=m,
+                                      api_key=os.environ["GEMINI_API_KEY"])
+    if os.getenv("ANTHROPIC_API_KEY"):
+        m = os.getenv("CLAUDE_MODEL", settings.CLAUDE_MODEL)
+        made["claude"] = AIConnection(name=f"{names.get(m, m)} · {today}", provider="claude", model=m,
+                                      api_key=os.environ["ANTHROPIC_API_KEY"])
+    for c in made.values():
+        s.add(c)
+    s.commit()
+    preferred = made.get(os.getenv("LPR_LLM_PROVIDER", "")) or next(iter(made.values()), None)
+    if preferred:
+        s.add(AppSetting(key="ai_active", value={"connection_id": preferred.id}))
+        s.commit()

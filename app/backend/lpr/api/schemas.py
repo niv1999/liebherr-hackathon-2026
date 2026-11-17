@@ -142,10 +142,11 @@ class ProductPatch(BaseModel):
     active: Optional[bool] = None
 
 
-class AISettingsIn(BaseModel):
-    provider: Literal["gemini", "claude", "none"]
-    model: Optional[str] = None
-    api_key: Optional[str] = None  # only sent when changed; stored in app/.env, never returned
+class AIConnectionIn(BaseModel):
+    provider: Literal["gemini", "claude"]
+    model: str
+    api_key: str
+    name: Optional[str] = None
 
 
 class FixedIn(BaseModel):

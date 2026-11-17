@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api, reportUrl, reviewerName } from "../api.js";
 import {
-  BLOCKS, Bar, Button, Delta, Empty, HelpTip, LabelBadge, RetailerLogo, ScoreRing, SourceTag, StatusPill, fmtDate,
-  scoreColor, useToast,
+  BLOCKS, Bar, Button, Delta, Empty, HelpTip, LabelBadge, ListSkeleton, RetailerLogo, ScoreRing, ScorecardSkeleton, Skeleton,
+  SourceTag, StatusPill, fmtDate, scoreColor, useToast,
 } from "../components/ui.jsx";
 
 const BLOCK_WEIGHT = { visibility: "×3", services: "×2", advice: "×1" };
@@ -32,6 +32,7 @@ export default function Retailer({ refreshKey, onRunAudit }) {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-2">
+        {retailers.length === 0 && [0, 1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-8 w-28 rounded-lg" />)}
         {retailers.map((r) => {
           const active = String(r.id) === String(id);
           const s = r.latest_run?.lpr_score;
@@ -49,7 +50,7 @@ export default function Retailer({ refreshKey, onRunAudit }) {
       </div>
 
       {!data ? (
-        <p className="text-sm text-slate-500">Loading…</p>
+        <ScorecardSkeleton />
       ) : !data.latest_run ? (
         <Empty title={`${data.retailer.name} has not been audited yet`}>
           <div className="mt-3"><Button onClick={() => onRunAudit([data.retailer.id])}>Audit {data.retailer.name}</Button></div>
@@ -347,7 +348,7 @@ function AssortmentTab({ data }) {
     <div className="p-4 space-y-4">
       <div className="grid grid-cols-3 gap-3">
         {[["Reference models", l.reference_count], ["Listed", l.listed_count], ["Available", l.available_count]].map(([k, v]) => (
-          <div key={k} className="rounded-lg border border-slate-200 p-3"><p className="text-[11px] text-slate-500">{k}</p><p className="text-xl font-bold tabular">{v}</p></div>
+          <div key={k} className="rounded-lg border border-slate-200 p-3"><p className="text-[11px] text-slate-500">{k}</p><p className="text-xl font-bold tabular">{v ?? "?"}</p></div>
         ))}
       </div>
       <p className="text-[11px] text-slate-400">Counted {fmtDate(l.counted_at)}</p>
@@ -384,7 +385,7 @@ function TodoTab({ run, onChanged }) {
     }
   };
 
-  if (!items) return <p className="p-6 text-sm text-slate-500">Loading…</p>;
+  if (!items) return <div className="p-4 space-y-3">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-20 rounded-lg" />)}</div>;
   if (!items.length) return <p className="p-6 text-sm text-slate-500 text-center">Nothing to fix.</p>;
   return (
     <div className="p-4 space-y-3">

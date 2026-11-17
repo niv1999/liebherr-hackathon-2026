@@ -319,7 +319,7 @@ def _fast_search(retailer: Retailer, model: str) -> str | None:
 def _listing_pass(s: Session, run: AuditRun, retailer: Retailer, crawler: Crawler, products: list[Product],
                   known: dict) -> None:
     ref = [p for p in products if p.sk in ("1", "2", "3", "frei")]
-    listed = available = 0
+    listed = available = unknown = 0
     for i, p in enumerate(ref, 1):
         _progress(s, run, f"Counting listed products {i}/{len(ref)}")
         url = known[p.id].url if p.id in known else None
@@ -334,10 +334,16 @@ def _listing_pass(s: Session, run: AuditRun, retailer: Retailer, crawler: Crawle
             status, html = raw_fetch(url)
             if html and status == 200:
                 avail = _availability(extract(html, url))
+            if avail is None:  # plain request blocked (e.g. Cloudflare): read the page in the real browser
+                res = crawler.fetch(url, f"avail_{model_slug(p.model)}", screenshots=False)
+                if not res.blocked:
+                    avail = _availability(extract(res.html, url))
             available += 1 if avail else 0
+            unknown += 1 if avail is None else 0
         s.add(ListingCheck(run_id=run.id, product_id=p.id, listed=bool(url), available=avail, url=url))
     s.commit()
-    run.reference_count, run.listed_count, run.available_count = len(ref), listed, available
+    run.reference_count, run.listed_count = len(ref), listed
+    run.available_count = None if listed and unknown > listed / 2 else available  # None = could not be read
     _availability_verdict(s, run)
 
 
@@ -355,6 +361,15 @@ def _availability_verdict(s: Session, run: AuditRun) -> None:
         sk = prods[c.product_id].sk
         totals[sk] = totals.get(sk, 0) + 1
         per_sk[sk] = per_sk.get(sk, 0) + (1 if c.available else 0)
+    checks = s.exec(select(ListingCheck).where(ListingCheck.run_id == run.id)).all()
+    listed_n = sum(c.listed for c in checks)
+    unknown_n = sum(c.listed and c.available is None for c in checks)
+    if listed_n and unknown_n > listed_n / 2:
+        s.add(V(run_id=run.id, criterion_id=crit.id, status="needs_human", source="rule",
+                reasoning=f"Availability could not be read for {unknown_n} of {listed_n} listed models (the shop blocks it).",
+                evidence={"listed": listed_n, "unknown": unknown_n}))
+        s.commit()
+        return
     short = [f"SK{sk}: {per_sk.get(sk, 0)} of {min(target, totals.get(sk, 0))}" for sk in ("1", "2", "3")
              if per_sk.get(sk, 0) < min(target, totals.get(sk, 0))]
     ok = not short

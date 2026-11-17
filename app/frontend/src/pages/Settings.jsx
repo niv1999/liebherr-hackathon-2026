@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { api, reviewerName, setReviewerName } from "../api.js";
-import { Button, HelpTip, Switch, fmtDate, useToast } from "../components/ui.jsx";
+import { Button, Field, HelpTip, Skeleton, Switch, fmtDate, inputCls as fieldCls, useToast } from "../components/ui.jsx";
 
 const MODELS = {
   gemini: [["gemini-2.5-flash", "Gemini 2.5 Flash (free tier)"], ["gemini-2.5-pro", "Gemini 2.5 Pro"]],
   claude: [["claude-opus-5-5", "Claude Opus 5.5"], ["claude-sonnet-5-5", "Claude Sonnet 5.5"], ["claude-haiku-5-5", "Claude Haiku 5.5"]],
 };
-const AI_TIP = "The AI judge decides the subjective criteria (feature texts, premium look, AI shopper test). The key is stored only on this computer (app/.env) and never shown again.";
+const AI_TIP = "The AI judge decides the criteria that need judgement: feature texts, premium look and the AI shopper test.";
 
 const card = "card p-5 space-y-3";
 const h2 = "text-sm font-bold flex items-center gap-1.5";
@@ -16,8 +16,7 @@ export default function Settings() {
   const toast = useToast();
   const [schedule, setSchedule] = useState(null);
   const [defaults, setDefaults] = useState(null);
-  const [ai, setAi] = useState(null);
-  const [aiForm, setAiForm] = useState({ provider: "gemini", model: "", api_key: "" });
+  const [conns, setConns] = useState(null);
   const [name, setName] = useState(reviewerName());
   const [audits, setAudits] = useState([]);
 
@@ -25,7 +24,7 @@ export default function Settings() {
     api.schedule().then(setSchedule);
     api.defaults().then(setDefaults);
     api.audits().then(setAudits);
-    api.aiSettings().then((s) => { setAi(s); setAiForm({ provider: s.provider === "none" ? "gemini" : s.provider, model: s.model, api_key: "" }); });
+    api.aiConnections().then(setConns);
   }, []);
 
   const run = async (fn, msg) => {
@@ -38,54 +37,33 @@ export default function Settings() {
     }
   };
 
-  const saveAi = async (provider) => {
-    const r = await run(() => api.setAiSettings({ provider, model: provider === "none" ? null : aiForm.model, api_key: aiForm.api_key || null }),
-      provider === "none" ? "AI judge turned off" : "AI judge saved");
-    if (r) { setAi(r); setAiForm({ ...aiForm, api_key: "" }); }
-  };
-  const hasKey = ai && (aiForm.provider === "claude" ? ai.has_claude_key : ai.has_gemini_key);
-
   return (
     <div className="space-y-5 max-w-3xl">
       <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
 
-      {ai && (
-        <section className={card}>
-          <h2 className={h2}>AI judge <HelpTip text={AI_TIP} />
-            <span className={`ml-auto text-[11px] font-semibold px-2 py-0.5 rounded-full ${ai.available ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-800"}`}>
-              {ai.available ? `On · ${ai.model}` : "Off"}
-            </span>
-          </h2>
-          <div className="flex flex-wrap items-end gap-3">
-            <label className="text-xs text-slate-500">Provider
-              <select value={aiForm.provider} onChange={(e) => setAiForm({ ...aiForm, provider: e.target.value, model: MODELS[e.target.value][0][0] })} className={`block mt-1 ${inputCls}`}>
-                <option value="gemini">Google Gemini</option><option value="claude">Anthropic Claude</option>
-              </select></label>
-            <label className="text-xs text-slate-500">Model
-              <select value={aiForm.model} onChange={(e) => setAiForm({ ...aiForm, model: e.target.value })} className={`block mt-1 ${inputCls}`}>
-                {MODELS[aiForm.provider].map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-              </select></label>
-            <label className="text-xs text-slate-500 flex-1 min-w-48">API key
-              <input type="password" value={aiForm.api_key} onChange={(e) => setAiForm({ ...aiForm, api_key: e.target.value })}
-                placeholder={hasKey ? "•••••••• saved (leave empty to keep)" : "Paste key"} className={`block mt-1 w-full ${inputCls}`} /></label>
-          </div>
-          <div className="flex gap-2">
-            <Button onClick={() => saveAi(aiForm.provider)} disabled={!hasKey && !aiForm.api_key}>Save &amp; turn on</Button>
-            {ai.available && <Button variant="ghost" onClick={() => saveAi("none")}>Turn off</Button>}
-          </div>
-        </section>
-      )}
+      {!conns && [0, 1, 2].map((i) => <Skeleton key={i} className="h-28 rounded-xl" />)}
+      {conns && <AiConnections conns={conns} setConns={setConns} />}
 
       {schedule && (
         <section className={card}>
-          <h2 className={h2}>Automatic audits</h2>
-          <div className="flex flex-wrap items-center gap-3">
-            <Switch checked={schedule.enabled} onChange={(v) => setSchedule({ ...schedule, enabled: v })} label="Audit all retailers every" />
-            <input type="number" min="1" value={schedule.interval_days} onChange={(e) => setSchedule({ ...schedule, interval_days: Number(e.target.value) })} className={`w-16 ${inputCls}`} />
-            <span className="text-sm">days</span>
-            <Button onClick={async () => { const s = await run(() => api.setSchedule({ enabled: schedule.enabled, interval_days: schedule.interval_days }), "Schedule saved"); if (s) setSchedule(s); }}>Save</Button>
+          <div className="flex items-center justify-between">
+            <h2 className={h2}>Automatic audits</h2>
+            <Switch checked={schedule.enabled} onChange={async (v) => {
+              const s = await run(() => api.setSchedule({ enabled: v, interval_days: schedule.interval_days }), v ? "Automatic audits on" : "Automatic audits off");
+              if (s) setSchedule(s);
+            }} />
           </div>
-          {schedule.next_run && <p className="text-xs text-slate-500">Next run {fmtDate(schedule.next_run)}</p>}
+          {schedule.enabled && (
+            <>
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-sm">Audit all retailers every</span>
+                <input type="number" min="1" value={schedule.interval_days} onChange={(e) => setSchedule({ ...schedule, interval_days: Number(e.target.value) })} className={`w-16 ${inputCls}`} />
+                <span className="text-sm">days</span>
+                <Button onClick={async () => { const s = await run(() => api.setSchedule({ enabled: true, interval_days: schedule.interval_days }), "Schedule saved"); if (s) setSchedule(s); }}>Save</Button>
+              </div>
+              {schedule.next_run && <p className="text-xs text-slate-500">Next run {fmtDate(schedule.next_run)}</p>}
+            </>
+          )}
         </section>
       )}
 
@@ -125,5 +103,83 @@ export default function Settings() {
         </div>
       </section>
     </div>
+  );
+}
+
+function AiConnections({ conns, setConns }) {
+  const toast = useToast();
+  const [adding, setAdding] = useState(conns.length === 0);
+  const [f, setF] = useState({ provider: "gemini", model: MODELS.gemini[0][0], api_key: "", name: "" });
+  const reload = () => api.aiConnections().then(setConns);
+
+  const add = async () => {
+    try {
+      const c = await api.addAiConnection({ ...f, name: f.name || null });
+      toast(`Connected: ${c.name}`);
+      setF({ ...f, api_key: "", name: "" });
+      setAdding(false);
+      reload();
+    } catch (e) {
+      toast(e.message, "error");
+    }
+  };
+  const use = async (c) => {
+    try { await api.activateAiConnection(c.id); toast(`Now using ${c.name}`); reload(); } catch (e) { toast(e.message, "error"); }
+  };
+  const remove = async (c) => {
+    if (!confirm(`Remove the connection “${c.name}”?`)) return;
+    try { await api.deleteAiConnection(c.id); toast("Connection removed"); reload(); } catch (e) { toast(e.message, "error"); }
+  };
+
+  return (
+    <section className={card}>
+      <div className="flex items-center justify-between">
+        <h2 className={h2}>AI judge <HelpTip text={AI_TIP} /></h2>
+        {!adding && <Button variant="ghost" onClick={() => setAdding(true)}>+ Add connection</Button>}
+      </div>
+
+      {conns.length > 0 && (
+        <div className="divide-y divide-slate-100 border border-slate-200 rounded-lg">
+          {conns.map((c) => (
+            <label key={c.id} className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer ${c.active ? "bg-sky-50/60" : "hover:bg-slate-50"}`}>
+              <input type="radio" name="ai-conn" checked={c.active} onChange={() => use(c)} className="accent-sky-600" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold truncate">{c.name}</p>
+                <p className="text-[11px] text-slate-500">{c.provider === "claude" ? "Anthropic Claude" : "Google Gemini"} · {c.model} · key {c.key_hint}</p>
+              </div>
+              {c.active && <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">In use</span>}
+              <button onClick={(e) => { e.preventDefault(); remove(c); }} className="text-xs text-slate-400 hover:text-red-600 cursor-pointer px-1">Remove</button>
+            </label>
+          ))}
+        </div>
+      )}
+
+      {adding && (
+        <div className="rounded-lg border border-slate-200 p-4 space-y-3 bg-slate-50/60">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Field label="Provider" required>
+              <select value={f.provider} onChange={(e) => setF({ ...f, provider: e.target.value, model: MODELS[e.target.value][0][0] })} className={fieldCls}>
+                <option value="gemini">Google Gemini</option><option value="claude">Anthropic Claude</option>
+              </select>
+            </Field>
+            <Field label="Model" required>
+              <select value={f.model} onChange={(e) => setF({ ...f, model: e.target.value })} className={fieldCls}>
+                {MODELS[f.provider].map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+            </Field>
+            <Field label="API key" required>
+              <input type="password" value={f.api_key} onChange={(e) => setF({ ...f, api_key: e.target.value })} placeholder="Paste key" className={fieldCls} />
+            </Field>
+            <Field label="Name">
+              <input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} placeholder="Generated automatically" className={fieldCls} />
+            </Field>
+          </div>
+          <div className="flex justify-end gap-2">
+            {conns.length > 0 && <Button variant="ghost" onClick={() => setAdding(false)}>Cancel</Button>}
+            <Button onClick={add} disabled={!f.api_key.trim()}>Connect</Button>
+          </div>
+        </div>
+      )}
+    </section>
   );
 }

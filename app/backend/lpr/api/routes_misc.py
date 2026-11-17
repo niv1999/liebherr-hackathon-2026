@@ -10,9 +10,9 @@ from ..checks.ai import simulate_shopper
 from ..db import get_session
 from ..extract import extract
 from ..llm import get_provider
-from ..models import AppSetting, AuditRun, Criterion, Notification, PageSnapshot, Retailer, Verdict
+from ..models import AIConnection, AppSetting, AuditRun, Criterion, Notification, PageSnapshot, Retailer, Verdict
 from ..services import latest_runs, run_summary
-from .schemas import AISettingsIn, AuditDefaultsIn, ScheduleIn, SimulateIn
+from .schemas import AIConnectionIn, AuditDefaultsIn, ScheduleIn, SimulateIn
 
 router = APIRouter(tags=["dashboard"])
 
@@ -133,60 +133,74 @@ def set_defaults(body: AuditDefaultsIn, s: Session = Depends(get_session)):
 # ------------------------------------------------------------------ AI
 @router.get("/api/ai/status")
 def ai_status():
-    return _ai_settings()
-
-
-def _ai_settings() -> dict:
-    import os
-
     p = get_provider()
-    kind = os.getenv("LPR_LLM_PROVIDER", settings.LLM_PROVIDER)
-    model = os.getenv("CLAUDE_MODEL", settings.CLAUDE_MODEL) if kind == "claude" else os.getenv("GEMINI_MODEL", settings.GEMINI_MODEL)
-    return {"provider": kind, "active_provider": p.name, "available": p.available, "model": model,
-            "has_gemini_key": bool(os.getenv("GEMINI_API_KEY")), "has_claude_key": bool(os.getenv("ANTHROPIC_API_KEY"))}
+    return {"available": p.available, "provider": p.name, "model": getattr(p, "model", None),
+            "connection": getattr(p, "connection_name", None)}
 
 
-def _write_env(updates: dict[str, str]) -> None:
-    """Update app/.env (git-ignored) in place and the running process environment."""
-    import os
-
-    path = settings.ENV_FILE
-    lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
-    done = set()
-    for i, line in enumerate(lines):
-        key = line.split("=", 1)[0].strip()
-        if key in updates:
-            lines[i] = f"{key}={updates[key]}"
-            done.add(key)
-    lines += [f"{k}={v}" for k, v in updates.items() if k not in done]
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    os.environ.update(updates)
+MODEL_NAMES = {"gemini-2.5-flash": "Gemini 2.5 Flash", "gemini-2.5-pro": "Gemini 2.5 Pro",
+               "claude-opus-5-5": "Claude Opus 5.5", "claude-sonnet-5-5": "Claude Sonnet 5.5",
+               "claude-haiku-5-5": "Claude Haiku 5.5"}
 
 
-@router.get("/api/settings/ai")
-def get_ai_settings():
-    return _ai_settings()
+def _conn_out(c: AIConnection, active_id: int | None) -> dict:
+    return {"id": c.id, "name": c.name, "provider": c.provider, "model": c.model, "created_at": c.created_at,
+            "key_hint": f"••••{c.api_key[-4:]}" if len(c.api_key) >= 4 else "••••", "active": c.id == active_id}
 
 
-@router.put("/api/settings/ai")
-def set_ai_settings(body: AISettingsIn):
-    """Choose the AI judge (Gemini / Claude / off) and optionally store its API key in app/.env."""
+def _active_id(s: Session) -> int | None:
+    row = s.get(AppSetting, "ai_active")
+    return (row.value or {}).get("connection_id") if row else None
+
+
+def _set_active(s: Session, cid: int | None) -> None:
     from ..llm import reset_provider
-
-    updates = {"LPR_LLM_PROVIDER": body.provider}
-    if body.provider == "gemini":
-        if body.model:
-            updates["GEMINI_MODEL"] = body.model
-        if body.api_key:
-            updates["GEMINI_API_KEY"] = body.api_key.strip()
-    elif body.provider == "claude":
-        if body.model:
-            updates["CLAUDE_MODEL"] = body.model
-        if body.api_key:
-            updates["ANTHROPIC_API_KEY"] = body.api_key.strip()
-    _write_env(updates)
+    row = s.get(AppSetting, "ai_active") or AppSetting(key="ai_active")
+    row.value = {"connection_id": cid}
+    s.add(row)
+    s.commit()
     reset_provider()
-    return _ai_settings()
+
+
+@router.get("/api/ai/connections")
+def list_connections(s: Session = Depends(get_session)):
+    active = _active_id(s)
+    return [_conn_out(c, active) for c in s.exec(select(AIConnection).order_by(AIConnection.id.desc())).all()]
+
+
+@router.post("/api/ai/connections", status_code=201)
+def add_connection(body: AIConnectionIn, s: Session = Depends(get_session)):
+    """Save an API key as a named connection and start using it."""
+    from datetime import date
+    name = (body.name or "").strip() or f"{MODEL_NAMES.get(body.model, body.model)} · {date.today().strftime('%d %b %Y')}"
+    c = AIConnection(name=name, provider=body.provider, model=body.model, api_key=body.api_key.strip())
+    s.add(c)
+    s.commit()
+    _set_active(s, c.id)
+    return _conn_out(c, c.id)
+
+
+@router.post("/api/ai/connections/{cid}/activate")
+def activate_connection(cid: int, s: Session = Depends(get_session)):
+    c = s.get(AIConnection, cid)
+    if not c:
+        raise HTTPException(404, "Connection not found")
+    _set_active(s, cid)
+    return _conn_out(c, cid)
+
+
+@router.delete("/api/ai/connections/{cid}")
+def delete_connection(cid: int, s: Session = Depends(get_session)):
+    c = s.get(AIConnection, cid)
+    if not c:
+        raise HTTPException(404, "Connection not found")
+    was_active = _active_id(s) == cid
+    s.delete(c)
+    s.commit()
+    if was_active:  # fall back to the most recent remaining connection
+        nxt = s.exec(select(AIConnection).order_by(AIConnection.id.desc())).first()
+        _set_active(s, nxt.id if nxt else None)
+    return {"ok": True}
 
 
 @router.post("/api/ai/simulate")

@@ -197,3 +197,13 @@ class Notification(SQLModel, table=True):
 class AppSetting(SQLModel, table=True):
     key: str = Field(primary_key=True)
     value: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
+
+
+class AIConnection(SQLModel, table=True):
+    """A saved AI provider connection (API key). One of them is active (AppSetting 'ai_active')."""
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str
+    provider: str  # gemini | claude
+    model: str
+    api_key: str
+    created_at: datetime = Field(default_factory=now)

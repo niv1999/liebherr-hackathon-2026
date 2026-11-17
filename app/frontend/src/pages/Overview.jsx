@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api.js";
-import { Bar, Button, Delta, Empty, HelpTip, LabelBadge, RetailerLogo, fmtDate } from "../components/ui.jsx";
+import { Bar, Button, Delta, Empty, HelpTip, LabelBadge, OverviewSkeleton, RetailerLogo, fmtDate } from "../components/ui.jsx";
 
 const TIPS = {
   score: "Average LPR score of all audited retailers. Each check counts by its weight: Visibility counts most, then Services, then Advice. Only checks the tool could decide are counted.",
@@ -37,7 +37,7 @@ export default function Overview({ refreshKey, onRunAudit }) {
   }, [running]);
 
   if (error) return <Empty title="Can't reach the HeLPR server">{error}</Empty>;
-  if (!data) return <p className="text-sm text-slate-500">Loading…</p>;
+  if (!data) return <OverviewSkeleton />;
   const k = data.kpis;
 
   return (

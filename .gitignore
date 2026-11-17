@@ -1,5 +1,5 @@
 # Big / raw data (keep local only)
-data/
+/data/
 *.zip
 *.mp4
 *.mov

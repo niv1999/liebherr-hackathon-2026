@@ -199,8 +199,15 @@ def get_provider() -> Provider:
     global _provider
     if _provider is None:
         kind = os.getenv("LPR_LLM_PROVIDER", settings.LLM_PROVIDER)
+        conn = active_connection()
         if kind == "file":
             _provider = FileProvider()
+        elif kind == "none":
+            _provider = NoProvider()
+        elif conn is not None:  # the connection chosen in Settings
+            cls = ClaudeProvider if conn.provider == "claude" else GeminiProvider
+            _provider = cls(conn.api_key, conn.model)
+            _provider.connection_name = conn.name
         elif kind == "gemini" and os.getenv("GEMINI_API_KEY"):
             _provider = GeminiProvider(os.environ["GEMINI_API_KEY"], os.getenv("GEMINI_MODEL", settings.GEMINI_MODEL))
         elif kind == "claude" and os.getenv("ANTHROPIC_API_KEY"):
@@ -208,3 +215,17 @@ def get_provider() -> Provider:
         else:
             _provider = NoProvider()
     return _provider
+
+
+def active_connection():
+    """The AI connection selected in Settings (or None)."""
+    from .db import session_scope
+    from .models import AIConnection, AppSetting
+
+    try:
+        with session_scope() as s:
+            row = s.get(AppSetting, "ai_active")
+            cid = (row.value or {}).get("connection_id") if row else None
+            return s.get(AIConnection, cid) if cid else None
+    except Exception:
+        return None

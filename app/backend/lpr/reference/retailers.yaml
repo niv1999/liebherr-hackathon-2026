@@ -1,0 +1,28 @@
+# Seed list of retailers. {query} is replaced by the URL-encoded search text.
+# product_link_pattern: regex a product page URL must match (checked against the model slug too).
+- name: "EP:"
+  base_url: https://www.ep.de
+  search_url: https://www.ep.de/search?text={query}
+  product_link_pattern: 'https://www\.ep\.de/p/\d+/[^?#]+'
+- name: MediaMarkt
+  base_url: https://www.mediamarkt.de
+  search_url: https://www.mediamarkt.de/de/search.html?query={query}
+  product_link_pattern: 'https://www\.mediamarkt\.de/de/product/[^?#]+\.html'
+- name: expert
+  base_url: https://www.expert.de
+  search_url: https://www.expert.de/suche?q={query}
+  product_link_pattern: 'https://www\.expert\.de/shop/unsere-produkte/[^?#]+\.html'
+- name: EURONICS
+  base_url: https://www.euronics.de
+  search_url: https://www.euronics.de/search?sSearch={query}
+  product_link_pattern: 'https://www\.euronics\.de/[^?#]+'
+  access_note: "Blocks automated access (HTTP 403/405, tested 14 + 17 Nov 2026). Needs manual assessment or a whitelisted bot."
+- name: OTTO
+  base_url: https://www.otto.de
+  search_url: https://www.otto.de/suche/{query}/
+  product_link_pattern: 'https://www\.otto\.de/p/[^?#]+'
+  access_note: "Returns an empty page to automated browsers (tested 14 Nov 2026). Needs manual assessment or a whitelisted bot."
+- name: Elektroplus
+  base_url: https://www.elektroplus.de
+  active: false
+  access_note: "Online shop URL not confirmed yet (elektroplus.de shows no shop). Add the correct URL to activate."

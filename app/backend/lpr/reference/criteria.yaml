@@ -1,0 +1,346 @@
+# Seed criteria (first slice: product detail page + AI readiness + a few services/advice).
+# Loaded into the DB on first start; after that they are edited through the API/UI.
+#   method: rule (code in lpr/checks/rules.py, by rule_key) | ai (lpr/checks/ai.py) | manual (always "needs human")
+#   sk_levels: assortment classes the criterion applies to
+#   priority: low | medium | high  (-> weight 1/2/3, times block weight)
+#   lpr_ref: number in knowledge/briefing.md section 5
+
+# ---------------- Visibility: product detail page ----------------
+- code: PDP-01
+  block: visibility
+  section: Product detail page
+  title: Product name includes "Liebherr"
+  lpr_ref: "#13"
+  method: rule
+  rule_key: name_has_brand
+  priority: medium
+  fix_hint: Start the product title with "Liebherr", e.g. "Liebherr CBNsda 5223-22 Kühl-Gefrierkombination".
+- code: PDP-02
+  block: visibility
+  section: Product detail page
+  title: Product name shows the full model name with index
+  lpr_ref: "#33"
+  method: rule
+  rule_key: name_has_model
+  priority: medium
+  fix_hint: Use the exact Liebherr model name including the index (e.g. "-22") in the product title.
+- code: PDP-03
+  block: visibility
+  section: Product detail page
+  title: EAN / model data match Liebherr master data
+  description: The EAN (GTIN) found on the page must equal the EAN in Liebherr's master data.
+  lpr_ref: "master data"
+  method: rule
+  rule_key: ean_matches
+  priority: high
+  fix_hint: Correct the EAN/GTIN to the official value from Liebherr's product data.
+- code: PDP-04
+  block: visibility
+  section: Product detail page
+  title: At least 5 Liebherr key features shown
+  lpr_ref: "#34"
+  method: rule
+  rule_key: key_features_count
+  priority: high
+  fix_hint: Show at least 5 official key features (e.g. BioFresh, NoFrost, DuoCooling) with a short description.
+- code: PDP-05
+  block: visibility
+  section: Product detail page
+  title: Liebherr technologies and their customer benefits explained correctly
+  description: Liebherr's #1 pain point. Compares the retailer's feature texts with Liebherr's official feature descriptions.
+  lpr_ref: "#34/#43/#48"
+  method: ai
+  rule_key: ai_feature_benefits
+  priority: high
+  ai_prompt: |
+    You audit a German retailer's product page for a Liebherr appliance.
+    Below you get (1) the official Liebherr feature names with their official benefit descriptions and (2) the text of the retailer page.
+    Decide whether the retailer page explains the important Liebherr technologies AND their customer benefits correctly and sufficiently.
+    PASS if most of the important technologies (especially BioFresh / NoFrost / the model's key features) are named and their benefit
+    for the customer is explained (not just listed as a word), and nothing is factually wrong.
+    FAIL if technologies are only listed without benefits, important ones are missing, or statements contradict the official texts.
+    In "evidence", quote the retailer sentences you based this on and name missing technologies.
+  fix_hint: Add short benefit explanations for each Liebherr technology, based on Liebherr's official feature texts.
+- code: PDP-06
+  block: visibility
+  section: Product detail page
+  title: Energy label and product data sheet shown near the product
+  lpr_ref: "#37"
+  method: rule
+  rule_key: energy_label_and_sheet
+  priority: high
+  fix_hint: Show the energy class arrow next to the price, linked to the energy label and the EU product data sheet.
+- code: PDP-07
+  block: visibility
+  section: Product detail page
+  title: Operating manual / documents available
+  lpr_ref: "#37"
+  method: rule
+  rule_key: manual_available
+  priority: medium
+  fix_hint: Link the official operating instructions (PDF) on the product page.
+- code: PDP-08
+  block: visibility
+  section: Product detail page
+  title: Shipping costs shown
+  lpr_ref: "#37"
+  method: rule
+  rule_key: shipping_costs
+  priority: low
+  fix_hint: State the delivery / shipping costs on the product page.
+- code: PDP-09
+  block: visibility
+  section: Product detail page
+  title: Installation dimensions (height, width, depth) given as text and correct
+  description: Missing or wrong dimensions are a main cause of avoidable returns ("does it fit?").
+  lpr_ref: "#39"
+  method: rule
+  rule_key: dimensions_text
+  priority: high
+  return_risk: true
+  fix_hint: Write height, width and depth in the technical data as text, matching Liebherr's data.
+- code: PDP-10
+  block: visibility
+  section: Product detail page
+  title: Key technical data complete (energy class, noise, volume)
+  lpr_ref: "#39"
+  method: rule
+  rule_key: tech_data_complete
+  priority: high
+  return_risk: true
+  fix_hint: Complete the technical data table with energy class, noise level and usable volume.
+- code: PDP-11
+  block: visibility
+  section: Product detail page
+  title: Door hinge and handle information given
+  description: Liebherr's real return example - a customer bought a model without a door handle that she needed.
+  lpr_ref: "return risk"
+  method: rule
+  rule_key: hinge_and_handle
+  priority: medium
+  return_risk: true
+  fix_hint: State the door hinge side (and whether it can be changed) and the handle type (e.g. "Griffmulde").
+- code: PDP-12
+  block: visibility
+  section: Product detail page
+  title: Official Liebherr product images used
+  lpr_ref: "#12/#35"
+  method: rule
+  rule_key: official_images
+  priority: medium
+  fix_hint: Use the official Liebherr product images from the Liebherr asset database.
+- code: PDP-13
+  block: visibility
+  section: Product detail page
+  title: Liebherr content integrated (Loadbee, Cliplister, DemoUp or manual)
+  lpr_ref: "#38/#44"
+  method: rule
+  rule_key: syndicated_content
+  priority: medium
+  fix_hint: Integrate Liebherr's syndicated content (e.g. via Loadbee or Cliplister).
+- code: PDP-14
+  block: visibility
+  section: Product detail page
+  title: Product videos shown
+  lpr_ref: "#40"
+  sk_levels: "2,3"
+  method: rule
+  rule_key: videos_present
+  priority: medium
+  fix_hint: Show Liebherr key-feature videos on the product page.
+- code: PDP-15
+  block: visibility
+  section: Product detail page
+  title: High-quality design, no other brands on the page
+  lpr_ref: "#30/#31"
+  method: ai
+  rule_key: ai_design_quality
+  priority: medium
+  ai_prompt: |
+    You see a screenshot of the top of a German retailer's product page for a Liebherr appliance, plus the page text.
+    PASS if the page looks clean and high-quality (large product images, clear structure, Liebherr presented prominently)
+    AND no competitor brands are advertised or recommended in the main product area.
+    FAIL if the page looks cluttered/low quality or other brands' products are promoted next to the Liebherr product.
+    Ignore cookie banners. In "evidence", describe what you see that supports the verdict.
+  fix_hint: Remove competitor recommendations from Liebherr product pages and use large, high-quality images.
+- code: PDP-16
+  block: visibility
+  section: Premium product page (SK3)
+  title: Premium, emotional presentation of an SK3 product
+  description: Liebherr names premium SK3 pages as one of the hardest criteria to assess by hand.
+  lpr_ref: "#41-#49"
+  sk_levels: "3"
+  method: ai
+  rule_key: ai_premium_page
+  priority: high
+  ai_prompt: |
+    This is a premium (SK3) Liebherr appliance. Judge whether the retailer's product page is a premium presentation:
+    lifestyle/emotional images or a high-quality video, features presented individually and in detail with images,
+    an SEO-style descriptive text about the product's special features, and Liebherr's quality / sustainability benefits.
+    PASS only if most of these are clearly present. FAIL if it is a standard product page.
+    In "evidence", list which premium elements are present and which are missing.
+  fix_hint: Build a premium page for SK3 models - lifestyle images, detailed feature sections with images, video, and a descriptive text.
+- code: PDP-17
+  block: visibility
+  section: Product detail page
+  title: Product description is complete, relevant and search-optimised
+  description: Liebherr names SEO-optimised descriptions as hard to assess by hand.
+  lpr_ref: "#43/#47/#53"
+  sk_levels: "2,3"
+  method: ai
+  rule_key: ai_seo_description
+  priority: medium
+  ai_prompt: |
+    Judge the retailer's own product description text (not the technical table) for this Liebherr appliance.
+    PASS if there is a real descriptive text (roughly 100+ words) that names the model, explains its main benefits and
+    special Liebherr features in customer language, and would help a shopper and a search engine understand the product.
+    FAIL if there is no such text, only a few bullet words, or generic copy-paste text that could fit any fridge.
+    In "evidence", quote the start of the description and its approximate length.
+  fix_hint: Add a descriptive product text (100+ words) explaining the model's main benefits and Liebherr features.
+
+# ---------------- Advice ----------------
+- code: ADV-01
+  block: advice
+  section: Phone / video advice
+  title: Phone number for advice visible on the product page
+  lpr_ref: "#61"
+  method: rule
+  rule_key: phone_visible
+  priority: high
+  fix_hint: Show a phone number for product advice (with opening hours) on the product page, ideally sticky.
+- code: ADV-02
+  block: advice
+  section: Phone / video advice
+  title: Liebherr staff training attended
+  lpr_ref: "#65"
+  method: manual
+  priority: low
+  fix_hint: Make sure advisors attend the Liebherr introductory training.
+
+# ---------------- Services ----------------
+- code: SRV-01
+  block: services
+  section: Payment
+  title: At least 2 payment methods offered
+  lpr_ref: "#71"
+  method: rule
+  rule_key: payment_methods
+  priority: medium
+  fix_hint: Offer at least two payment methods (e.g. PayPal, Klarna, credit card).
+- code: SRV-02
+  block: services
+  section: Payment
+  title: Invoice or financing offered
+  lpr_ref: "#72"
+  sk_levels: "2,3"
+  method: rule
+  rule_key: financing
+  priority: low
+  fix_hint: Offer purchase on invoice or financing for SK2/SK3 products.
+- code: SRV-03
+  block: services
+  section: Delivery
+  title: Delivery services offered (installation, old-appliance pickup, packaging removal)
+  lpr_ref: "#17/#69"
+  method: rule
+  rule_key: delivery_services
+  priority: medium
+  fix_hint: Offer and describe delivery services such as setup, connection, packaging removal and old-appliance pickup.
+- code: SRV-04
+  block: services
+  section: Availability
+  title: Availability / delivery time shown
+  lpr_ref: "#15/#70"
+  method: rule
+  rule_key: availability_shown
+  priority: medium
+  fix_hint: Show whether the product is in stock and the expected delivery time.
+- code: SRV-05
+  block: services
+  section: Delivery
+  title: Delivery checklist completed with the customer
+  lpr_ref: "#75"
+  method: manual
+  priority: low
+  fix_hint: Complete Liebherr's delivery checklist with every customer.
+
+# ---------------- AI readiness (separate score) ----------------
+- code: AIR-01
+  block: ai_readiness
+  section: Structured data
+  title: Machine-readable product data (schema.org Product)
+  method: rule
+  rule_key: air_jsonld_product
+  priority: high
+  fix_hint: Add schema.org Product data (JSON-LD) with name, brand, model, GTIN, image, price and availability.
+- code: AIR-02
+  block: ai_readiness
+  section: Structured data
+  title: Structured data contains a correct GTIN and brand
+  method: rule
+  rule_key: air_jsonld_identifiers
+  priority: high
+  fix_hint: Include the correct GTIN/EAN and brand "Liebherr" in the structured product data.
+- code: AIR-03
+  block: ai_readiness
+  section: Structured data
+  title: Price and availability machine-readable
+  method: rule
+  rule_key: air_offer
+  priority: medium
+  fix_hint: Include an Offer with price, currency and availability in the structured data.
+- code: AIR-04
+  block: ai_readiness
+  section: Accessible content
+  title: Key specs readable without JavaScript
+  description: Many AI crawlers do not run JavaScript. Checks the plain HTML for the dimensions and model name.
+  method: rule
+  rule_key: air_no_js_content
+  priority: high
+  fix_hint: Render the technical data and description in the HTML sent by the server, not only via JavaScript.
+- code: AIR-05
+  block: ai_readiness
+  section: Accessible content
+  title: AI search crawlers allowed in robots.txt
+  method: rule
+  rule_key: air_robots
+  priority: medium
+  fix_hint: Allow AI search crawlers (e.g. OAI-SearchBot, PerplexityBot) in robots.txt for product pages.
+- code: AIR-06
+  block: ai_readiness
+  section: Content quality
+  title: Feature benefits available as text (not only in images)
+  method: rule
+  rule_key: air_features_as_text
+  priority: medium
+  fix_hint: Describe Liebherr features in text, not only inside images or videos.
+- code: AIR-07
+  block: ai_readiness
+  section: Content quality
+  title: FAQ / Q&A or reviews present
+  method: rule
+  rule_key: air_faq_reviews
+  priority: low
+  fix_hint: Add an FAQ / Q&A section or customer reviews.
+- code: AIR-08
+  block: ai_readiness
+  section: Content quality
+  title: Product images have descriptive alt texts
+  method: rule
+  rule_key: air_alt_texts
+  priority: low
+  fix_hint: Give product images alt texts naming the model and what the image shows.
+- code: AIR-09
+  block: ai_readiness
+  section: AI shopper test
+  title: An AI assistant can answer a typical shopper question from the page
+  method: ai
+  rule_key: ai_shopper_test
+  priority: high
+  ai_prompt: |
+    Act as an AI shopping assistant that may ONLY use the retailer page text below (no outside knowledge).
+    Question from a shopper: "Does this fridge-freezer fit into a niche of {niche}? What are its exact height, width and depth,
+    which side is the door hinge, and does it have a handle?"
+    Answer the question from the page text only. Then judge: PASS if the page text contains enough information to answer
+    all parts correctly, FAIL otherwise. In "evidence", give your answer and list which facts were missing.
+  fix_hint: Make dimensions, door hinge and handle information available as text so AI assistants can answer fit questions.

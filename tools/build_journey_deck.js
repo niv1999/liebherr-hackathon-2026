@@ -81,6 +81,44 @@ async function icon(name, color) {
     }
     return s;
   };
+  // Stylised fridge-freezer drawn with shapes (bookend motif)
+  const fridge = (s, x, y, w, h) => {
+    const RR = pres.shapes.ROUNDED_RECTANGLE;
+    s.addShape(pres.shapes.OVAL, { x: x - 0.15, y: y + h - 0.08, w: w + 0.3, h: 0.22, fill: { color: "000000", transparency: 85 }, line: { color: "000000", transparency: 100 }, objectName: "Fridge shadow" });
+    s.addShape(RR, { x, y, w, h, rectRadius: 0.12, fill: { color: H.lt1 }, line: { color: H.accent3, width: 1.25 }, objectName: "Fridge body" });
+    const split = y + h * 0.6;
+    s.addShape(pres.shapes.LINE, { x: x + 0.04, y: split, w: w - 0.08, h: 0, line: { color: H.accent3, width: 1.5 }, objectName: "Door split" });
+    s.addShape(RR, { x: x + w - 0.28, y: y + h * 0.18, w: 0.09, h: h * 0.3, rectRadius: 0.04, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Handle top" });
+    s.addShape(RR, { x: x + w - 0.28, y: split + 0.18, w: 0.09, h: h * 0.22, rectRadius: 0.04, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Handle bottom" });
+    s.addShape(RR, { x: x + 0.25, y: y + 0.3, w: w * 0.32, h: 0.28, rectRadius: 0.05, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Display" });
+    s.addShape(pres.shapes.OVAL, { x: x + 0.33, y: y + 0.39, w: 0.1, h: 0.1, fill: { color: YEL }, line: { color: YEL }, objectName: "Display light" });
+    s.addShape(RR, { x: x + 0.5, y: y + 0.39, w: w * 0.32 - 0.35, h: 0.1, rectRadius: 0.03, fill: { color: "6E6E6E" }, line: { color: "6E6E6E" }, objectName: "Display text" });
+  };
+  const bookend = async (s) => {
+    s.addShape(pres.shapes.RECTANGLE, { x: 6.3, y: 0, w: 3.7, h: 5.625, fill: { color: YEL }, line: { color: YEL }, objectName: "Yellow panel" });
+    fridge(s, 7.15, 0.75, 1.9, 4.0);
+    s.addShape(pres.shapes.OVAL, { x: 6.55, y: 3.05, w: 1.3, h: 1.3, fill: { color: H.accent1 }, line: { color: H.lt1, width: 3 }, objectName: "Audit badge" });
+    s.addImage({ data: await icon("FaMagnifyingGlassChart", YEL), x: 6.87, y: 3.37, w: 0.66, h: 0.66, altText: "Audit icon", objectName: "Audit icon" });
+  };
+  // Yellow phase opener
+  const GOALS = ["Open a broad field, then focus on one design challenge", "Build a shared understanding of users and expert knowledge", "Sum up what we learned and create a typical user", "Collect many ideas, then focus on the relevant ones", "Turn the chosen idea into something people can see and try"];
+  const PICONS = ["FaBullseye", "FaComments", "FaUser", "FaLightbulb", "FaCubes"];
+  const divider = async (n, section) => {
+    const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: section });
+    s.background = { color: YEL };
+    slideNo++;
+    T(s, "0" + n, { x: 0.5, y: 0.55, w: 4, h: 2.0, fontSize: 130, bold: true, color: C.text1, fontFace: THEME.headFontFace, valign: "bottom" });
+    T(s, "PHASE " + n, { x: 0.6, y: 2.75, w: 5, h: 0.3, fontSize: 12, bold: true, charSpacing: 3, color: C.text1 });
+    T(s, PH[n - 1], { x: 0.6, y: 3.05, w: 8.5, h: 0.7, fontSize: 34, bold: true, color: C.text1, fontFace: THEME.headFontFace });
+    T(s, GOALS[n - 1], { x: 0.6, y: 3.8, w: 8.5, h: 0.4, fontSize: 16, color: C.text1 });
+    for (let i = 0; i < 7; i++) {
+      const cur = i === n - 1;
+      s.addShape(pres.shapes.OVAL, { x: 0.6 + i * 0.42, y: 4.75, w: 0.24, h: 0.24, fill: { color: cur ? H.dk1 : YEL }, line: { color: H.dk1, width: 1.25 }, objectName: "Step" });
+    }
+    s.addShape(pres.shapes.OVAL, { x: 6.85, y: 0.55, w: 2.5, h: 2.5, fill: { color: H.lt1 }, line: { color: H.lt1 }, objectName: "Phase icon circle" });
+    s.addImage({ data: await icon(PICONS[n - 1], H.dk1), x: 7.5, y: 1.2, w: 1.2, h: 1.2, altText: PH[n - 1], objectName: "Phase icon" });
+  };
+
   // decorative circles (title + end)
   const deco = async (s) => {
     s.addShape(pres.shapes.OVAL, { x: 5.9, y: 0.85, w: 3.9, h: 3.9, fill: { color: H.lt2 }, line: { color: H.lt2 }, objectName: "Deco big" });
@@ -92,9 +130,9 @@ async function icon(name, color) {
   pres.addSection({ title: "Intro" });
   {
     const s = pres.addSlide({ masterName: "TITLE", sectionTitle: "Intro" });
-    await deco(s);
+    await bookend(s);
     T(s, "LIEBHERR CHALLENGE  ·  DESIGN THINKING", { x: 0.6, y: 0.8, w: 5.6, h: 0.3, fontSize: 11, bold: true, charSpacing: 2, color: C.accent1 });
-    T(s, "Our Design Thinking journey", { x: 0.6, y: 1.4, w: 5.6, h: 1.6, fontSize: 36, bold: true, color: C.text2, valign: "bottom", fontFace: THEME.headFontFace });
+    T(s, "Our Design Thinking journey", { x: 0.6, y: 1.3, w: 5.4, h: 1.7, fontSize: 40, bold: true, color: C.text2, valign: "bottom", fontFace: THEME.headFontFace });
     T(s, "Smarter webshop checks for Liebherr", { x: 0.6, y: 3.15, w: 5.6, h: 0.6, fontSize: 18, color: C.accent1 });
     T(s, "CHALLENGE PARTNER", { x: 0.6, y: 3.95, w: 3, h: 0.25, fontSize: 9, bold: true, charSpacing: 2, color: C.accent2 });
     s.addImage({ path: path.join(IMG, "liebherr_logo.png"), x: 0.6, y: 4.25, w: 1.8, h: 1.8 * 99 / 800, altText: "Liebherr logo", objectName: "Partner logo" });
@@ -134,6 +172,7 @@ async function icon(name, color) {
 
   // 4 — Phase 1
   pres.addSection({ title: "Phase 1" });
+  await divider(1, "Phase 1");
   {
     const s = slide("Our Design Challenge", 1, "Phase 1");
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.4, w: 9.0, h: 1.8, rectRadius: 0.12, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Question" });
@@ -150,6 +189,7 @@ async function icon(name, color) {
 
   // 5 — Phase 2 techniques
   pres.addSection({ title: "Phase 2" });
+  await divider(2, "Phase 2");
   {
     const s = slide("How we learned about the problem", 2, "Phase 2");
     const tech = [
@@ -206,6 +246,7 @@ async function icon(name, color) {
 
   // 7 — Phase 3: Bob persona
   pres.addSection({ title: "Phase 3" });
+  await divider(3, "Phase 3");
   {
     const s = slide("Meet Bob, our typical user", 3, "Phase 3");
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.35, w: 3.1, h: 2.0, rectRadius: 0.12, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Persona card" });
@@ -279,6 +320,7 @@ async function icon(name, color) {
 
   // Phase 4 — idea clusters
   pres.addSection({ title: "Phase 4" });
+  await divider(4, "Phase 4");
   {
     const s = slide("Idea pool: 25 ideas in 7 clusters", 4, "Phase 4");
     const cl = [
@@ -328,6 +370,7 @@ async function icon(name, color) {
 
   // Phase 5 — HeLPR hero
   pres.addSection({ title: "Phase 5" });
+  await divider(5, "Phase 5");
   {
     const s = slide("Meet HeLPR, our prototype", 5, "Phase 5");
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.35, w: 3.6, h: 3.65, rectRadius: 0.12, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Hero card" });
@@ -429,9 +472,10 @@ async function icon(name, color) {
   // 11 — End
   {
     const s = pres.addSlide({ masterName: "TITLE", sectionTitle: "Next" });
-    await deco(s);
-    T(s, "Thank you", { x: 0.6, y: 1.4, w: 5.6, h: 1.6, fontSize: 36, bold: true, color: C.text2, valign: "bottom", fontFace: THEME.headFontFace });
-    T(s, "Team Liebherr 5  ·  HNU Winter School 2026", { x: 0.6, y: 3.15, w: 5.6, h: 0.6, fontSize: 18, color: C.accent1 });
+    s.background = { color: "2B2B2B" };
+    await bookend(s);
+    T(s, "Thank you", { x: 0.6, y: 1.4, w: 5.6, h: 1.6, fontSize: 48, bold: true, color: C.background1, valign: "bottom", fontFace: THEME.headFontFace });
+    T(s, "Team Liebherr 5  ·  HNU Winter School 2026", { x: 0.6, y: 3.15, w: 5.6, h: 0.6, fontSize: 18, color: YEL });
   }
 
   await pres.writeFile({ fileName: OUT });

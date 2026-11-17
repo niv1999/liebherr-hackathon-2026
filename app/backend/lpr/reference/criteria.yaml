@@ -464,3 +464,133 @@
     Answer the question from the page text only. Then judge: PASS if the page text contains enough information to answer
     all parts correctly, FAIL otherwise. In "evidence", give your answer and list which facts were missing.
   fix_hint: Make dimensions, door hinge and handle information available as text so AI assistants can answer fit questions.
+
+# ---------------- Added: remaining automatable LPR criteria ----------------
+- code: SVS-01
+  block: visibility
+  section: Shop basics
+  title: Shop name has no cheap-sounding words
+  lpr_ref: '#1'
+  page_type: shop
+  method: rule
+  rule_key: no_cheap_name
+  priority: low
+  fix_hint: Avoid words like "billig", "günstig" or "discount" in the shop name.
+- code: SVS-02
+  block: visibility
+  section: Shop basics
+  title: Company name and address shown
+  lpr_ref: '#4'
+  page_type: shop
+  method: rule
+  rule_key: company_address
+  priority: low
+  fix_hint: Show the company name and address of the physical store in the footer.
+- code: SVS-03
+  block: visibility
+  section: Shop basics
+  title: Shop loads quickly
+  lpr_ref: '#10'
+  page_type: shop
+  method: rule
+  rule_key: page_speed
+  priority: low
+  fix_hint: Improve page speed (product page ready in 3 seconds or less).
+- code: SVS-04
+  block: visibility
+  section: Shop basics
+  title: Product page links to the Liebherr brand page
+  lpr_ref: '#8/#32'
+  method: rule
+  rule_key: logo_links_brand
+  priority: medium
+  fix_hint: Link the Liebherr logo / brand name on product pages to the Liebherr brand page.
+- code: SVS-05
+  block: advice
+  section: Shop basics
+  title: Pickup or advice in a physical store offered
+  lpr_ref: '#5/#16'
+  page_type: shop
+  method: rule
+  rule_key: store_pickup_advice
+  priority: low
+  fix_hint: Mention that products can be picked up and that advice is available in the physical store.
+- code: PDP-18
+  block: visibility
+  section: Product detail page
+  title: Product images can be zoomed / enlarged
+  lpr_ref: '#36'
+  method: rule
+  rule_key: zoom_available
+  priority: low
+  fix_hint: Allow customers to zoom into and enlarge product images.
+- code: PDP-19
+  block: visibility
+  section: Product detail page
+  title: No other brands recommended on the product page
+  lpr_ref: '#31/#66'
+  method: rule
+  rule_key: no_other_brands
+  priority: medium
+  fix_hint: Only recommend Liebherr appliances as alternatives on Liebherr product pages.
+- code: PDP-20
+  block: visibility
+  section: Product detail page
+  title: Product page can be shared (WhatsApp, X ...)
+  lpr_ref: '#76'
+  method: rule
+  rule_key: share_links
+  priority: low
+  fix_hint: Add share buttons (WhatsApp, X, Facebook, e-mail) to the product page.
+- code: ADV-03
+  block: advice
+  section: Phone / video advice
+  title: Matching Liebherr accessories offered
+  lpr_ref: '#67'
+  method: rule
+  rule_key: accessories
+  priority: low
+  fix_hint: Offer matching Liebherr accessories on the product page (cross-selling).
+- code: ADV-04
+  block: advice
+  section: Phone / video advice
+  title: Video consultation offered (SK3)
+  lpr_ref: '#63'
+  sk_levels: '3'
+  page_type: shop
+  method: rule
+  rule_key: video_advice
+  priority: medium
+  fix_hint: Offer video consultation bookable from the product page, or a 12/7 hotline.
+- code: BRD-09
+  block: advice
+  section: Brand page
+  title: Product filters on the brand page
+  lpr_ref: '#59'
+  sk_levels: 2,3
+  page_type: brand
+  method: rule
+  rule_key: brand_filters
+  priority: low
+  fix_hint: Add product filters (category, size, energy class) to the Liebherr brand page.
+- code: SRV-06
+  block: services
+  section: Delivery
+  title: Shipment tracking offered
+  lpr_ref: '#74'
+  page_type: shop
+  method: rule
+  rule_key: tracking
+  priority: low
+  fix_hint: Offer shipment tracking for all deliveries and mention it on the product page.
+- code: SRV-07
+  block: services
+  section: Availability
+  title: Enough Liebherr models available per SK class
+  description: 'Liebherr: 10 available models per SK class; the retailer chooses which. Decided by the listing count.'
+  lpr_ref: '#68'
+  page_type: shop
+  method: rule
+  rule_key: available_per_sk
+  priority: high
+  fix_hint: Keep at least 10 Liebherr models per SK class in stock and orderable.

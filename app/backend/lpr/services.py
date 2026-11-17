@@ -185,11 +185,13 @@ def retailer_overview(s: Session, retailer: Retailer) -> dict:
             out["needs_human"].append(item)
     for key in ("good", "missing", "needs_human"):
         out[key].sort(key=lambda i: (-i["criterion"]["weight"], i["criterion"]["code"]))
-    checks = s.exec(select(ListingCheck).where(ListingCheck.run_id == run.id)).all()
+    lrun = s.exec(select(AuditRun).where(AuditRun.retailer_id == retailer.id, AuditRun.status == "done",
+                                         AuditRun.listed_count != None).order_by(AuditRun.id.desc())).first()  # noqa: E711
+    checks = s.exec(select(ListingCheck).where(ListingCheck.run_id == lrun.id)).all() if lrun else []
     if checks:
         prods = {p.id: p for p in s.exec(select(Product)).all()}
-        out["listing"] = {"reference_count": run.reference_count, "listed_count": run.listed_count,
-                          "available_count": run.available_count,
+        out["listing"] = {"reference_count": lrun.reference_count, "listed_count": lrun.listed_count,
+                          "available_count": lrun.available_count, "counted_at": lrun.finished_at,
                           "items": [{"model": prods[c.product_id].model, "sk": prods[c.product_id].sk,
                                      "listed": c.listed, "available": c.available, "url": c.url} for c in checks]}
     return out

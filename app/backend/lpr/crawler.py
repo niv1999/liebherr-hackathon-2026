@@ -35,6 +35,7 @@ class FetchResult:
     fullpage_path: str | None = None
     links: list[str] = field(default_factory=list)
     image_info: list[dict] = field(default_factory=list)  # src, alt, natural size of <img> elements
+    load_ms: int | None = None  # time until the page's DOM was ready
     error: str | None = None
 
 
@@ -117,7 +118,10 @@ class Crawler:
         res = FetchResult(url=url)
         page = self._ctx.new_page()
         try:
+            import time as _t
+            t0 = _t.monotonic()
             resp = page.goto(url, wait_until="domcontentloaded", timeout=settings.PAGE_TIMEOUT_MS)
+            res.load_ms = int((_t.monotonic() - t0) * 1000)
             res.status = resp.status if resp else None
             page.wait_for_timeout(settings.PAGE_SETTLE_MS)
             self._accept_cookies(page)

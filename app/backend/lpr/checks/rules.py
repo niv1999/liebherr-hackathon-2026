@@ -426,3 +426,108 @@ def air_alt_texts(ctx: CheckContext) -> CheckResult:
     if share >= 0.5:
         return ok(f"{len(good)} of {len(big)} large images have descriptive alt texts.", **ev)
     return fail(f"Only {len(good)} of {len(big)} large images have descriptive alt texts.", **ev)
+
+
+# ------------------------------------------------------------ more LPR criteria
+@register("zoom_available")
+def zoom_available(ctx: CheckContext) -> CheckResult:
+    alts = " ".join((i.get("alt") or "") for i in ctx.image_info).lower()
+    if re.search(r"zoom|vergrößer|lupe|vollbild", alts + " " + _text(ctx)):
+        return ok("Product images can be enlarged / zoomed.")
+    return fail("No image zoom or enlargement found.")
+
+
+@register("share_links")
+def share_links(ctx: CheckContext) -> CheckResult:
+    blob = " ".join(ctx.page.get("links") or []).lower() + " " + _text(ctx)
+    found = [n for n, rx in (("WhatsApp", r"whatsapp|wa\.me"), ("Facebook", r"facebook\.com/sharer"),
+                             ("X", r"twitter\.com/intent|x\.com/intent"), ("Pinterest", r"pinterest\.com/pin"),
+                             ("E-mail", r"mailto:"), ("Share button", r"\bteilen\b"))
+             if re.search(rx, blob)]
+    if found:
+        return ok(f"The product can be shared ({', '.join(found)}).", found=found)
+    return fail("No way to share the product page (WhatsApp, X, Facebook ...).")
+
+
+@register("no_other_brands")
+def no_other_brands(ctx: CheckContext) -> CheckResult:
+    from .brand import OTHER_BRANDS
+    t = ctx.page.get("content_text") or ""
+    found = sorted({b for b in OTHER_BRANDS if re.search(rf"\b{re.escape(b)}\b", t)})
+    if not found:
+        return ok("Only Liebherr products are recommended on the product page.")
+    return fail(f"Other brands appear on the Liebherr product page: {', '.join(found)}.", brands=found)
+
+
+@register("accessories")
+def accessories(ctx: CheckContext) -> CheckResult:
+    if re.search(r"zubehör|passend dazu|dazu passt|ergänzend", _text(ctx)):
+        return ok("Matching accessories are offered.", quote=_snippet(ctx.page.get("text") or "", "Zubehör"))
+    return fail("No matching Liebherr accessories offered.")
+
+
+@register("tracking")
+def tracking(ctx: CheckContext) -> CheckResult:
+    if re.search(r"sendungsverfolgung|sendungsnummer|tracking|lieferstatus|bestellstatus|liefertermin", _text(ctx)):
+        return ok("Shipment tracking / order status is mentioned.")
+    return human("Shipment tracking is not mentioned on the product page (may be in the shop's FAQ).")
+
+
+@register("company_address")
+def company_address(ctx: CheckContext) -> CheckResult:
+    t = ctx.page.get("text") or ""
+    m = re.search(r"[A-ZÄÖÜ][\w.&\- ]{2,60}(GmbH|AG|KG|e\.K\.|SE)\b[^.]{0,120}?\b\d{5}\s+[A-ZÄÖÜ][a-zäöüß]+", t)
+    if m:
+        return ok("Company name and address are shown.", quote=m.group(0)[:160])
+    if re.search(r"impressum", t, re.I):
+        return human("Only an 'Impressum' link was found; the address is not shown on the page itself.")
+    return fail("No company name and address found.")
+
+
+@register("page_speed")
+def page_speed(ctx: CheckContext) -> CheckResult:
+    ms = ctx.page.get("load_ms")
+    if ms is None:
+        return human("Load time could not be measured.")
+    if ms <= 3000:
+        return ok(f"The product page loads quickly ({ms / 1000:.1f} s until ready).", load_ms=ms)
+    return fail(f"The product page loads slowly ({ms / 1000:.1f} s until ready; 3 s or less expected).", load_ms=ms)
+
+
+@register("no_cheap_name")
+def no_cheap_name(ctx: CheckContext) -> CheckResult:
+    name = f"{ctx.page.get('retailer_name') or ''} {ctx.page.get('title') or ''}".lower()
+    found = [w for w in ("billig", "günstig", "discount", "schnäppchen", "low price", "lowprice", "ramsch") if w in name]
+    if not found:
+        return ok("The shop name has no cheap-sounding words.")
+    return fail(f"The shop name / title contains: {', '.join(found)}.", words=found)
+
+
+@register("logo_links_brand")
+def logo_links_brand(ctx: CheckContext) -> CheckResult:
+    links = [l.lower() for l in ctx.page.get("links") or []]
+    hit = next((l for l in links if re.search(r"markenwelt|/marken/liebherr|/brand/liebherr|/liebherr/?$", l)), None)
+    if hit:
+        return ok("The product page links to the Liebherr brand page.", link=hit)
+    return fail("No link from the product page to the Liebherr brand page.")
+
+
+@register("store_pickup_advice")
+def store_pickup_advice(ctx: CheckContext) -> CheckResult:
+    found = _found(_text(ctx), [r"im markt abholen", r"abholung", r"abholbereit", r"click\s*&\s*collect", r"reservieren",
+                                r"beratung im markt", r"in ihrer filiale", r"fachhändler vor ort", r"im markt"])
+    if found:
+        return ok("Pickup / in-store advice at a physical store is offered.", found=found)
+    return fail("No information about pickup or advice in a physical store.")
+
+
+@register("video_advice")
+def video_advice(ctx: CheckContext) -> CheckResult:
+    if re.search(r"video-?beratung|live-?beratung|videochat|video call|live-shopping", _text(ctx)):
+        return ok("Video consultation is offered.")
+    return fail("No video consultation offered.")
+
+
+@register("available_per_sk")
+def available_per_sk(ctx: CheckContext) -> CheckResult:
+    return human("Decided by the listing count (run an audit with 'count listed & available models').")

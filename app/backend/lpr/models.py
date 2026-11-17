@@ -52,6 +52,7 @@ class Product(SQLModel, table=True):
     noise_db: Optional[float] = None
     door_hinge: Optional[str] = None
     handle: Optional[str] = None
+    active: bool = True  # inactive models are not audited
     data: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))  # features, images, docs, attributes
 
 

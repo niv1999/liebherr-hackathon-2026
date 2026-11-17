@@ -1,3 +1,4 @@
+import { createContext, useCallback, useContext, useState } from "react";
 // Small shared UI pieces in the style of the team's mockup (navy ink, cyan accent, white cards).
 
 export const BLOCKS = {
@@ -127,4 +128,52 @@ export function fmtDate(iso) {
   if (!iso) return "–";
   const d = new Date(iso.endsWith("Z") || iso.includes("+") ? iso : iso + "Z");
   return d.toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+}
+
+/* ---------------------------------------------------------------- help tip, logo, toasts */
+
+export function HelpTip({ text, className = "" }) {
+  return (
+    <span className={`relative inline-flex group align-middle ${className}`}>
+      <span className="w-4 h-4 rounded-full border border-slate-300 text-[10px] font-bold text-slate-400 inline-flex items-center justify-center cursor-help select-none">?</span>
+      <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-6 z-40 w-64 rounded-lg bg-ink text-white text-[11px] font-normal normal-case tracking-normal leading-snug p-2.5 shadow-lg opacity-0 group-hover:opacity-100 transition">
+        {text}
+      </span>
+    </span>
+  );
+}
+
+export function RetailerLogo({ retailer, className = "w-9 h-9" }) {
+  const [failed, setFailed] = useState(false);
+  if (!retailer) return null;
+  if (failed) return <Monogram name={retailer.name} className={`${className} text-xs rounded-xl`} />;
+  return (
+    <div className={`${className} rounded-xl bg-white border border-slate-200 flex items-center justify-center overflow-hidden shrink-0`}>
+      <img src={`/api/retailers/${retailer.id}/logo`} alt={`${retailer.name} logo`} onError={() => setFailed(true)} className="w-3/4 h-3/4 object-contain" />
+    </div>
+  );
+}
+
+const ToastCtx = createContext(() => {});
+export const useToast = () => useContext(ToastCtx);
+
+export function ToastProvider({ children }) {
+  const [items, setItems] = useState([]);
+  const push = useCallback((message, kind = "success") => {
+    const id = Math.random().toString(36).slice(2);
+    setItems((xs) => [...xs, { id, message, kind }]);
+    setTimeout(() => setItems((xs) => xs.filter((x) => x.id !== id)), 3200);
+  }, []);
+  return (
+    <ToastCtx.Provider value={push}>
+      {children}
+      <div className="fixed bottom-5 right-5 z-[60] flex flex-col gap-2">
+        {items.map((t) => (
+          <div key={t.id} className={`px-4 py-2.5 rounded-lg shadow-lg text-sm font-medium text-white ${t.kind === "error" ? "bg-red-600" : "bg-ink"}`}>
+            {t.kind === "error" ? "⚠ " : "✓ "}{t.message}
+          </div>
+        ))}
+      </div>
+    </ToastCtx.Provider>
+  );
 }

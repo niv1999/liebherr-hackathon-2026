@@ -65,7 +65,8 @@ def report_html(s: Session, run: AuditRun) -> str:
         {'<span class="rr">return risk</span>' if c['return_risk'] else ''}</h3>
         <p><b>Products:</b> {e(', '.join(p for p in t['products'] if p))} &nbsp; <b>Due:</b> {e(t['due_date'] or '-')}</p>
         <p><b>Finding:</b> {e(ev.get('reasoning') or '')}</p>
-        <p><b>How to fix:</b> {e(t['suggested_fix'] or '')}</p></div>""")
+        <p><b>How to fix:</b> {e(t['suggested_fix'] or '')}</p>
+        {('<p><b>Official Liebherr assets:</b> ' + ' · '.join(f'<a href="{e(a["url"])}">{e(a["label"])}</a>' for a in t.get('assets') or []) + '</p>') if t.get('assets') else ''}</div>""")
     first_shot = next((v for v in shots.values() if v["screenshot_url"]), None)
     shot_path = None
     if first_shot:

@@ -91,7 +91,7 @@ def _execute(s: Session, run: AuditRun) -> None:
     retailer = s.get(Retailer, run.retailer_id)
     criteria = [c for c in s.exec(select(Criterion).where(Criterion.active == True)).all()  # noqa: E712
                 if not run.criterion_codes or c.code in run.criterion_codes]
-    products = s.exec(select(Product)).all()
+    products = [p for p in s.exec(select(Product)).all() if p.active]
     defaults = (s.get(AppSetting, "audit_defaults") or AppSetting(key="x", value={})).value
     per_sk = int(defaults.get("samples_per_sk", settings.SAMPLES_PER_SK))
     due = (date.today() + timedelta(days=int(defaults.get("due_days", 30)))).isoformat()
@@ -186,6 +186,9 @@ def _execute(s: Session, run: AuditRun) -> None:
             raw_status, raw_html = raw_fetch(url)
             page = extract(res.html, res.final_url or url)
             page["shop_search"] = shop_search
+            page["links"] = res.links
+            page["load_ms"] = res.load_ms
+            page["retailer_name"] = retailer.name
             raw_page = extract(raw_html, url) if raw_html else None
             snap = snapshot(res, url, page, "product", p.id, raw_status)
             types = ("product", "shop") if i == 1 else ("product",)
@@ -204,6 +207,13 @@ def _execute(s: Session, run: AuditRun) -> None:
                 page = extract(res.html, res.final_url or brand_url)
                 page["links"] = res.links
                 page["final_url"] = res.final_url
+                sub = _technology_subpage(res.links, res.final_url or brand_url)
+                if sub:  # e.g. MediaMarkt keeps Liebherr technologies on a "Technik" subpage
+                    _progress(s, run, "Checking the brand page's technology subpage")
+                    sres = crawler.fetch(sub, "brand_technology", screenshots=False)
+                    if not sres.blocked:
+                        page["subpage_url"] = sub
+                        page["subpage_text"] = extract(sres.html, sub).get("content_text", "")
                 snap = snapshot(res, brand_url, page, "brand")
                 checked = check_page(s, retailer, criteria, None, page, None, None, robots, res.image_info,
                                      res.screenshot_path, res.block_reason if res.blocked else None, feedback_fn,
@@ -271,6 +281,16 @@ def _shop_search(crawler: Crawler, retailer: Retailer) -> dict:
     return out
 
 
+def _technology_subpage(links: list[str], brand_url: str) -> str | None:
+    from urllib.parse import urlparse
+    host = urlparse(brand_url).netloc
+    for href in links:
+        h = href.split("#")[0]
+        if urlparse(h).netloc == host and re.search(r"technik|technolog|innovation", h, re.I)                 and re.search(r"liebherr", h, re.I) and h.rstrip("/") != brand_url.rstrip("/"):
+            return h
+    return None
+
+
 def _find_brand_link(s: Session, run: AuditRun) -> str | None:
     """Look for a 'Liebherr Markenwelt' link on the product pages we already fetched."""
     for snap in s.exec(select(PageSnapshot).where(PageSnapshot.run_id == run.id)).all():
@@ -318,6 +338,33 @@ def _listing_pass(s: Session, run: AuditRun, retailer: Retailer, crawler: Crawle
         s.add(ListingCheck(run_id=run.id, product_id=p.id, listed=bool(url), available=avail, url=url))
     s.commit()
     run.reference_count, run.listed_count, run.available_count = len(ref), listed, available
+    _availability_verdict(s, run)
+
+
+def _availability_verdict(s: Session, run: AuditRun) -> None:
+    """LPR #68: enough Liebherr models per SK class are available to buy (Liebherr: 10 per SK, retailer's choice)."""
+    from .models import Verdict as V
+    crit = s.exec(select(Criterion).where(Criterion.rule_key == "available_per_sk", Criterion.active == True)).first()  # noqa: E712
+    if not crit:
+        return
+    target = 10
+    prods = {p.id: p for p in s.exec(select(Product)).all()}
+    per_sk: dict[str, int] = {}
+    totals: dict[str, int] = {}
+    for c in s.exec(select(ListingCheck).where(ListingCheck.run_id == run.id)).all():
+        sk = prods[c.product_id].sk
+        totals[sk] = totals.get(sk, 0) + 1
+        per_sk[sk] = per_sk.get(sk, 0) + (1 if c.available else 0)
+    short = [f"SK{sk}: {per_sk.get(sk, 0)} of {min(target, totals.get(sk, 0))}" for sk in ("1", "2", "3")
+             if per_sk.get(sk, 0) < min(target, totals.get(sk, 0))]
+    ok = not short
+    reason = (f"Enough Liebherr models are available in every SK class (target {target} per class, "
+              "or all reference models where fewer exist)." if ok else
+              f"Too few Liebherr models available: {', '.join(short)}.")
+    s.add(V(run_id=run.id, criterion_id=crit.id, status="pass" if ok else "fail", source="rule", confidence=1.0,
+            reasoning=reason, evidence={"available_per_sk": per_sk, "reference_per_sk": totals, "target": target},
+            suggested_fix=None if ok else crit.fix_hint))
+    s.commit()
 
 
 def _notify(s: Session, run: AuditRun) -> None:

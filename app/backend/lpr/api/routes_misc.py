@@ -12,7 +12,7 @@ from ..extract import extract
 from ..llm import get_provider
 from ..models import AppSetting, AuditRun, Criterion, Notification, PageSnapshot, Retailer, Verdict
 from ..services import latest_runs, run_summary
-from .schemas import AuditDefaultsIn, ScheduleIn, SimulateIn
+from .schemas import AISettingsIn, AuditDefaultsIn, ScheduleIn, SimulateIn
 
 router = APIRouter(tags=["dashboard"])
 
@@ -133,8 +133,60 @@ def set_defaults(body: AuditDefaultsIn, s: Session = Depends(get_session)):
 # ------------------------------------------------------------------ AI
 @router.get("/api/ai/status")
 def ai_status():
+    return _ai_settings()
+
+
+def _ai_settings() -> dict:
+    import os
+
     p = get_provider()
-    return {"provider": p.name, "available": p.available, "model": settings.GEMINI_MODEL if p.available else None}
+    kind = os.getenv("LPR_LLM_PROVIDER", settings.LLM_PROVIDER)
+    model = os.getenv("CLAUDE_MODEL", settings.CLAUDE_MODEL) if kind == "claude" else os.getenv("GEMINI_MODEL", settings.GEMINI_MODEL)
+    return {"provider": kind, "active_provider": p.name, "available": p.available, "model": model,
+            "has_gemini_key": bool(os.getenv("GEMINI_API_KEY")), "has_claude_key": bool(os.getenv("ANTHROPIC_API_KEY"))}
+
+
+def _write_env(updates: dict[str, str]) -> None:
+    """Update app/.env (git-ignored) in place and the running process environment."""
+    import os
+
+    path = settings.ENV_FILE
+    lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
+    done = set()
+    for i, line in enumerate(lines):
+        key = line.split("=", 1)[0].strip()
+        if key in updates:
+            lines[i] = f"{key}={updates[key]}"
+            done.add(key)
+    lines += [f"{k}={v}" for k, v in updates.items() if k not in done]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    os.environ.update(updates)
+
+
+@router.get("/api/settings/ai")
+def get_ai_settings():
+    return _ai_settings()
+
+
+@router.put("/api/settings/ai")
+def set_ai_settings(body: AISettingsIn):
+    """Choose the AI judge (Gemini / Claude / off) and optionally store its API key in app/.env."""
+    from ..llm import reset_provider
+
+    updates = {"LPR_LLM_PROVIDER": body.provider}
+    if body.provider == "gemini":
+        if body.model:
+            updates["GEMINI_MODEL"] = body.model
+        if body.api_key:
+            updates["GEMINI_API_KEY"] = body.api_key.strip()
+    elif body.provider == "claude":
+        if body.model:
+            updates["CLAUDE_MODEL"] = body.model
+        if body.api_key:
+            updates["ANTHROPIC_API_KEY"] = body.api_key.strip()
+    _write_env(updates)
+    reset_provider()
+    return _ai_settings()
 
 
 @router.post("/api/ai/simulate")

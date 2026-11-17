@@ -8,7 +8,7 @@ from ..checks import REGISTRY
 from ..db import get_session
 from ..models import Criterion, Product, Verdict, now
 from ..scoring import weight
-from .schemas import CriterionIn, CriterionPatch
+from .schemas import CriterionIn, CriterionPatch, ProductIn, ProductPatch
 
 router = APIRouter(tags=["criteria"])
 
@@ -83,8 +83,53 @@ def list_products(sk: Optional[str] = None, q: Optional[str] = None, s: Session 
     rows = s.exec(select(Product).order_by(Product.model)).all()
     return [{"id": p.id, "model": p.model, "sk": p.sk, "series": p.series, "ean": p.ean, "uvp_eur": p.uvp_eur,
              "height_mm": p.height_mm, "width_mm": p.width_mm, "depth_mm": p.depth_mm,
-             "energy_class": p.energy_class, "image": (p.data.get("images") or [None])[0]}
+             "energy_class": p.energy_class, "noise_db": p.noise_db, "door_hinge": p.door_hinge, "handle": p.handle,
+             "active": p.active, "features": len((p.data or {}).get("key_features") or []),
+             "image": ((p.data or {}).get("images") or [None])[0]}
             for p in rows if (not sk or p.sk == sk) and (not q or q.lower() in p.model.lower())]
+
+
+@router.post("/api/products", status_code=201)
+def create_product(body: ProductIn, s: Session = Depends(get_session)):
+    if s.exec(select(Product).where(Product.model == body.model)).first():
+        raise HTTPException(409, "A model with this name exists")
+    p = Product(**body.model_dump(), data={})
+    s.add(p)
+    s.commit()
+    return p
+
+
+@router.patch("/api/products/{pid}")
+def update_product(pid: int, body: ProductPatch, s: Session = Depends(get_session)):
+    p = s.get(Product, pid)
+    if not p:
+        raise HTTPException(404, "Product not found")
+    for k, v in body.model_dump(exclude_unset=True).items():
+        setattr(p, k, v)
+    s.add(p)
+    s.commit()
+    return p
+
+
+@router.delete("/api/products/{pid}")
+def delete_product(pid: int, s: Session = Depends(get_session)):
+    """Deletes a model that was never audited; otherwise deactivates it (keeps history)."""
+    p = s.get(Product, pid)
+    if not p:
+        raise HTTPException(404, "Product not found")
+    if s.exec(select(Verdict).where(Verdict.product_id == pid)).first():
+        p.active = False
+        s.add(p)
+        s.commit()
+        return {"ok": True, "deactivated": True}
+    from ..models import ListingCheck, RetailerProductUrl
+    for row in s.exec(select(RetailerProductUrl).where(RetailerProductUrl.product_id == pid)).all():
+        s.delete(row)
+    for row in s.exec(select(ListingCheck).where(ListingCheck.product_id == pid)).all():
+        s.delete(row)
+    s.delete(p)
+    s.commit()
+    return {"ok": True, "deleted": True}
 
 
 @router.get("/api/products/{pid}")

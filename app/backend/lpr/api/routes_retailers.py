@@ -107,3 +107,16 @@ def delete_product_url(rid: int, uid: int, s: Session = Depends(get_session)):
     s.delete(u)
     s.commit()
     return {"ok": True}
+
+
+@router.get("/{rid}/logo")
+def logo(rid: int, s: Session = Depends(get_session)):
+    """The shop's own icon (apple-touch-icon / favicon), fetched once and cached."""
+    from fastapi.responses import FileResponse
+
+    from ..logos import retailer_logo
+    r = _get(s, rid)
+    path = retailer_logo(r.id, r.base_url)
+    if not path:
+        raise HTTPException(404, "No logo found")
+    return FileResponse(path, headers={"Cache-Control": "max-age=86400"})

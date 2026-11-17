@@ -12,7 +12,7 @@ from ..extract import extract
 from ..models import AuditRun, Criterion, Feedback, PageSnapshot, Product, Retailer, Verdict, now
 from ..reports import excel_report, pdf_report
 from ..services import rescore, run_summary, run_verdicts, todo_list
-from .schemas import AuditIn, FeedbackIn, VerdictPatch
+from .schemas import AuditIn, FeedbackIn, FixedIn, VerdictPatch
 
 router = APIRouter(tags=["audits"])
 
@@ -64,6 +64,21 @@ def get_audit(run_id: int, s: Session = Depends(get_session)):
 def audit_todo(run_id: int, s: Session = Depends(get_session)):
     _run(s, run_id)
     return todo_list(s, run_id)
+
+
+@router.post("/api/audits/{run_id}/todo/{criterion_id}/fixed")
+def mark_fixed(run_id: int, criterion_id: int, body: FixedIn, s: Session = Depends(get_session)):
+    """The retailer fixed this item: all its failed verdicts in this audit become 'pass' (as an override)."""
+    _run(s, run_id)
+    vs = s.exec(select(Verdict).where(Verdict.run_id == run_id, Verdict.criterion_id == criterion_id)).all()
+    changed = 0
+    for v in vs:
+        if v.effective_status == "fail":
+            v.override_status, v.override_by, v.override_comment, v.override_at = "pass", body.by, "Marked as fixed", now()
+            s.add(v)
+            changed += 1
+    s.commit()
+    return {"changed": changed, "run": run_summary(rescore(s, run_id))}
 
 
 @router.get("/api/audits/{run_id}/report.xlsx")

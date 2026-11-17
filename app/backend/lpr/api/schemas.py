@@ -108,3 +108,45 @@ class SimulateIn(BaseModel):
     retailer_id: int
     question: str
     product_id: Optional[int] = None
+
+
+class ProductIn(BaseModel):
+    model: str
+    ean: Optional[str] = None
+    sk: Optional[str] = None
+    series: Optional[str] = None
+    uvp_eur: Optional[float] = None
+    height_mm: Optional[float] = None
+    width_mm: Optional[float] = None
+    depth_mm: Optional[float] = None
+    energy_class: Optional[str] = None
+    noise_db: Optional[float] = None
+    door_hinge: Optional[str] = None
+    handle: Optional[str] = None
+    active: bool = True
+
+
+class ProductPatch(BaseModel):
+    model: Optional[str] = None
+    ean: Optional[str] = None
+    sk: Optional[str] = None
+    series: Optional[str] = None
+    uvp_eur: Optional[float] = None
+    height_mm: Optional[float] = None
+    width_mm: Optional[float] = None
+    depth_mm: Optional[float] = None
+    energy_class: Optional[str] = None
+    noise_db: Optional[float] = None
+    door_hinge: Optional[str] = None
+    handle: Optional[str] = None
+    active: Optional[bool] = None
+
+
+class AISettingsIn(BaseModel):
+    provider: Literal["gemini", "claude", "none"]
+    model: Optional[str] = None
+    api_key: Optional[str] = None  # only sent when changed; stored in app/.env, never returned
+
+
+class FixedIn(BaseModel):
+    by: Optional[str] = None

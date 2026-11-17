@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { api, reviewerName, setReviewerName } from "../api.js";
-import { Button } from "./ui.jsx";
+import { Button, useToast } from "./ui.jsx";
 
 // "Run audit" dialog: choose retailers, optionally the slow listing count, then start.
 export default function RunAuditModal({ preselected, onClose, onStarted }) {
+  const toast = useToast();
   const [retailers, setRetailers] = useState([]);
   const [selected, setSelected] = useState(new Set(preselected || []));
   const [listing, setListing] = useState(false);
@@ -30,6 +31,7 @@ export default function RunAuditModal({ preselected, onClose, onStarted }) {
     try {
       setReviewerName(name);
       await api.startAudit({ retailer_ids: [...selected], include_listing: listing, started_by: name || null });
+      toast(`Audit started for ${selected.size} retailer${selected.size > 1 ? "s" : ""}`);
       onStarted();
     } catch (e) {
       setError(e.message);
@@ -40,13 +42,7 @@ export default function RunAuditModal({ preselected, onClose, onStarted }) {
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center p-4" onClick={onClose}>
       <div className="card w-full max-w-md p-5 space-y-4" onClick={(e) => e.stopPropagation()}>
-        <div>
-          <h2 className="text-base font-bold">Run an audit</h2>
-          <p className="text-xs text-slate-500 mt-1">
-            HeLPR opens each shop like a shopper, checks product pages per SK class and the Liebherr brand page,
-            then scores the retailer. About 1–3 minutes per retailer; audits run one after another.
-          </p>
-        </div>
+        <h2 className="text-base font-bold">Run audit</h2>
         <div className="space-y-1.5">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Retailers</p>
           {retailers.map((r) => (
@@ -60,12 +56,12 @@ export default function RunAuditModal({ preselected, onClose, onStarted }) {
         <label className="flex items-start gap-2.5 text-sm cursor-pointer">
           <input type="checkbox" checked={listing} onChange={(e) => setListing(e.target.checked)} className="mt-1 accent-sky-600" />
           <span>
-            Also count listed &amp; available models
-            <span className="block text-xs text-slate-500">Searches all 43 reference models; adds ~5 minutes per retailer.</span>
+            Count listed &amp; available models
+            <span className="block text-xs text-slate-500">Full assortment check · a few extra minutes</span>
           </span>
         </label>
         <label className="block text-sm">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Your name (shown in history)</span>
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Your name</span>
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Dominik"
             className="mt-1 w-full text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-200" />
         </label>

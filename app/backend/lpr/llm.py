@@ -143,16 +143,68 @@ class FileProvider:
         return a["text"] if a else "Waiting for the offline judge's answer."
 
 
+class ClaudeProvider:
+    """Anthropic Claude via the official SDK. Structured output with messages.parse + a Pydantic schema."""
+
+    name = "claude"
+
+    def __init__(self, api_key: str, model: str):
+        import anthropic
+
+        self.client = anthropic.Anthropic(api_key=api_key)
+        self.model = model
+        self.available = True
+
+    @staticmethod
+    def _content(prompt: str, images: list[Path] | None) -> list[dict]:
+        import base64
+
+        blocks: list[dict] = []
+        for p in images or []:
+            if p and Path(p).exists():
+                data = base64.standard_b64encode(Path(p).read_bytes()).decode("utf-8")
+                blocks.append({"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": data}})
+        blocks.append({"type": "text", "text": prompt})
+        return blocks
+
+    def judge(self, prompt: str, images: list[Path] | None = None, schema: type[BaseModel] = AIJudgement):
+        resp = self.client.messages.parse(
+            model=self.model,
+            max_tokens=16000,
+            messages=[{"role": "user", "content": self._content(prompt, images)}],
+            output_format=schema,
+        )
+        if resp.stop_reason == "refusal" or resp.parsed_output is None:
+            raise RuntimeError(f"Claude returned no verdict (stop_reason={resp.stop_reason})")
+        return resp.parsed_output
+
+    def answer(self, prompt: str) -> str:
+        resp = self.client.messages.create(model=self.model, max_tokens=4000,
+                                           messages=[{"role": "user", "content": prompt}])
+        return "".join(b.text for b in resp.content if b.type == "text").strip()
+
+
 _provider: Provider | None = None
 
 
+def reset_provider() -> None:
+    """Called after the AI settings change, so the next call uses the new provider / key."""
+    global _provider
+    _provider = None
+
+
 def get_provider() -> Provider:
+    import os
+
     global _provider
     if _provider is None:
-        if settings.LLM_PROVIDER == "file":
+        kind = os.getenv("LPR_LLM_PROVIDER", settings.LLM_PROVIDER)
+        if kind == "file":
             _provider = FileProvider()
-        elif settings.LLM_PROVIDER == "gemini" and settings.GEMINI_API_KEY:
-            _provider = GeminiProvider(settings.GEMINI_API_KEY, settings.GEMINI_MODEL)
+        elif kind == "gemini" and os.getenv("GEMINI_API_KEY"):
+            _provider = GeminiProvider(os.environ["GEMINI_API_KEY"], os.getenv("GEMINI_MODEL", settings.GEMINI_MODEL))
+        elif kind == "claude" and os.getenv("ANTHROPIC_API_KEY"):
+            _provider = ClaudeProvider(os.environ["ANTHROPIC_API_KEY"], os.getenv("CLAUDE_MODEL", settings.CLAUDE_MODEL))
         else:
             _provider = NoProvider()
     return _provider

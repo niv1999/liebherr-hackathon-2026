@@ -94,11 +94,24 @@ def brand_categories(ctx: CheckContext) -> CheckResult:
 
 @register("brand_technologies")
 def brand_technologies(ctx: CheckContext) -> CheckResult:
-    t = _brand_text(ctx).lower()
-    found = [x for x in LIEBHERR_TECH if x.lower() in t]
+    main = _brand_text(ctx).lower()
+    sub = (ctx.page.get("subpage_text") or "").lower()
+    found = [x for x in LIEBHERR_TECH if x.lower() in main or x.lower() in sub]
+    ev = {"technologies": found, "checked_pages": [ctx.page.get("url")] + ([ctx.page["subpage_url"]] if sub else [])}
+    where = " (brand page + its technology page)" if sub else ""
     if len(found) >= 3:
-        return ok(f"{len(found)} Liebherr technologies are presented.", technologies=found)
-    return fail(f"Only {len(found)} Liebherr technologies are presented (at least 3 expected).", technologies=found)
+        return ok(f"{len(found)} Liebherr technologies are presented{where}: {', '.join(found)}.", **ev)
+    return fail(f"Only {len(found)} Liebherr technologies are named{where}: {', '.join(found) or 'none'} "
+                "(at least 3 expected, e.g. BioFresh, NoFrost, DuoCooling).", **ev)
+
+
+@register("brand_filters")
+def brand_filters(ctx: CheckContext) -> CheckResult:
+    t = (ctx.page.get("text") or "").lower()
+    found = [w for w in ("filter", "sortieren", "sortierung", "preis von", "energieeffizienzklasse") if w in t]
+    if found:
+        return ok("Product filters / sorting are offered on the brand page.", found=found)
+    return fail("No product filters or sorting on the brand page.")
 
 
 @register("brand_products")

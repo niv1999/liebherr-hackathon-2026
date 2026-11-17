@@ -33,12 +33,12 @@ def _jsonld_blocks(soup: BeautifulSoup) -> list[Any]:
         except Exception:
             continue
         stack = data if isinstance(data, list) else [data]
-        while stack:
+        while stack:  # walk nested objects too (e.g. MediaMarkt: BuyAction -> object: Product)
             item = stack.pop()
             if isinstance(item, dict):
-                out.append(item)
-                if "@graph" in item and isinstance(item["@graph"], list):
-                    stack.extend(item["@graph"])
+                if "@type" in item:
+                    out.append(item)
+                stack.extend(v for v in item.values() if isinstance(v, (dict, list)))
             elif isinstance(item, list):
                 stack.extend(item)
     return out
@@ -61,7 +61,7 @@ def extract(html: str, url: str = "") -> dict[str, Any]:
     soup = BeautifulSoup(html or "", "lxml")
     blocks = _jsonld_blocks(soup)
     products = [b for b in blocks if _is_product(b)]
-    product = products[0] if products else None
+    product = max(products, key=len) if products else None  # the richest Product object
     title = soup.title.get_text(strip=True) if soup.title else None
     h1 = soup.find("h1")
     h1_text = h1.get_text(" ", strip=True) if h1 else None

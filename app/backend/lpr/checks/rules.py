@@ -165,7 +165,8 @@ def tech_data_complete(ctx: CheckContext) -> CheckResult:
     t = _text(ctx)
     checks = {
         "energy class": bool(re.search(r"energieeffizienzklasse|effizienzklasse", t)),
-        "noise level": bool(re.search(r"\d{2}\s?db", t)) and ("geräusch" in t or "lautstärke" in t or "schall" in t),
+        "noise level": bool(re.search(r"\d{2}\s?db|db\s?\(?a?\)?\s*:?\s*\d{2}", t))
+        and ("geräusch" in t or "lautstärke" in t or "schall" in t),
         "volume": bool(re.search(r"\d{2,3}\s?(l|liter)\b", t)) and ("inhalt" in t or "volumen" in t or "nutzinhalt" in t),
     }
     missing = [k for k, v in checks.items() if not v]
@@ -339,8 +340,18 @@ def air_no_js_content(ctx: CheckContext) -> CheckResult:
 AI_BOTS = ["OAI-SearchBot", "GPTBot", "ChatGPT-User", "PerplexityBot", "ClaudeBot", "Google-Extended"]
 
 
-def _robots_blocks(robots: str, agent: str) -> bool:
-    """True if robots.txt disallows the whole site (or /p, /product paths) for this agent."""
+def _rule_matches(pattern: str, path: str) -> int:
+    """Length of the match if the robots.txt pattern matches the path (supports * and $), else -1."""
+    if not pattern:
+        return -1
+    rx = "^" + re.escape(pattern).replace(r"\*", ".*")
+    if rx.endswith(r"\$"):
+        rx = rx[:-2] + "$"
+    return len(pattern) if re.match(rx, path) else -1
+
+
+def _robots_blocks(robots: str, agent: str, path: str = "/") -> bool:
+    """True if robots.txt disallows `path` for this agent (Google-style: longest match wins, Allow wins ties)."""
     groups, current, rules = [], [], []
     for line in robots.splitlines():
         line = line.split("#")[0].strip()
@@ -359,14 +370,22 @@ def _robots_blocks(robots: str, agent: str) -> bool:
         groups.append((current, rules))
     specific = [r for agents, r in groups if agent.lower() in agents]
     chosen = specific[0] if specific else next((r for agents, r in groups if "*" in agents), [])
-    return any(k == "disallow" and v in ("/", "/*") for k, v in chosen)
+    best_len, allowed = -1, True
+    for k, v in chosen:
+        n = _rule_matches(v, path)
+        if n > best_len or (n == best_len and k == "allow"):
+            best_len, allowed = n, (k == "allow")
+    return not allowed
 
 
 @register("air_robots")
 def air_robots(ctx: CheckContext) -> CheckResult:
     if ctx.robots_txt is None:
         return human("robots.txt could not be read.")
-    blocked = [a for a in AI_BOTS if _robots_blocks(ctx.robots_txt, a)]
+    from urllib.parse import urlparse
+
+    path = urlparse(ctx.page.get("url") or "/").path or "/"
+    blocked = [a for a in AI_BOTS if _robots_blocks(ctx.robots_txt, a, path)]
     search_bots_ok = not any(b in blocked for b in ("OAI-SearchBot", "PerplexityBot"))
     if search_bots_ok:
         return ok("AI search crawlers are allowed by robots.txt.", blocked_bots=blocked)
@@ -398,7 +417,7 @@ def air_faq_reviews(ctx: CheckContext) -> CheckResult:
 
 @register("air_alt_texts")
 def air_alt_texts(ctx: CheckContext) -> CheckResult:
-    big = [i for i in ctx.image_info if (i.get("w") or 0) >= 300 and (i.get("h") or 0) >= 300]
+    big = [i for i in ctx.image_info if (i.get("w") or 0) >= 240 and (i.get("h") or 0) >= 240]
     if not big:
         return human("No large images found to check.")
     good = [i for i in big if len((i.get("alt") or "").strip()) >= 8]

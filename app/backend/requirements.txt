@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+apscheduler
+google-genai
+playwright
+httpx
+beautifulsoup4
+lxml
+pandas
+openpyxl
+pillow
+imagehash
+pyyaml
+python-dotenv
+pytest

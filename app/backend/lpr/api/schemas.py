@@ -14,6 +14,7 @@ class RetailerIn(BaseModel):
     base_url: str
     search_url: Optional[str] = None
     product_link_pattern: Optional[str] = None
+    brand_page_url: Optional[str] = None
     access_note: Optional[str] = None
     active: bool = True
 
@@ -23,6 +24,7 @@ class RetailerPatch(BaseModel):
     base_url: Optional[str] = None
     search_url: Optional[str] = None
     product_link_pattern: Optional[str] = None
+    brand_page_url: Optional[str] = None
     access_note: Optional[str] = None
     active: Optional[bool] = None
 
@@ -47,6 +49,7 @@ class CriterionIn(BaseModel):
     ai_prompt: Optional[str] = None
     priority: Priority = "medium"
     return_risk: bool = False
+    escalate: bool = False
     fix_hint: Optional[str] = None
     active: bool = True
 
@@ -62,6 +65,8 @@ class CriterionPatch(BaseModel):
     ai_prompt: Optional[str] = None
     priority: Optional[Priority] = None
     return_risk: Optional[bool] = None
+    escalate: Optional[bool] = None
+    page_type: Optional[Literal["product", "brand", "shop"]] = None
     fix_hint: Optional[str] = None
     active: Optional[bool] = None
 

@@ -29,6 +29,7 @@ class Retailer(SQLModel, table=True):
     # How to find products: a search URL with {query}, and a regex product links must match.
     search_url: Optional[str] = None
     product_link_pattern: Optional[str] = None
+    brand_page_url: Optional[str] = None  # the Liebherr brand page ("Markenwelt") in this shop
     active: bool = True
     # Set when the shop blocks automated access; shown as "needs manual assessment".
     access_note: Optional[str] = None
@@ -69,6 +70,7 @@ class Criterion(SQLModel, table=True):
     ai_prompt: Optional[str] = None  # editable instruction for AI-judged criteria
     priority: str = "medium"  # low | medium | high  -> weight
     return_risk: bool = False
+    escalate: bool = False  # if the rule fails ("not found in text"), the vision judge double-checks the full page
     fix_hint: Optional[str] = None  # default suggested fix shown to retailers
     active: bool = True
     updated_at: datetime = Field(default_factory=now)
@@ -113,6 +115,8 @@ class AuditRun(SQLModel, table=True):
     listed_count: Optional[int] = None
     available_count: Optional[int] = None
     block_scores: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
+    sk_scores: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))  # LPR score per SK class
+    brand_page_url: Optional[str] = None
     error: Optional[str] = None
 
 

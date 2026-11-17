@@ -25,6 +25,7 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 LLM_MIN_INTERVAL_S = float(os.getenv("LPR_LLM_MIN_INTERVAL_S", "6.5"))  # free tier ~10 requests/min
 AI_CONFIDENCE_THRESHOLD = float(os.getenv("LPR_AI_CONFIDENCE_THRESHOLD", "0.6"))
 FEEDBACK_EXAMPLES_IN_PROMPT = int(os.getenv("LPR_FEEDBACK_EXAMPLES", "5"))
+ESCALATION_ENABLED = os.getenv("LPR_ESCALATION", "1") == "1"  # vision double-check of "not found" rule fails
 
 # Crawling
 USER_AGENT = os.getenv(

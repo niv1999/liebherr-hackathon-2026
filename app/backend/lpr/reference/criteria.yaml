@@ -84,6 +84,7 @@
   section: Product detail page
   title: Shipping costs shown
   lpr_ref: "#37"
+  escalate: true
   method: rule
   rule_key: shipping_costs
   priority: low
@@ -104,6 +105,7 @@
   section: Product detail page
   title: Key technical data complete (energy class, noise, volume)
   lpr_ref: "#39"
+  escalate: true
   method: rule
   rule_key: tech_data_complete
   priority: high
@@ -115,6 +117,7 @@
   title: Door hinge and handle information given
   description: Liebherr's real return example - a customer bought a model without a door handle that she needed.
   lpr_ref: "return risk"
+  escalate: true
   method: rule
   rule_key: hinge_and_handle
   priority: medium
@@ -198,12 +201,126 @@
     In "evidence", quote the start of the description and its approximate length.
   fix_hint: Add a descriptive product text (100+ words) explaining the model's main benefits and Liebherr features.
 
+# ---------------- Visibility: brand page (Liebherr shop-in-shop) ----------------
+- code: BRD-01
+  block: visibility
+  section: Brand page
+  title: Liebherr brand page exists and is reachable
+  lpr_ref: "#18"
+  page_type: brand
+  method: rule
+  rule_key: brand_exists
+  priority: high
+  fix_hint: Set up a Liebherr brand page ("Markenwelt") with current Liebherr images and content.
+- code: BRD-02
+  block: visibility
+  section: Brand page
+  title: Current official Liebherr logo used
+  lpr_ref: "#7"
+  page_type: brand
+  method: rule
+  rule_key: brand_logo
+  priority: medium
+  fix_hint: Use the current Liebherr logo from the official asset package.
+- code: BRD-03
+  block: visibility
+  section: Brand page
+  title: Product categories presented (built-in / freestanding or cooling / freezing)
+  lpr_ref: "#22"
+  page_type: brand
+  method: rule
+  rule_key: brand_categories
+  priority: medium
+  fix_hint: Show Liebherr product categories, split into built-in vs freestanding (or cooling vs freezing).
+- code: BRD-04
+  block: visibility
+  section: Brand page
+  title: Key Liebherr technologies presented
+  lpr_ref: "#26"
+  page_type: brand
+  method: rule
+  rule_key: brand_technologies
+  priority: medium
+  fix_hint: Present the key Liebherr technologies (e.g. BioFresh, NoFrost, DuoCooling), each with its own section or page.
+- code: BRD-05
+  block: visibility
+  section: Brand page
+  title: Liebherr products / bestsellers shown on the brand page
+  lpr_ref: "#23"
+  page_type: brand
+  method: rule
+  rule_key: brand_products
+  priority: medium
+  fix_hint: Show Liebherr bestsellers or highlights with links to the product pages.
+- code: BRD-06
+  block: visibility
+  section: Brand page
+  title: Descriptive text about Liebherr (at least 200 words)
+  lpr_ref: "#53"
+  sk_levels: "2,3"
+  page_type: brand
+  method: rule
+  rule_key: brand_seo_text
+  priority: low
+  fix_hint: Add a descriptive text of at least 200 words about Liebherr on the brand page.
+- code: BRD-07
+  block: visibility
+  section: Brand page
+  title: Brand page looks current and premium, no other brands
+  description: Current campaign teaser, high-quality images, only Liebherr products.
+  lpr_ref: "#19/#20/#21"
+  page_type: brand
+  method: ai
+  rule_key: ai_design_quality
+  priority: medium
+  ai_prompt: |
+    You see a screenshot of the top of a German retailer's Liebherr BRAND PAGE (shop-in-shop), plus its text.
+    PASS if it looks clean, current and premium (large Liebherr images or campaign teaser, clear structure)
+    AND it shows only Liebherr (no other brands' products or ads). FAIL if it looks outdated, cluttered, is
+    just a plain product list, or other brands appear. In "evidence", describe what you see.
+  fix_hint: Use the current Liebherr campaign teaser and only Liebherr content on the brand page.
+- code: BRD-08
+  block: advice
+  section: Brand page
+  title: Advice options (phone / video / advisor) shown on the brand page
+  lpr_ref: "#24/#58"
+  page_type: brand
+  method: rule
+  rule_key: brand_advice
+  priority: medium
+  fix_hint: Show advice options (phone with opening hours, video advice or a buying guide) on the brand page.
+
+# ---------------- Visibility: Liebherr inside the shop ----------------
+- code: VIS-01
+  block: visibility
+  section: Shop search
+  title: Searching "Liebherr" leads to Liebherr products / brand page
+  lpr_ref: "#54"
+  sk_levels: "2,3"
+  page_type: shop
+  method: rule
+  rule_key: shop_search_brand
+  priority: medium
+  fix_hint: Make the shop search for "Liebherr" lead to the Liebherr brand page.
+- code: VIS-02
+  block: visibility
+  section: Shop search
+  title: A Liebherr product is in the top 5 when searching "Kühl-Gefrierkombination"
+  lpr_ref: "#55"
+  sk_levels: "2,3"
+  page_type: shop
+  method: rule
+  rule_key: shop_search_category
+  priority: medium
+  fix_hint: Make sure at least one Liebherr model appears in the top 5 results for "Kühl-Gefrierkombination".
+
 # ---------------- Advice ----------------
 - code: ADV-01
   block: advice
   section: Phone / video advice
   title: Phone number for advice visible on the product page
   lpr_ref: "#61"
+  escalate: true
   method: rule
   rule_key: phone_visible
   priority: high
@@ -223,6 +340,7 @@
   section: Payment
   title: At least 2 payment methods offered
   lpr_ref: "#71"
+  page_type: shop
   method: rule
   rule_key: payment_methods
   priority: medium
@@ -233,6 +351,7 @@
   title: Invoice or financing offered
   lpr_ref: "#72"
   sk_levels: "2,3"
+  page_type: shop
   method: rule
   rule_key: financing
   priority: low
@@ -302,6 +421,7 @@
   block: ai_readiness
   section: Accessible content
   title: AI search crawlers allowed in robots.txt
+  page_type: shop
   method: rule
   rule_key: air_robots
   priority: medium

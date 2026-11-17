@@ -76,7 +76,7 @@ def run_audit(run_id: int) -> None:
         s.commit()
         try:
             _execute(s, run)
-            run.status = "done"
+            run.status, run.error = "done", None
         except Exception as e:  # keep the error visible in the UI
             log.exception("run %s failed", run_id)
             run.status = "failed"
@@ -148,35 +148,71 @@ def _execute(s: Session, run: AuditRun) -> None:
 
         robots = robots_txt(retailer.base_url)
 
-        # ---- 2+3. DELEGATE & CHECK: fetch each page, run every applicable criterion -----------
-        criteria_by_id = {c.id: c for c in criteria}
-        for i, (p, url) in enumerate(targets, 1):
-            _progress(s, run, f"Checking product {i}/{len(targets)}: {p.model}")
-            name = f"pdp_{model_slug(p.model)}"
-            res = crawler.fetch(url, name)
-            raw_status, raw_html = raw_fetch(url)
-            page = extract(res.html, res.final_url or url)
-            raw_page = extract(raw_html, url) if raw_html else None
-            snap = PageSnapshot(run_id=run.id, product_id=p.id, page_type="product", url=url, final_url=res.final_url,
-                                status_code=res.status, blocked=res.blocked, html_path=res.html_path,
-                                screenshot_path=res.screenshot_path, fullpage_path=res.fullpage_path,
-                                extracted={k: v for k, v in page.items() if k != "jsonld_product"} |
-                                {"jsonld_product_present": page.get("jsonld_product") is not None,
-                                 "image_info": res.image_info[:80],
-                                 "raw_status": raw_status, "block_reason": res.block_reason})
-            s.add(snap)
-            s.commit()
-
-            checked = check_page(s, retailer, criteria, p, page, raw_page, raw_status, robots, res.image_info,
-                                 res.screenshot_path, res.block_reason if res.blocked else None,
-                                 feedback_fn=lambda cid: _feedback_examples(s, cid))
+        def save_verdicts(checked, product_id, snap):
             for c, r in checked:
-                s.add(Verdict(run_id=run.id, criterion_id=c.id, product_id=p.id, page_id=snap.id, status=r.status,
-                              source=r.source if c.method != "manual" else "manual", confidence=r.confidence,
-                              reasoning=r.reasoning, evidence=r.evidence, screenshot_path=res.screenshot_path,
+                pid = product_id if c.page_type == "product" else None  # shop/brand verdicts belong to the retailer
+                s.add(Verdict(run_id=run.id, criterion_id=c.id, product_id=pid, page_id=snap.id if snap else None,
+                              status=r.status, source=r.source if c.method != "manual" else "manual",
+                              confidence=r.confidence, reasoning=r.reasoning, evidence=r.evidence,
+                              screenshot_path=snap.screenshot_path if snap else None,
                               suggested_fix=c.fix_hint if r.status == "fail" else None,
                               due_date=due if r.status == "fail" else None))
             s.commit()
+
+        def snapshot(res, url, page, page_type, product_id=None, raw_status=None):
+            snap = PageSnapshot(run_id=run.id, product_id=product_id, page_type=page_type, url=url,
+                                final_url=res.final_url, status_code=res.status, blocked=res.blocked,
+                                html_path=res.html_path, screenshot_path=res.screenshot_path,
+                                fullpage_path=res.fullpage_path,
+                                extracted={k: v for k, v in page.items() if k not in ("jsonld_product", "links")} |
+                                {"jsonld_product_present": page.get("jsonld_product") is not None,
+                                 "image_info": res.image_info[:80], "raw_status": raw_status,
+                                 "block_reason": res.block_reason})
+            s.add(snap)
+            s.commit()
+            return snap
+
+        # Shop-wide facts: how the shop search treats Liebherr (criteria VIS-01 / VIS-02)
+        shop_search = {}
+        if any(c.rule_key in ("shop_search_brand", "shop_search_category") for c in criteria):
+            _progress(s, run, "Testing the shop search")
+            shop_search = _shop_search(crawler, retailer)
+
+        # ---- 2+3. DELEGATE & CHECK: product pages (shop-wide criteria only once, on the first page) ---
+        feedback_fn = lambda cid: _feedback_examples(s, cid)  # noqa: E731
+        for i, (p, url) in enumerate(targets, 1):
+            _progress(s, run, f"Checking product {i}/{len(targets)}: {p.model}")
+            res = crawler.fetch(url, f"pdp_{model_slug(p.model)}")
+            raw_status, raw_html = raw_fetch(url)
+            page = extract(res.html, res.final_url or url)
+            page["shop_search"] = shop_search
+            raw_page = extract(raw_html, url) if raw_html else None
+            snap = snapshot(res, url, page, "product", p.id, raw_status)
+            types = ("product", "shop") if i == 1 else ("product",)
+            checked = check_page(s, retailer, criteria, p, page, raw_page, raw_status, robots, res.image_info,
+                                 res.screenshot_path, res.block_reason if res.blocked else None, feedback_fn,
+                                 page_types=types, fullpage_path=res.fullpage_path)
+            save_verdicts(checked, p.id, snap)
+
+        # ---- brand page (the Liebherr shop-in-shop) ---------------------------------------------
+        if any(c.page_type == "brand" for c in criteria):
+            brand_url = retailer.brand_page_url or _find_brand_link(s, run)
+            run.brand_page_url = brand_url
+            if brand_url:
+                _progress(s, run, "Checking the Liebherr brand page")
+                res = crawler.fetch(brand_url, "brand_page")
+                page = extract(res.html, res.final_url or brand_url)
+                page["links"] = res.links
+                page["final_url"] = res.final_url
+                snap = snapshot(res, brand_url, page, "brand")
+                checked = check_page(s, retailer, criteria, None, page, None, None, robots, res.image_info,
+                                     res.screenshot_path, res.block_reason if res.blocked else None, feedback_fn,
+                                     page_types=("brand",), fullpage_path=res.fullpage_path)
+                save_verdicts(checked, None, snap)
+            else:
+                from .checks import CheckResult
+                save_verdicts([(c, CheckResult("fail", "No Liebherr brand page found in this shop."))
+                               for c in criteria if c.page_type == "brand" and c.rule_key == "brand_exists"], None, None)
 
         # ---- listing pass: how many reference models are listed / available -------------------
         if run.include_listing and not run.product_ids:
@@ -187,7 +223,8 @@ def _execute(s: Session, run: AuditRun) -> None:
     _progress(s, run, "Scoring")
     verdicts = s.exec(select(Verdict).where(Verdict.run_id == run.id)).all()
     all_criteria = {c.id: c for c in s.exec(select(Criterion)).all()}
-    result = score(verdicts, all_criteria)
+    sk_of = {p.id: p.sk for p in products}
+    result = score(verdicts, all_criteria, sk_of)
     for k, v in result.items():
         setattr(run, k, v)
     if not targets:
@@ -198,6 +235,67 @@ def _execute(s: Session, run: AuditRun) -> None:
     s.commit()
 
 
+def _top_product_links(res: FetchResult, pattern: str | None, n: int = 5) -> list[str]:
+    rx = re.compile(pattern) if pattern else None
+    out = []
+    for href in res.links:
+        h = href.split("#")[0].split("?")[0]
+        if rx and rx.match(h) and h not in out:
+            out.append(h)
+        if len(out) >= n:
+            break
+    return out
+
+
+def _is_liebherr_link(url: str, liebherr_models: set[str]) -> bool:
+    low = url.lower()
+    return "liebherr" in low or any(m in low for m in liebherr_models)
+
+
+def _shop_search(crawler: Crawler, retailer: Retailer) -> dict:
+    from .db import session_scope as _ss
+    with _ss() as s2:
+        models = {model_slug(p.model) for p in s2.exec(select(Product)).all()}
+        models |= {model_core(m).replace(" ", "-") for m in models}
+    out = {}
+    for key, query in (("brand", "Liebherr"), ("category", "Kühl-Gefrierkombination")):
+        res = crawler.search(retailer.search_url, query, f"shopsearch_{key}")
+        if res.blocked:
+            out[key] = {"blocked": res.block_reason}
+            continue
+        top = _top_product_links(res, retailer.product_link_pattern)
+        landed = bool(res.final_url and re.search(r"liebherr", res.final_url, re.I) and "search" not in res.final_url.lower()
+                      and "suche" not in res.final_url.lower())
+        out[key] = {"query": query, "final_url": res.final_url, "landed_on_brand_page": landed, "top5": top,
+                    "liebherr_products_top5": sum(_is_liebherr_link(u, models) for u in top)}
+    return out
+
+
+def _find_brand_link(s: Session, run: AuditRun) -> str | None:
+    """Look for a 'Liebherr Markenwelt' link on the product pages we already fetched."""
+    for snap in s.exec(select(PageSnapshot).where(PageSnapshot.run_id == run.id)).all():
+        if not snap.html_path:
+            continue
+        from pathlib import Path
+        html = Path(snap.html_path).read_text(encoding="utf-8")
+        m = re.search(r'href="([^"]*(?:markenwelt[^"]*liebherr|marken/liebherr|brand/liebherr|/liebherr/?))"', html, re.I)
+        if m:
+            from urllib.parse import urljoin
+            return urljoin(snap.url, m.group(1))
+    return None
+
+
+def _fast_search(retailer: Retailer, model: str) -> str | None:
+    """Shop search via plain HTTP; returns the product URL if the result page lists it, else None."""
+    from urllib.parse import quote_plus, urljoin
+
+    status, html = raw_fetch(retailer.search_url.replace("{query}", quote_plus(model)), timeout=15)
+    if status != 200 or not html:
+        return None
+    links = [urljoin(retailer.base_url, h) for h in re.findall(r'href="([^"]+)"', html)]
+    return find_product_link(FetchResult(url="", links=links), retailer.product_link_pattern, model)
+
+
 def _listing_pass(s: Session, run: AuditRun, retailer: Retailer, crawler: Crawler, products: list[Product],
                   known: dict) -> None:
     ref = [p for p in products if p.sk in ("1", "2", "3", "frei")]
@@ -206,8 +304,10 @@ def _listing_pass(s: Session, run: AuditRun, retailer: Retailer, crawler: Crawle
         _progress(s, run, f"Counting listed products {i}/{len(ref)}")
         url = known[p.id].url if p.id in known else None
         if not url:
-            res = crawler.search(retailer.search_url, p.model, f"list_{model_slug(p.model)}")
-            url = None if res.blocked else find_product_link(res, retailer.product_link_pattern, p.model)
+            url = _fast_search(retailer, p.model)  # plain HTTP first (fast), real browser only if needed
+            if url is None:
+                res = crawler.search(retailer.search_url, p.model, f"list_{model_slug(p.model)}")
+                url = None if res.blocked else find_product_link(res, retailer.product_link_pattern, p.model)
         avail = None
         if url:
             listed += 1
@@ -229,7 +329,7 @@ def _notify(s: Session, run: AuditRun) -> None:
                            body=(run.error or "")[:300]))
     elif run.blocked:
         s.add(Notification(run_id=run.id, title=f"{retailer.name}: blocked for automated checks",
-                           body=f"{run.progress} Needs manual assessment."))
+                           body=run.progress or "Needs manual assessment."))
     else:
         change = ""
         if prev and prev.lpr_score is not None and run.lpr_score is not None:

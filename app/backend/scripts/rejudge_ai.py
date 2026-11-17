@@ -35,8 +35,9 @@ def main() -> None:
         retailer = s.get(Retailer, run.retailer_id)
         crit = {c.id: c for c in s.exec(select(Criterion)).all()}
         for snap in s.exec(select(PageSnapshot).where(PageSnapshot.run_id == run.id)).all():
-            product = s.get(Product, snap.product_id)
-            if (models and product.model not in models) or not snap.html_path or snap.blocked:
+            product = s.get(Product, snap.product_id) if snap.product_id else None
+            label = product.model if product else f"{snap.page_type} page"
+            if (models and label not in models) or not snap.html_path or snap.blocked:
                 continue
             verdicts = s.exec(select(Verdict).where(Verdict.page_id == snap.id)).all()
             ai_v = {v.criterion_id: v for v in verdicts if crit[v.criterion_id].method == "ai"}
@@ -56,7 +57,7 @@ def main() -> None:
                     v.status, v.reasoning, v.evidence, v.confidence, v.source = r.status, r.reasoning, r.evidence, r.confidence, "ai"
                     v.suggested_fix = c.fix_hint if r.status == "fail" else None
                     s.add(v)
-                    print(f"{product.model:16} {kind:7} {c.code:7} {r.status:12} conf={r.confidence} {r.reasoning[:100]}")
+                    print(f"{label:16} {kind:7} {c.code:7} {r.status:12} conf={r.confidence} {r.reasoning[:100]}")
             s.commit()
         sm = run_summary(rescore(s, run.id))
         print("LPR", sm["lpr_score"], "| AI-readiness", sm["ai_readiness_score"], "| checked", sm["checked_count"], "of", sm["applicable_count"])

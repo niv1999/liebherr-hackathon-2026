@@ -117,7 +117,7 @@ async function icon(name, color) {
   // 3 — Challenge
   {
     const s = slide("The challenge", null, "Intro");
-    const st = [["FaStore", "~30", "retailer webshops"], ["FaListCheck", "~76", "criteria per shop"], ["FaClock", "3", "months between checks"]];
+    const st = [["FaStore", "~30", "retailer webshops"], ["FaListCheck", "~76", "LPR quality criteria"], ["FaClock", "3", "months between checks"]];
     for (let i = 0; i < 3; i++) {
       const [ic, n, l] = st[i];
       const x = 0.5 + i * 3.05;
@@ -135,13 +135,13 @@ async function icon(name, color) {
     const s = slide("Our Design Challenge", 1, "Phase 1");
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.4, w: 9.0, h: 1.8, rectRadius: 0.12, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Question" });
     T(s, "“How do we manage to improve the webshop quality assessment for Liebherr employees and their retail partners?”", { x: 0.85, y: 1.4, w: 8.3, h: 1.8, fontSize: 22, bold: true, color: C.background1, valign: "middle" });
-    const ch = [["FaUserTie", "Users", "Liebherr employees + retailers"], ["FaStar", "Wishes", "Automatic check, clear score"], ["FaFaceFrown", "Complaints", "Manual, slow, inconsistent"]];
+    const ch = [["FaUserTie", "Users", "Liebherr employees and their retail partners. Topic: retail webshop quality (LPR)"], ["FaStar", "Wishes", "Automatic webshop check, comparable quality index, transparent rating, clear to-do list for retailers"], ["FaFaceFrown", "Complaints", "Manual and time-intensive, only every 3 months, inconsistent ratings, late feedback, complex criteria"]];
     for (let i = 0; i < 3; i++) {
       const [ic, h, t] = ch[i];
       const x = 0.5 + i * 3.05;
       await iconCircle(s, ic, x, 3.55, 0.6, false);
       T(s, h, { x: x + 0.75, y: 3.55, w: 2.2, h: 0.3, fontSize: 14, bold: true, color: C.accent1 });
-      T(s, t, { x: x + 0.75, y: 3.85, w: 2.2, h: 0.6, fontSize: 13 });
+      T(s, t, { x: x + 0.75, y: 3.85, w: 2.2, h: 1.2, fontSize: 12 });
     }
   }
 
@@ -151,7 +151,7 @@ async function icon(name, color) {
     const s = slide("How we learned about the problem", 2, "Phase 2");
     const tech = [
       ["FaComments", "Expert interview", "Kickoff call with Liebherr", "They want one quality score per retailer, fair for all", false],
-      ["FaEnvelopeOpenText", "Expert questions", "Our questions, answered by Dominik", null, true],
+      ["FaEnvelopeOpenText", "Expert questions", "We asked Liebherr (Dominik) about the rebate split, the hardest criteria, “AI-ready” and how they would use the tool", null, true],
       ["FaGlobe", "Webshop test", "We tried to read 5 shops with a tool", "3 of 5 shops work automatically", false],
     ];
     for (let i = 0; i < 3; i++) {
@@ -160,11 +160,11 @@ async function icon(name, color) {
       card(s, x, 1.4, 2.85, 3.55);
       await iconCircle(s, ic, x + 0.25, 1.6, 0.65, true);
       T(s, h, { x: x + 0.25, y: 2.4, w: 2.4, h: 0.35, fontSize: 17, bold: true, color: C.text2 });
-      T(s, d, { x: x + 0.25, y: 2.8, w: 2.4, h: 0.6, fontSize: 13, color: C.accent2 });
-      if (todo) todoTag(s, x + 0.25, 3.75);
+      T(s, d, { x: x + 0.25, y: 2.8, w: 2.4, h: 0.9, fontSize: 12, color: C.accent2 });
+      if (todo) { T(s, "KEY RESULT", { x: x + 0.25, y: 3.85, w: 2.4, h: 0.25, fontSize: 10, bold: true, charSpacing: 1, color: C.accent1 }); todoTag(s, x + 0.25, 4.15); }
       else {
-        T(s, "KEY RESULT", { x: x + 0.25, y: 3.6, w: 2.4, h: 0.25, fontSize: 10, bold: true, charSpacing: 1, color: C.accent1 });
-        T(s, r, { x: x + 0.25, y: 3.88, w: 2.4, h: 0.9, fontSize: 14, bold: true });
+        T(s, "KEY RESULT", { x: x + 0.25, y: 3.85, w: 2.4, h: 0.25, fontSize: 10, bold: true, charSpacing: 1, color: C.accent1 });
+        T(s, r, { x: x + 0.25, y: 4.13, w: 2.4, h: 0.75, fontSize: 14, bold: true });
       }
     }
   }
@@ -188,7 +188,7 @@ async function icon(name, color) {
     s.addShape(pres.shapes.OVAL, { x: 0.7, y: 1.55, w: 0.8, h: 0.8, fill: { color: H.lt1 }, line: { color: H.lt1 }, objectName: "Avatar" });
     s.addImage({ data: await icon("FaUser", H.accent1), x: 0.9, y: 1.73, w: 0.4, h: 0.44, altText: "Bob", objectName: "Avatar icon" });
     T(s, "Bob, 35", { x: 1.65, y: 1.6, w: 1.9, h: 0.4, fontSize: 22, bold: true, color: C.background1 });
-    T(s, "LPR auditor at Liebherr", { x: 1.65, y: 2.0, w: 1.9, h: 0.3, fontSize: 12, color: C.accent3 });
+    T(s, "Liebherr employee", { x: 1.65, y: 2.0, w: 1.9, h: 0.3, fontSize: 12, color: C.accent3 });
     T(s, "Single, no children · 2-room flat · funny · loves board games", { x: 0.7, y: 2.55, w: 2.75, h: 0.7, fontSize: 12.5, color: C.background1 });
     s.addImage({ path: path.join(IMG, "empathy.jpg"), x: 0.5, y: 3.5, w: 3.1, h: 3.1 / 1.776, altText: "Photo of our User Empathy Map", objectName: "Empathy map photo" });
     const cards = [
@@ -213,7 +213,7 @@ async function icon(name, color) {
       ["FaEye", "Sees", "A lot of Excel, all day long", false],
       ["FaEarListen", "Hears", "Typing, phone calls, notifications on his phone", false],
       ["FaCommentDots", "Says", "Complains about his job, and that AI will soon replace him", false],
-      ["FaCloudRain", "Thinks & feels", "Wants the workday to end so he can rest. A bit down, but still optimistic.", false],
+      ["FaCloudRain", "Thinks & feels", "Just wants the workday to end so he can rest. A bit depressed, but still optimistic.", false],
       ["FaTriangleExclamation", "Frustrations & worries", "Time-consuming work, burned out, overwhelmed. Biggest fear: being replaced by AI.", true],
       ["FaBullseye", "Job to be done", "Feels stuck in his comfort zone. A new AI tool would give him more responsibility and new skills.", true],
     ];

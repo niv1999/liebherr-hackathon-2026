@@ -149,5 +149,12 @@ class AIConnectionIn(BaseModel):
     name: Optional[str] = None
 
 
+class AIConnectionPatch(BaseModel):
+    provider: Optional[Literal["gemini", "claude"]] = None
+    model: Optional[str] = None
+    api_key: Optional[str] = None  # empty = keep the saved key
+    name: Optional[str] = None  # "" = generated name
+
+
 class FixedIn(BaseModel):
     by: Optional[str] = None

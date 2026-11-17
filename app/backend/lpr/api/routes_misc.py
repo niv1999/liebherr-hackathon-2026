@@ -12,7 +12,7 @@ from ..extract import extract
 from ..llm import get_provider
 from ..models import AIConnection, AppSetting, AuditRun, Criterion, Notification, PageSnapshot, Retailer, Verdict
 from ..services import latest_runs, run_summary
-from .schemas import AIConnectionIn, AuditDefaultsIn, ScheduleIn, SimulateIn
+from .schemas import AIConnectionIn, AIConnectionPatch, AuditDefaultsIn, ScheduleIn, SimulateIn
 
 router = APIRouter(tags=["dashboard"])
 
@@ -147,9 +147,21 @@ MODEL_NAMES = {"gemini-2.5-flash": "Gemini 2.5 Flash", "gemini-2.5-pro": "Gemini
                "claude-haiku-5-5": "Claude Haiku 5.5"}
 
 
+def _auto_name(model: str, day=None) -> str:
+    from datetime import date
+    return f"{MODEL_NAMES.get(model, model)} · {(day or date.today()).strftime('%d %b %Y')}"
+
+
+def _is_auto_name(c: AIConnection) -> bool:
+    """True if the name is still the generated 'Model · date' one (then it follows model changes)."""
+    import re
+    return bool(re.fullmatch(rf"{re.escape(MODEL_NAMES.get(c.model, c.model))} · \d{{2}} \w{{3}} \d{{4}}", c.name))
+
+
 def _conn_out(c: AIConnection, active_id: int | None) -> dict:
     return {"id": c.id, "name": c.name, "provider": c.provider, "model": c.model, "created_at": c.created_at,
-            "key_hint": f"••••{c.api_key[-4:]}" if len(c.api_key) >= 4 else "••••", "active": c.id == active_id}
+            "key_hint": f"••••{c.api_key[-4:]}" if len(c.api_key) >= 4 else "••••", "active": c.id == active_id,
+            "auto_name": _is_auto_name(c)}
 
 
 def _active_id(s: Session) -> int | None:
@@ -203,12 +215,43 @@ def add_connection(body: AIConnectionIn, s: Session = Depends(get_session)):
     ok, msg = check_key(body.provider, body.api_key.strip())
     if not ok:
         raise HTTPException(400, msg)
-    name = (body.name or "").strip() or f"{MODEL_NAMES.get(body.model, body.model)} · {date.today().strftime('%d %b %Y')}"
+    name = (body.name or "").strip() or _auto_name(body.model, date.today())
     c = AIConnection(name=name, provider=body.provider, model=body.model, api_key=body.api_key.strip())
     s.add(c)
     s.commit()
     _set_active(s, c.id)
     return _conn_out(c, c.id)
+
+
+@router.patch("/api/ai/connections/{cid}")
+def edit_connection(cid: int, body: AIConnectionPatch, s: Session = Depends(get_session)):
+    """Change model, name or key of a saved connection. A generated name follows the new model."""
+    from ..llm import reset_provider
+    c = s.get(AIConnection, cid)
+    if not c:
+        raise HTTPException(404, "Connection not found")
+    key = (body.api_key or "").strip()
+    provider = body.provider or c.provider
+    if provider != c.provider and not key:
+        raise HTTPException(400, "A different provider needs its own API key.")
+    if key:
+        ok, msg = check_key(provider, key)
+        if not ok:
+            raise HTTPException(400, msg)
+        c.api_key = key
+    auto = _is_auto_name(c)
+    c.provider = provider
+    if body.model:
+        c.model = body.model
+    if body.name is not None and body.name.strip() and body.name.strip() != c.name:
+        c.name = body.name.strip()  # custom name
+    elif body.name is not None and not body.name.strip() or auto:
+        c.name = _auto_name(c.model, c.created_at.date())  # generated name, keeps the creation date
+    s.add(c)
+    s.commit()
+    if _active_id(s) == cid:
+        reset_provider()  # the judge picks up the new model right away
+    return _conn_out(c, _active_id(s))
 
 
 @router.post("/api/ai/connections/{cid}/activate")

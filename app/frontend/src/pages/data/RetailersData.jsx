@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../../api.js";
 import { EditIcon, IconButton } from "../../components/icons.jsx";
-import { Button, Field, ListSkeleton, RetailerLogo, bumpLogos, inputCls, useToast } from "../../components/ui.jsx";
+import { Button, Field, ListSkeleton, Monogram, RetailerLogo, bumpLogos, inputCls, useToast } from "../../components/ui.jsx";
 import { useT } from "../../prefs.jsx";
 import { Toggle } from "./CriteriaData.jsx";
 
@@ -77,7 +77,16 @@ function RetailerForm({ initial, onSaved }) {
   const [f, setF] = useState({ name: v("name"), base_url: v("base_url") || "https://", brand_page_url: v("brand_page_url"),
     search_example: "", product_example: "", search_url: v("search_url"), product_link_pattern: v("product_link_pattern"), access_note: v("access_note") });
   const [advanced, setAdvanced] = useState(false);
-  const [logo, setLogo] = useState(null); // null = unchanged | File = new upload | "remove" = back to shop icon
+  const [logo, setLogo] = useState(null); // null = unchanged | File = new upload | "remove" = back to initials
+  const [hasLogo, setHasLogo] = useState(false); // an uploaded logo is saved for this retailer
+  useEffect(() => {
+    if (!initial.id) return;
+    const img = new Image();
+    img.onload = () => setHasLogo(true);
+    img.onerror = () => setHasLogo(false);
+    img.src = `/api/retailers/${initial.id}/logo?probe=${Date.now()}`;
+  }, [initial.id]);
+  const showSaved = hasLogo && logo !== "remove";
   const preview = useMemo(() => (logo instanceof File ? URL.createObjectURL(logo) : null), [logo]);
   useEffect(() => () => preview && URL.revokeObjectURL(preview), [preview]);
   const fileRef = useRef(null);
@@ -102,7 +111,7 @@ function RetailerForm({ initial, onSaved }) {
       const saved = initial.id ? await api.updateRetailer(initial.id, body) : await api.createRetailer(body);
       const id = initial.id || saved.id;
       if (logo instanceof File) await api.uploadLogo(id, logo);
-      else if (logo === "remove") await api.removeLogo(id);
+      else if (logo === "remove" && hasLogo) await api.removeLogo(id);
       if (logo) bumpLogos();
       onSaved();
     } catch (e) {
@@ -111,21 +120,21 @@ function RetailerForm({ initial, onSaved }) {
   };
   return (
     <div className="card p-5 space-y-4 bg-slate-50">
-      <Field label="Logo" tip={t("PNG, JPG, WebP or SVG, max 2 MB. Without an upload, HeLPR uses the shop's own icon.")}>
+      <Field label="Logo" tip={t("PNG, JPG, WebP or SVG, max 2 MB. Without a logo, the initials are shown.")}>
         <div className="flex items-center gap-3">
           {preview ? (
             <div className="w-12 h-12 rounded-md bg-white border border-slate-200 flex items-center justify-center overflow-hidden shrink-0">
               <img src={preview} alt="" className="w-3/4 h-3/4 object-contain" />
             </div>
-          ) : initial.id && logo !== "remove" ? (
+          ) : showSaved ? (
             <RetailerLogo retailer={initial} className="w-12 h-12" />
           ) : (
-            <div className="w-12 h-12 rounded-md border border-dashed border-slate-300 shrink-0" />
+            <Monogram name={f.name || "?"} className="w-12 h-12 text-sm" />
           )}
           <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" onChange={pickLogo} className="hidden" />
-          <Button variant="ghost" onClick={() => fileRef.current?.click()}>{t(initial.id || logo ? "Change logo" : "Upload logo")}</Button>
-          {(logo instanceof File || (initial.id && logo !== "remove")) && (
-            <Button variant="subtle" onClick={() => setLogo(initial.id ? "remove" : null)}>{t("Use shop icon")}</Button>
+          <Button variant="ghost" onClick={() => fileRef.current?.click()}>{t(preview || showSaved ? "Change logo" : "Upload logo")}</Button>
+          {(preview || showSaved) && (
+            <Button variant="subtle" onClick={() => setLogo(hasLogo ? "remove" : null)}>{t("Remove logo")}</Button>
           )}
         </div>
       </Field>

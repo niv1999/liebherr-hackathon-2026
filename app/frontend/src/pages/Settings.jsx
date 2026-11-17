@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, reviewerName, setReviewerName } from "../api.js";
-import { IconButton, TrashIcon } from "../components/icons.jsx";
+import { EditIcon, IconButton, TrashIcon } from "../components/icons.jsx";
 import { Button, Field, HelpTip, Skeleton, Switch, fmtDate, inputCls as fieldCls, useToast } from "../components/ui.jsx";
 import { useT } from "../prefs.jsx";
 
@@ -124,6 +124,7 @@ function AiConnections({ conns, setConns }) {
   const [adding, setAdding] = useState(conns.length === 0);
   const [f, setF] = useState({ provider: "gemini", model: MODELS.gemini[0][0], api_key: "", name: "" });
   const [check, setCheck] = useState(null); // null | "checking" | {valid, message}
+  const [editing, setEditing] = useState(null); // connection id
   const reload = () => api.aiConnections().then(setConns);
 
   const connect = async () => {
@@ -161,7 +162,8 @@ function AiConnections({ conns, setConns }) {
       {conns.length > 0 && (
         <div className="divide-y divide-slate-100 border border-slate-200 rounded-md">
           {conns.map((c) => (
-            <label key={c.id} className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer ${c.active ? "bg-brand-tint" : "hover:bg-slate-50"}`}>
+            <div key={c.id}>
+            <label className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer ${c.active ? "bg-brand-tint" : "hover:bg-slate-50"}`}>
               <input type="radio" name="ai-conn" checked={c.active} onChange={() => use(c)} className="accent-brand" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold truncate">{c.name}</p>
@@ -171,8 +173,13 @@ function AiConnections({ conns, setConns }) {
                 </p>
               </div>
               {c.active && <span className="text-[11px] font-semibold" style={{ color: "var(--color-ok)" }}>{t("In use")}</span>}
-              <span onClick={(e) => e.preventDefault()}><IconButton title={t("Remove")} danger onClick={() => remove(c)}><TrashIcon /></IconButton></span>
+              <span onClick={(e) => e.preventDefault()} className="flex items-center gap-1">
+                <IconButton title={t(editing === c.id ? "Close" : "Edit")} onClick={() => setEditing(editing === c.id ? null : c.id)}><EditIcon /></IconButton>
+                <IconButton title={t("Remove")} danger onClick={() => remove(c)}><TrashIcon /></IconButton>
+              </span>
             </label>
+            {editing === c.id && <EditConnection conn={c} onDone={() => { setEditing(null); reload(); }} />}
+            </div>
           ))}
         </div>
       )}
@@ -207,5 +214,57 @@ function AiConnections({ conns, setConns }) {
         </div>
       )}
     </section>
+  );
+}
+
+function EditConnection({ conn, onDone }) {
+  const t = useT();
+  const toast = useToast();
+  const [f, setF] = useState({ provider: conn.provider, model: conn.model, api_key: "", name: conn.auto_name ? "" : conn.name });
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const providerChanged = f.provider !== conn.provider;
+
+  const save = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const c = await api.editAiConnection(conn.id, { ...f, api_key: f.api_key.trim() || null, name: f.name.trim() });
+      toast(t("Saved: {name}", { name: c.name }));
+      onDone();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="border-t border-slate-200 p-4 space-y-3 bg-slate-50">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <Field label="Provider" required>
+          <select value={f.provider} onChange={(e) => setF({ ...f, provider: e.target.value, model: MODELS[e.target.value][0][0] })} className={fieldCls}>
+            <option value="gemini">Google Gemini</option><option value="claude">Anthropic Claude</option>
+          </select>
+        </Field>
+        <Field label="Model" required>
+          <select value={f.model} onChange={(e) => setF({ ...f, model: e.target.value })} className={fieldCls}>
+            {MODELS[f.provider].map(([v, l, cost]) => <option key={v} value={v}>{l} · {t(cost)} {cost.startsWith("≈") ? t("per audit") : ""}</option>)}
+          </select>
+        </Field>
+        <Field label="API key" required={providerChanged}>
+          <input type="password" value={f.api_key} onChange={(e) => setF({ ...f, api_key: e.target.value })}
+            placeholder={providerChanged ? t("Paste key") : t("Keep current key ({hint})", { hint: conn.key_hint })} className={fieldCls} />
+        </Field>
+        <Field label="Name">
+          <input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} placeholder={t("Generated automatically")} className={fieldCls} />
+        </Field>
+      </div>
+      {error && <p className="text-xs font-semibold" style={{ color: "var(--color-bad)" }}>⚠ {t(error)}</p>}
+      <div className="flex justify-end gap-2">
+        <Button variant="ghost" onClick={onDone}>{t("Cancel")}</Button>
+        <Button onClick={save} disabled={busy || (providerChanged && !f.api_key.trim())}>{busy ? t(f.api_key.trim() ? "Checking key…" : "Saving…") : t("Save")}</Button>
+      </div>
+    </div>
   );
 }

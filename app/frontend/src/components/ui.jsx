@@ -126,7 +126,9 @@ export function ExtLink({ href, children }) {
 }
 
 export function Monogram({ name, className = "" }) {
-  const letters = (name || "?").replace(/[^A-Za-z]/g, "").slice(0, 2).toUpperCase();
+  // "MediaMarkt" -> MM, "Media Markt" -> MM, "expert" -> EX, "EP:" -> EP
+  const words = (name || "?").match(/[A-ZÄÖÜ][a-zäöüß]+|[A-Za-zÄÖÜäöüß]+|\d+/g) || ["?"];
+  const letters = (words.length > 1 ? words[0][0] + words[1][0] : words[0].slice(0, 2)).toUpperCase();
   return (
     <div className={`rounded-md bg-ink text-white flex items-center justify-center font-bold tracking-tight shrink-0 ${className}`}>
       {letters}

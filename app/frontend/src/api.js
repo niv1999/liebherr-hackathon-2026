@@ -40,6 +40,7 @@ export const api = {
   addAiConnection: (body) => request("POST", "/api/ai/connections", body),
   activateAiConnection: (id) => request("POST", `/api/ai/connections/${id}/activate`),
   deleteAiConnection: (id) => request("DELETE", `/api/ai/connections/${id}`),
+  editAiConnection: (id, body) => request("PATCH", `/api/ai/connections/${id}`, body),
   markFixed: (runId, criterionId, by) => request("POST", `/api/audits/${runId}/todo/${criterionId}/fixed`, { by }),
   createCriterion: (body) => request("POST", "/api/criteria", body),
   deleteCriterion: (id) => request("DELETE", `/api/criteria/${id}`),

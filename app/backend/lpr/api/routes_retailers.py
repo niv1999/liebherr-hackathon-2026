@@ -114,21 +114,21 @@ def delete_product_url(rid: int, uid: int, s: Session = Depends(get_session)):
 
 @router.get("/{rid}/logo")
 def logo(rid: int, s: Session = Depends(get_session)):
-    """The shop's own icon (apple-touch-icon / favicon), fetched once and cached."""
+    """The uploaded logo (404 without one: the UI then shows the retailer's initials)."""
     from fastapi.responses import FileResponse
 
     from ..logos import retailer_logo
     r = _get(s, rid)
-    path = retailer_logo(r.id, r.base_url)
+    path = retailer_logo(r.id)
     if not path:
-        raise HTTPException(404, "No logo found")
+        raise HTTPException(404, "No logo uploaded")
     # no-cache = browser revalidates (ETag) so a newly uploaded logo shows at once; CSP blocks scripts in SVGs
     return FileResponse(path, headers={"Cache-Control": "no-cache", "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'"})
 
 
 @router.post("/{rid}/logo")
 async def upload_logo(rid: int, file: UploadFile = File(...), s: Session = Depends(get_session)):
-    """Use an uploaded image as the retailer's logo (replaces the automatic shop icon)."""
+    """Upload the retailer's logo (replaces the previous one)."""
     from ..logos import save_logo
     _get(s, rid)
     data = await file.read()
@@ -141,7 +141,7 @@ async def upload_logo(rid: int, file: UploadFile = File(...), s: Session = Depen
 
 @router.delete("/{rid}/logo")
 def remove_logo(rid: int, s: Session = Depends(get_session)):
-    """Drop the stored logo; the shop's own icon is fetched again next time."""
+    """Remove the logo; the UI shows the retailer's initials again."""
     from ..logos import clear_logo
     _get(s, rid)
     clear_logo(rid)

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useT } from "../prefs.jsx";
 // Shared UI pieces. Visual language follows the Liebherr appliances CI: black, white, Arctic blue (#002F56).
 
@@ -162,13 +162,19 @@ export function HelpTip({ text, className = "" }) {
   );
 }
 
+// bumped after a logo upload so every <img> asks the server again
+let logoVersion = 0;
+export const bumpLogos = () => { logoVersion = Date.now(); };
+
 export function RetailerLogo({ retailer, className = "w-9 h-9" }) {
   const [failed, setFailed] = useState(false);
+  const src = retailer ? `/api/retailers/${retailer.id}/logo${logoVersion ? `?v=${logoVersion}` : ""}` : null;
+  useEffect(() => setFailed(false), [src]);
   if (!retailer) return null;
   if (failed) return <Monogram name={retailer.name} className={`${className} text-xs rounded-md`} />;
   return (
     <div className={`${className} rounded-md bg-white border border-slate-200 flex items-center justify-center overflow-hidden shrink-0`}>
-      <img src={`/api/retailers/${retailer.id}/logo`} alt={`${retailer.name} logo`} onError={() => setFailed(true)} className="w-3/4 h-3/4 object-contain" />
+      <img src={src} alt={`${retailer.name} logo`} onError={() => setFailed(true)} className="w-3/4 h-3/4 object-contain" />
     </div>
   );
 }

@@ -51,6 +51,18 @@ export const api = {
   createRetailer: (body) => request("POST", "/api/retailers", body),
   updateRetailer: (id, body) => request("PATCH", `/api/retailers/${id}`, body),
   deleteRetailer: (id) => request("DELETE", `/api/retailers/${id}`),
+  uploadLogo: async (id, file) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch(`/api/retailers/${id}/logo`, { method: "POST", body: fd });
+    if (!res.ok) {
+      let msg = `${res.status} ${res.statusText}`;
+      try { msg = (await res.json()).detail || msg; } catch {}
+      throw new Error(msg);
+    }
+    return res.json();
+  },
+  removeLogo: (id) => request("DELETE", `/api/retailers/${id}/logo`),
   simulate: (body) => request("POST", "/api/ai/simulate", body),
 };
 

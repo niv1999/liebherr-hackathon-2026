@@ -110,6 +110,14 @@ def extract(html: str, url: str = "") -> dict[str, Any]:
 
     lower_html = (html or "").lower()
     text = visible_text(BeautifulSoup(html or "", "lxml"))
+    site_name = soup.find("meta", property="og:site_name")
+    hrefs = [a["href"] for a in soup.find_all("a", href=True)]
+    # spec table size: 2-cell table rows + <dt>/<dd> pairs
+    spec_rows = sum(1 for tr in soup.find_all("tr") if len(tr.find_all(["td", "th"], recursive=False)) == 2)
+    spec_rows += len(soup.find_all("dt"))
+    # a buy box that stays visible while scrolling: sticky/fixed container mentioning the cart
+    sticky_buy = any(re.search(r"warenkorb|add-?to-?cart|addtocart|in den korb|jetzt kaufen", lower_html[m.end(): m.end() + 3000])
+                     for m in re.finditer(r'(?:class|id)="[^"]*(?:sticky|fixed)[^"]*"', lower_html))
     return {
         "url": url,
         "title": title,
@@ -129,4 +137,9 @@ def extract(html: str, url: str = "") -> dict[str, Any]:
         "text": text,
         "text_length": len(text),
         "content_text": content_text(html),  # without navigation/footer: used for AI prompts
+        "site_name": site_name.get("content") if site_name else None,
+        "cart_links": sorted({h for h in hrefs if re.search(r"warenkorb|/cart|basket|checkout", h, re.I)})[:5],
+        "spec_rows": spec_rows,
+        "sticky_buy": sticky_buy,
+        "image_count": len(soup.find_all("img")) + len(soup.find_all("picture")),
     }

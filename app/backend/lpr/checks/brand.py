@@ -182,3 +182,76 @@ def shop_search_category(ctx: CheckContext) -> CheckResult:
     if n >= 1:
         return ok(f"{n} Liebherr product(s) in the top 5 for 'Kühl-Gefrierkombination'.", **r)
     return fail("No Liebherr product in the top 5 for 'Kühl-Gefrierkombination'.", **r)
+
+
+
+# ------------------------------------------------------------ remaining brand-page criteria (#9, #27-#29, #60)
+@register("liebherr_grouped")
+def liebherr_grouped(ctx: CheckContext) -> CheckResult:
+    """#9: Liebherr products are grouped in one place and can be filtered / sorted."""
+    pattern = ctx.retailer.product_link_pattern
+    prods = {l.split("?")[0] for l in ctx.page.get("links") or [] if pattern and re.match(pattern, l)}
+    t = (ctx.page.get("text") or "").lower()
+    sortable = [w for w in ("filter", "sortieren", "sortierung", "sortiert nach") if w in t]
+    if len(prods) >= 4 and sortable:
+        return ok(f"Liebherr products are grouped ({len(prods)} on the brand page) and can be filtered/sorted.", found=sortable)
+    if len(prods) >= 4:
+        return fail("Liebherr products are grouped, but cannot be filtered or sorted.")
+    return fail("Liebherr products are not grouped in one place.")
+
+
+def _tech_page(ctx: CheckContext) -> str | None:
+    return ctx.page.get("subpage_url")
+
+
+@register("tech_page_media")
+def tech_page_media(ctx: CheckContext) -> CheckResult:
+    """#27: each technology page has a teaser image or video."""
+    if not _tech_page(ctx):
+        return human("No separate Liebherr technology page found; check the technology sections by hand.")
+    m = ctx.page.get("subpage_media") or {}
+    if m.get("videos") or m.get("images", 0) >= 3:
+        return ok(f"The technology page has teaser media ({m.get('images', 0)} images, {m.get('videos', 0)} videos).",
+                  page=_tech_page(ctx), **m)
+    return fail("The technology page has no teaser images or videos.", page=_tech_page(ctx), **m)
+
+
+@register("tech_page_text")
+def tech_page_text(ctx: CheckContext) -> CheckResult:
+    """#28: each technology page has a detailed description."""
+    if not _tech_page(ctx):
+        return human("No separate Liebherr technology page found; check the technology sections by hand.")
+    t = ctx.page.get("subpage_text") or ""
+    words = sum(len(x.split()) for x in re.split(r"(?<=[.!?])\s+", t) if len(x.split()) >= 6)
+    found = [x for x in LIEBHERR_TECH if x.lower() in t.lower()]
+    if words >= 150:
+        return ok(f"The technology page describes the technologies in about {words} words.", words=words, technologies=found)
+    return fail(f"The technology page has only about {words} words of description (150+ expected).", words=words)
+
+
+@register("tech_page_products")
+def tech_page_products(ctx: CheckContext) -> CheckResult:
+    """#29: each technology page lists the matching products."""
+    if not _tech_page(ctx):
+        return human("No separate Liebherr technology page found; check the technology sections by hand.")
+    pattern = ctx.retailer.product_link_pattern
+    prods = sorted({l.split("?")[0] for l in ctx.page.get("subpage_links") or [] if pattern and re.match(pattern, l)})
+    if prods:
+        return ok(f"The technology page links {len(prods)} matching products.", examples=prods[:5])
+    techs = "|".join(x.lower() for x in LIEBHERR_TECH)
+    per_tech = sorted({l.split("#")[0] for l in ctx.page.get("subpage_links") or [] if re.search(techs, l, re.I)})
+    if per_tech:
+        return human("The technology overview links to a page per technology; check there whether matching products are listed.",
+                     pages=per_tech[:6])
+    return fail("The technology page does not list matching products.")
+
+
+@register("brand_questionnaire")
+def brand_questionnaire(ctx: CheckContext) -> CheckResult:
+    """#60 (SK3): a needs-based questionnaire / product finder on the brand page."""
+    t = _brand_text(ctx)
+    m = re.search(r"produktberater|produktfinder|kühlschrank-?finder|berater starten|beratungs-?assistent|"
+                  r"welche[rs]? (?:kühlschrank|gerät) passt|finden sie (?:ihr|den passenden)|was brauchen sie", t, re.I)
+    if m:
+        return ok("A needs-based product advisor is offered on the brand page.", quote=m.group(0))
+    return fail("No needs-based questionnaire / product finder on the brand page.")

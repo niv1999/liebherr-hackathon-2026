@@ -617,3 +617,220 @@
   rule_key: green_claims
   priority: low
   fix_hint: Use the EmpCo-compliant texts from Liebherr's 2026_09 asset update instead of generic green claims.
+
+# ---------------- remaining LPR criteria (added 18 Nov: full coverage of #1-#76) ----------------
+- code: SVS-06
+  block: visibility
+  section: Shop basics
+  title: Webshop has the same or a similar name as the physical stores
+  lpr_ref: '#2'
+  page_type: shop
+  method: rule
+  rule_key: shop_name_matches
+  priority: low
+  fix_hint: Use the store brand name in the webshop's name and page titles.
+- code: SVS-07
+  block: visibility
+  section: Shop basics
+  title: Shop does not look as if Liebherr itself runs it
+  lpr_ref: '#3'
+  page_type: brand
+  method: ai
+  rule_key: ai_generic
+  ai_prompt: >-
+    Look at the retailer's Liebherr brand page. Pass if it is clearly the retailer's own shop (the retailer's logo and
+    navigation dominate). Fail if it could be mistaken for an official Liebherr shop, e.g. a huge Liebherr logo in the
+    page header instead of the retailer's branding, or wording like "official Liebherr store".
+  priority: low
+  fix_hint: Keep the retailer's own branding in the header; show the Liebherr logo only inside the brand area.
+- code: SVS-08
+  block: visibility
+  section: Shop basics
+  title: Shopping cart reachable from every page
+  lpr_ref: '#6'
+  page_type: shop
+  method: rule
+  rule_key: cart_link
+  priority: low
+  fix_hint: Show a cart icon with item count in the header of every page.
+- code: SVS-09
+  block: visibility
+  section: Shop basics
+  title: Liebherr products grouped and can be filtered / sorted
+  lpr_ref: '#9'
+  page_type: brand
+  method: rule
+  rule_key: liebherr_grouped
+  priority: medium
+  fix_hint: Group all Liebherr products on one page with filters (category, size, energy class) and sorting.
+- code: SVS-10
+  block: visibility
+  section: Shop basics
+  title: Purchasing process is clear and transparent
+  lpr_ref: '#11'
+  method: ai
+  rule_key: ai_generic
+  ai_prompt: >-
+    Judge whether buying this product is clear and transparent: final price, add-to-cart button, delivery time,
+    shipping costs and payment options are easy to find near the buy box, without confusing upsells or hidden costs.
+  priority: medium
+  fix_hint: Show price incl. VAT, shipping costs, delivery time and payment options right next to the buy button.
+- code: SVS-11
+  block: visibility
+  section: Shop basics
+  title: Discontinued models labelled as such
+  description: Compare old Liebherr models still listed in the shop with the current assortment list.
+  lpr_ref: '#14'
+  method: manual
+  priority: low
+  fix_hint: Mark models that are no longer in the Liebherr assortment as discontinued ("Auslaufmodell").
+- code: BRD-10
+  block: visibility
+  section: Brand page
+  title: Promotions & brand section with extra campaigns and brand image content
+  lpr_ref: '#25'
+  page_type: brand
+  method: ai
+  rule_key: ai_generic
+  ai_prompt: >-
+    Judge whether the Liebherr brand page has a filled "promotions & brand" area: current Liebherr campaigns or
+    promotions plus brand image content (lifestyle images, brand story, quality or sustainability messages).
+    Fail if the page only lists products.
+  priority: low
+  fix_hint: Add a promotions & brand section with current Liebherr campaigns and brand image content.
+- code: BRD-11
+  block: visibility
+  section: Brand page
+  title: Technology pages have a teaser image or video
+  lpr_ref: '#27'
+  page_type: brand
+  method: rule
+  rule_key: tech_page_media
+  priority: low
+  fix_hint: Give each Liebherr technology page (BioFresh, NoFrost ...) a teaser image or video from the Liebherr assets.
+- code: BRD-12
+  block: visibility
+  section: Brand page
+  title: Technology pages have a detailed description
+  lpr_ref: '#28'
+  page_type: brand
+  method: rule
+  rule_key: tech_page_text
+  priority: low
+  fix_hint: Describe each Liebherr technology and its customer benefit in a few paragraphs.
+- code: BRD-13
+  block: visibility
+  section: Brand page
+  title: Technology pages list all matching products
+  lpr_ref: '#29'
+  page_type: brand
+  method: rule
+  rule_key: tech_page_products
+  priority: low
+  fix_hint: Link the Liebherr products with this technology from each technology page.
+- code: PDP-21
+  block: visibility
+  section: Premium product page (SK3)
+  title: Buy button stays visible while scrolling (sticky cart)
+  lpr_ref: '#46'
+  sk_levels: '3'
+  method: rule
+  rule_key: sticky_cart
+  priority: low
+  fix_hint: Keep the price and buy button in a sticky bar while the customer scrolls the SK3 product page.
+- code: PDP-22
+  block: visibility
+  section: Premium product page (SK3)
+  title: All technical details provided
+  lpr_ref: '#50'
+  sk_levels: '3'
+  method: rule
+  rule_key: tech_details_full
+  priority: medium
+  return_risk: true
+  fix_hint: Show the complete Liebherr data sheet (all technical details) on SK3 product pages.
+- code: PDP-23
+  block: visibility
+  section: Premium product page (SK3)
+  title: Own high-quality product videos for Liebherr's top-10 SK3 models
+  description: Only required above 200 Liebherr units sold online per year; the sales figure is not visible online.
+  lpr_ref: '#51'
+  sk_levels: '3'
+  method: manual
+  priority: low
+  fix_hint: Produce own product videos for the top-10 SK3 models.
+- code: VIS-03
+  block: visibility
+  section: Liebherr visible in the shop
+  title: SEO, paid search ads and inventory ads used for Liebherr
+  description: Not visible from the shop itself; check search engine results and ad libraries.
+  lpr_ref: '#52'
+  sk_levels: '2,3'
+  method: manual
+  priority: low
+  fix_hint: Run search and inventory ads for Liebherr models and optimise the pages for search engines.
+- code: VIS-04
+  block: visibility
+  section: Liebherr visible in the shop
+  title: Liebherr clearly visible in the fridge-freezer category
+  lpr_ref: '#56'
+  sk_levels: '2,3'
+  page_type: shop
+  method: rule
+  rule_key: category_visible
+  priority: medium
+  fix_hint: Show a Liebherr filter or logo in the fridge-freezer category, or place a Liebherr product in the first 5.
+- code: VIS-05
+  block: visibility
+  section: Liebherr visible in the shop
+  title: Liebherr highlighted 4 times a year (or 1 social-commerce event)
+  description: Needs observation over several months; weekly audits can track it over time.
+  lpr_ref: '#57'
+  sk_levels: '2,3'
+  method: manual
+  priority: low
+  fix_hint: Plan four Liebherr highlights per year on the brand and product pages, or one social-commerce event.
+- code: ADV-05
+  block: advice
+  section: Buying guide / advisor
+  title: Needs-based questionnaire on the brand page (SK3)
+  lpr_ref: '#60'
+  sk_levels: '3'
+  page_type: brand
+  method: rule
+  rule_key: brand_questionnaire
+  priority: medium
+  return_risk: true
+  fix_hint: Add a product finder that asks for needs (size, niche, household) and suggests matching Liebherr models.
+- code: ADV-06
+  block: advice
+  section: Phone / video advice
+  title: Hotline open at least 50 hours a week
+  description: 60 hours a week above 200 Liebherr online sales a year. Checks the stated hours, not real staffing.
+  lpr_ref: '#62'
+  page_type: shop
+  method: rule
+  rule_key: hotline_hours
+  priority: medium
+  fix_hint: Extend the advice hotline to at least 50 hours a week and state the hours next to the phone number.
+- code: ADV-07
+  block: advice
+  section: Phone / video advice
+  title: Video advice at least 30 hours a week (SK3)
+  description: 40 hours a week above 200 Liebherr online sales a year. Checks the stated hours, not real staffing.
+  lpr_ref: '#64'
+  sk_levels: '3'
+  page_type: shop
+  method: rule
+  rule_key: video_hours
+  priority: low
+  fix_hint: Offer video advice for at least 30 hours a week and state the hours.
+- code: SRV-08
+  block: services
+  section: After sales
+  title: Transport damage and warranty requests handled via Liebherr's forms
+  description: Internal process, not visible in the shop.
+  lpr_ref: '#73'
+  method: manual
+  priority: low
+  fix_hint: Handle transport damage and warranty cases with Liebherr's official forms.

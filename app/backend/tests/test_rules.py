@@ -101,3 +101,40 @@ def test_green_claims_empco():
     assert run(vague, "green_claims") == "fail"
     assert run(backed, "green_claims") == "pass"
     assert run(label, "green_claims") == "needs_human"
+
+
+def test_hotline_hours():
+    from lpr.checks.rules import weekly_hours
+    assert weekly_hours("Mo-Fr 8-20 Uhr, Sa 9-18 Uhr") == 69
+    assert weekly_hours("Montag bis Freitag von 08:00 bis 18:00 Uhr") == 50
+    assert weekly_hours("Rufen Sie uns an") is None
+    assert run("<html><body><p>Hotline 0800 123 4567, Mo-Fr 8-20 Uhr</p></body></html>", "hotline_hours") == "pass"
+    assert run("<html><body><p>Hotline 0800 123 4567, Mo-Fr 9-17 Uhr</p></body></html>", "hotline_hours") == "fail"
+
+
+def test_cart_and_specs():
+    assert run(GOOD_PAGE.replace("<body>", '<body><a href="/warenkorb">Warenkorb</a>'), "cart_link") == "pass"
+    assert run(BAD_PAGE, "cart_link") == "fail"
+    assert run(GOOD_PAGE, "tech_details_full") == "fail"  # 8 rows, full data sheet expected
+    long_table = "<table>" + "".join(f"<tr><td>k{i}</td><td>v{i}</td></tr>" for i in range(25)) + "</table>"
+    assert run(f"<html><body>{long_table}</body></html>", "tech_details_full") == "pass"
+
+
+def test_logo_upload_validation(tmp_path, monkeypatch):
+    import io
+
+    from PIL import Image
+
+    from lpr import logos
+    monkeypatch.setattr(logos, "LOGO_DIR", tmp_path)
+    buf = io.BytesIO()
+    Image.new("RGB", (8, 8), "red").save(buf, "PNG")
+    assert logos.save_logo(99, buf.getvalue()).name == "99.png"
+    assert logos.save_logo(99, b'<svg xmlns="http://www.w3.org/2000/svg"></svg>').name == "99.svg"
+    assert [f.name for f in tmp_path.iterdir()] == ["99.svg"]  # the old logo is replaced
+    for bad in (b"", b"not an image", b"x" * 2_000_001):
+        try:
+            logos.save_logo(99, bad)
+            raise AssertionError("should have failed")
+        except ValueError:
+            pass

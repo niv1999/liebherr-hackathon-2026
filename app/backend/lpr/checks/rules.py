@@ -569,3 +569,112 @@ def green_claims(ctx: CheckContext) -> CheckResult:
                      "based on a certification scheme; please check.", labels=labels, substantiated=proven[:3])
     return ok("No vague environmental claims without evidence." if not proven else
               "Environmental claims are backed by specific facts (e.g. energy efficiency, repairability).", substantiated=proven[:3])
+
+
+
+# ------------------------------------------------------------ remaining LPR criteria (#2, #6, #46, #50, #56, #62, #64)
+def _norm(x: str) -> str:
+    return re.sub(r"[^a-z0-9äöü]", "", (x or "").lower())
+
+
+@register("shop_name_matches")
+def shop_name_matches(ctx: CheckContext) -> CheckResult:
+    """#2: the webshop carries the same (or a similar) name as the retailer's physical stores."""
+    store = _norm(ctx.retailer.name)
+    shown = [x for x in (ctx.page.get("site_name"), ctx.page.get("title")) if x]
+    if store and any(store in _norm(x) for x in shown):
+        return ok(f"The shop is named like the store ({ctx.retailer.name}).", shown=shown)
+    return human(f"The shop name could not be matched to '{ctx.retailer.name}' automatically.", shown=shown)
+
+
+@register("cart_link")
+def cart_link(ctx: CheckContext) -> CheckResult:
+    """#6: the cart can be reached from every page (a cart link in the page header)."""
+    links = ctx.page.get("cart_links") or [l for l in ctx.page.get("links") or [] if re.search(r"warenkorb|/cart|basket", l, re.I)]
+    if links or re.search(r"\bwarenkorb\b", _text(ctx)):
+        return ok("A link to the shopping cart is on the page.", links=links[:3])
+    return fail("No link to the shopping cart found on the product page.")
+
+
+@register("sticky_cart")
+def sticky_cart(ctx: CheckContext) -> CheckResult:
+    """#46 (SK3): the buy button stays visible while scrolling."""
+    if ctx.page.get("sticky_buy"):
+        return ok("The buy button sits in a sticky bar that stays visible while scrolling.")
+    return human("No sticky buy bar detected in the page code; check by scrolling the page.")
+
+
+@register("tech_details_full")
+def tech_details_full(ctx: CheckContext) -> CheckResult:
+    """#50 (SK3): all technical details given; a full Liebherr data sheet has well over 20 rows."""
+    n = ctx.page.get("spec_rows") or 0
+    if n >= 20:
+        return ok(f"A detailed technical data table is shown ({n} rows).", rows=n)
+    return fail(f"The technical data table is short ({n} rows; the full data sheet has 20+).", rows=n)
+
+
+@register("category_visible")
+def category_visible(ctx: CheckContext) -> CheckResult:
+    """#56: in the fridge-freezer category Liebherr is visible right away (a Liebherr product in the first 5)."""
+    r = (ctx.page.get("shop_search") or {}).get("category")
+    if not r or r.get("blocked"):
+        return human("The category page could not be tested.")
+    n = r.get("liebherr_products_top5", 0)
+    if n >= 1:
+        return ok(f"{n} Liebherr product(s) among the first 5 in the fridge-freezer category.", **r)
+    return human("No Liebherr product among the first 5; check whether a Liebherr filter or logo is shown.", **r)
+
+
+DAY = {"mo": 0, "di": 1, "mi": 2, "do": 3, "fr": 4, "sa": 5, "so": 6}
+HOURS = re.compile(r"\b(mo|di|mi|do|fr|sa|so)[a-z]*\.?\s*(?:(?:-|–|bis)\s*(mo|di|mi|do|fr|sa|so)[a-z]*\.?)?\s*:?\s*(?:von\s*)?"
+                   r"(\d{1,2})(?:[:.](\d{2}))?\s*(?:uhr)?\s*(?:-|–|bis)\s*(\d{1,2})(?:[:.](\d{2}))?")
+
+
+def weekly_hours(text: str) -> float | None:
+    """Sum the opening hours per week from texts like 'Mo-Fr 8-20 Uhr, Sa 9-18 Uhr'. None if no hours found."""
+    per_day: dict[int, float] = {}
+    for m in HOURS.finditer(text.lower()):
+        a = DAY[m.group(1)]
+        b = DAY[m.group(2)] if m.group(2) else a
+        start = int(m.group(3)) + int(m.group(4) or 0) / 60
+        end = int(m.group(5)) + int(m.group(6) or 0) / 60
+        if not (0 <= start < end <= 24) or b < a:
+            continue
+        for d in range(a, b + 1):
+            per_day[d] = max(per_day.get(d, 0), end - start)
+    return round(sum(per_day.values()), 1) if per_day else None
+
+
+def _hours_near(text: str, keywords: str) -> tuple[float | None, str | None]:
+    best, quote = None, None
+    for m in re.finditer(keywords, text, re.I):
+        window = text[m.start(): m.start() + 300]
+        h = weekly_hours(window)
+        if h is not None and (best is None or h > best):
+            best, quote = h, window[:160]
+    return best, quote
+
+
+@register("hotline_hours")
+def hotline_hours(ctx: CheckContext) -> CheckResult:
+    """#62: the advice hotline is open at least 50 h/week (60 h above 200 Liebherr online sales a year)."""
+    h, quote = _hours_near(ctx.page.get("text") or "", r"hotline|telefon|beratung|kundenservice|service-?center")
+    if h is None:
+        return human("No hotline opening hours stated on the page.")
+    if h >= 50:
+        return ok(f"The hotline is open about {h:g} h per week (at least 50 h required).", hours=h, quote=quote)
+    return fail(f"The hotline is open only about {h:g} h per week (at least 50 h required).", hours=h, quote=quote)
+
+
+@register("video_hours")
+def video_hours(ctx: CheckContext) -> CheckResult:
+    """#64 (SK3): video advice at least 30 h/week (40 h above 200 Liebherr online sales a year)."""
+    text = ctx.page.get("text") or ""
+    if not re.search(r"video-?beratung|live-?beratung|videochat|video call", text, re.I):
+        return fail("No video advice offered.")
+    h, quote = _hours_near(text, r"video")
+    if h is None:
+        return human("Video advice is offered, but no hours are stated.")
+    if h >= 30:
+        return ok(f"Video advice is available about {h:g} h per week (at least 30 h required).", hours=h, quote=quote)
+    return fail(f"Video advice is available only about {h:g} h per week (at least 30 h required).", hours=h, quote=quote)

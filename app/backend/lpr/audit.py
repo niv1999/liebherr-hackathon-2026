@@ -164,7 +164,7 @@ def _execute(s: Session, run: AuditRun) -> None:
                                 final_url=res.final_url, status_code=res.status, blocked=res.blocked,
                                 html_path=res.html_path, screenshot_path=res.screenshot_path,
                                 fullpage_path=res.fullpage_path,
-                                extracted={k: v for k, v in page.items() if k not in ("jsonld_product", "links")} |
+                                extracted={k: v for k, v in page.items() if k not in ("jsonld_product", "links", "subpage_links")} |
                                 {"jsonld_product_present": page.get("jsonld_product") is not None,
                                  "image_info": res.image_info[:80], "raw_status": raw_status,
                                  "block_reason": res.block_reason})
@@ -174,7 +174,7 @@ def _execute(s: Session, run: AuditRun) -> None:
 
         # Shop-wide facts: how the shop search treats Liebherr (criteria VIS-01 / VIS-02)
         shop_search = {}
-        if any(c.rule_key in ("shop_search_brand", "shop_search_category") for c in criteria):
+        if any(c.rule_key in ("shop_search_brand", "shop_search_category", "category_visible") for c in criteria):
             _progress(s, run, "Testing the shop search")
             shop_search = _shop_search(crawler, retailer)
 
@@ -213,7 +213,10 @@ def _execute(s: Session, run: AuditRun) -> None:
                     sres = crawler.fetch(sub, "brand_technology", screenshots=False)
                     if not sres.blocked:
                         page["subpage_url"] = sub
-                        page["subpage_text"] = extract(sres.html, sub).get("content_text", "")
+                        sx = extract(sres.html, sub)
+                        page["subpage_text"] = sx.get("content_text", "")
+                        page["subpage_media"] = {"images": sx.get("image_count", 0), "videos": sx.get("video_count", 0)}
+                        page["subpage_links"] = sres.links
                 snap = snapshot(res, brand_url, page, "brand")
                 checked = check_page(s, retailer, criteria, None, page, None, None, robots, res.image_info,
                                      res.screenshot_path, res.block_reason if res.blocked else None, feedback_fn,

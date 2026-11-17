@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlmodel import Session, select
 
 from ..db import get_session
@@ -122,4 +122,27 @@ def logo(rid: int, s: Session = Depends(get_session)):
     path = retailer_logo(r.id, r.base_url)
     if not path:
         raise HTTPException(404, "No logo found")
-    return FileResponse(path, headers={"Cache-Control": "max-age=86400"})
+    # no-cache = browser revalidates (ETag) so a newly uploaded logo shows at once; CSP blocks scripts in SVGs
+    return FileResponse(path, headers={"Cache-Control": "no-cache", "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'"})
+
+
+@router.post("/{rid}/logo")
+async def upload_logo(rid: int, file: UploadFile = File(...), s: Session = Depends(get_session)):
+    """Use an uploaded image as the retailer's logo (replaces the automatic shop icon)."""
+    from ..logos import save_logo
+    _get(s, rid)
+    data = await file.read()
+    try:
+        save_logo(rid, data)
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+    return {"ok": True}
+
+
+@router.delete("/{rid}/logo")
+def remove_logo(rid: int, s: Session = Depends(get_session)):
+    """Drop the stored logo; the shop's own icon is fetched again next time."""
+    from ..logos import clear_logo
+    _get(s, rid)
+    clear_logo(rid)
+    return {"ok": True}

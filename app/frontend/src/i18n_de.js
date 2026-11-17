@@ -231,6 +231,13 @@ export const DE = {
   // data: retailers
   "+ New retailer": "+ Neuer Händler",
   "Retailer added": "Händler hinzugefügt",
+  "Logo": "Logo",
+  "Upload logo": "Logo hochladen",
+  "Change logo": "Logo ändern",
+  "Use shop icon": "Shop-Icon verwenden",
+  "PNG, JPG, WebP or SVG, max 2 MB. Without an upload, HeLPR uses the shop's own icon.": "PNG, JPG, WebP oder SVG, max. 2 MB. Ohne Upload nutzt HeLPR das Icon des Shops.",
+  "The logo is too large (max 2 MB).": "Das Logo ist zu groß (max. 2 MB).",
+  "Please upload an image (PNG, JPG, WebP or SVG).": "Bitte ein Bild hochladen (PNG, JPG, WebP oder SVG).",
   "{name} saved": "{name} gespeichert",
   "{name} activated": "{name} aktiviert",
   "{name} deactivated": "{name} deaktiviert",

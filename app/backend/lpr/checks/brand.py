@@ -50,8 +50,10 @@ def brand_logo(ctx: CheckContext) -> CheckResult:
     from .. import settings
     from ..images import _trim
 
+    # only real logo images: "logo" in file name or alt text (not campaign banners that mention Liebherr)
     cands = [i for i in ctx.image_info if i.get("src", "").startswith("http")
-             and re.search(r"liebherr|logo", (i.get("src", "") + " " + (i.get("alt") or "")), re.I)][:12]
+             and re.search(r"logo", (i.get("src", "") + " " + (i.get("alt") or "")), re.I)
+             and re.search(r"liebherr", (i.get("src", "") + " " + (i.get("alt") or "")), re.I)][:12]
     if not cands:
         return human("No Liebherr logo image found on the brand page (it may be an SVG or CSS image).")
     best = None
@@ -73,6 +75,8 @@ def brand_logo(ctx: CheckContext) -> CheckResult:
     svg = [i["src"] for i in cands if i["src"].lower().split("?")[0].endswith(".svg")]
     if svg:
         return human("A Liebherr logo is shown as SVG; its version can't be compared automatically.", logo=svg[0])
+    if best is None:
+        return human("A Liebherr logo image was found but could not be compared automatically.")
     return fail("The Liebherr logo on the page does not match the current official logo.",
                 closest=best[1] if best else None, distance=best[0] if best else None)
 

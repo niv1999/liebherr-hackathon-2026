@@ -76,7 +76,7 @@ def run_audit(run_id: int) -> None:
         s.commit()
         try:
             _execute(s, run)
-            run.status = "done"
+            run.status, run.error = "done", None
         except Exception as e:  # keep the error visible in the UI
             log.exception("run %s failed", run_id)
             run.status = "failed"
@@ -285,6 +285,17 @@ def _find_brand_link(s: Session, run: AuditRun) -> str | None:
     return None
 
 
+def _fast_search(retailer: Retailer, model: str) -> str | None:
+    """Shop search via plain HTTP; returns the product URL if the result page lists it, else None."""
+    from urllib.parse import quote_plus, urljoin
+
+    status, html = raw_fetch(retailer.search_url.replace("{query}", quote_plus(model)), timeout=15)
+    if status != 200 or not html:
+        return None
+    links = [urljoin(retailer.base_url, h) for h in re.findall(r'href="([^"]+)"', html)]
+    return find_product_link(FetchResult(url="", links=links), retailer.product_link_pattern, model)
+
+
 def _listing_pass(s: Session, run: AuditRun, retailer: Retailer, crawler: Crawler, products: list[Product],
                   known: dict) -> None:
     ref = [p for p in products if p.sk in ("1", "2", "3", "frei")]
@@ -293,8 +304,10 @@ def _listing_pass(s: Session, run: AuditRun, retailer: Retailer, crawler: Crawle
         _progress(s, run, f"Counting listed products {i}/{len(ref)}")
         url = known[p.id].url if p.id in known else None
         if not url:
-            res = crawler.search(retailer.search_url, p.model, f"list_{model_slug(p.model)}")
-            url = None if res.blocked else find_product_link(res, retailer.product_link_pattern, p.model)
+            url = _fast_search(retailer, p.model)  # plain HTTP first (fast), real browser only if needed
+            if url is None:
+                res = crawler.search(retailer.search_url, p.model, f"list_{model_slug(p.model)}")
+                url = None if res.blocked else find_product_link(res, retailer.product_link_pattern, p.model)
         avail = None
         if url:
             listed += 1
@@ -316,7 +329,7 @@ def _notify(s: Session, run: AuditRun) -> None:
                            body=(run.error or "")[:300]))
     elif run.blocked:
         s.add(Notification(run_id=run.id, title=f"{retailer.name}: blocked for automated checks",
-                           body=f"{run.progress} Needs manual assessment."))
+                           body=run.progress or "Needs manual assessment."))
     else:
         change = ""
         if prev and prev.lpr_score is not None and run.lpr_score is not None:

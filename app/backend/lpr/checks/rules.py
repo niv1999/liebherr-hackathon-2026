@@ -196,7 +196,7 @@ def official_images(ctx: CheckContext) -> CheckResult:
     official = (ctx.product.data or {}).get("images") or []
     if not official:
         return human("No official images in the reference data for this model.")
-    res = match_official_images(official, ctx.image_info)
+    res = match_official_images(official, ctx.image_info, model=ctx.product.model)
     if res["page_images"] == 0:
         return human("No large product images could be read from the page.", **res)
     if res["matched"] >= 1:
@@ -417,7 +417,7 @@ def air_faq_reviews(ctx: CheckContext) -> CheckResult:
 
 @register("air_alt_texts")
 def air_alt_texts(ctx: CheckContext) -> CheckResult:
-    big = [i for i in ctx.image_info if (i.get("w") or 0) >= 240 and (i.get("h") or 0) >= 240]
+    big = [i for i in ctx.image_info if max(i.get("w") or 0, i.get("h") or 0) >= 300 and min(i.get("w") or 0, i.get("h") or 0) >= 100]
     if not big:
         return human("No large images found to check.")
     good = [i for i in big if len((i.get("alt") or "").strip()) >= 8]

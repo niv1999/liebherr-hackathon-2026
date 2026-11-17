@@ -16,7 +16,10 @@ from .models import Criterion, Product, Retailer
 
 def applicable(criteria: list[Criterion], page_types: tuple[str, ...], product: Product | None) -> list[Criterion]:
     sk = product.sk if product else None
-    return [c for c in criteria if c.active and c.page_type in page_types and (product is None or c.applies_to_sk(sk))]
+    # product criteria follow the product's SK class; shop-wide / brand criteria are checked once per retailer
+    # (their SK relevance is applied in the per-SK score)
+    return [c for c in criteria if c.active and c.page_type in page_types
+            and (product is None or c.page_type != "product" or c.applies_to_sk(sk))]
 
 
 def fullpage_tiles(fullpage_path: str | None, max_tiles: int = 5, tile_h: int = 1600) -> list[Path]:

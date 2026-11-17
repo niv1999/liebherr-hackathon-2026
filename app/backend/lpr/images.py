@@ -16,7 +16,7 @@ from . import settings
 
 _CACHE_FILE = settings.RUNTIME_DIR / "official_image_hashes.json"
 _lock = threading.Lock()
-MAX_DISTANCE = 10  # hamming distance on 64-bit pHash; <=10 = same picture (resized/compressed)
+MAX_DISTANCE = 12  # hamming distance on 64-bit pHash; <=12 = same picture (resized, padded, WebP-compressed)
 
 
 def _load_cache() -> dict[str, str]:
@@ -63,11 +63,21 @@ def official_hashes(urls: list[str], limit: int = 16) -> list[tuple[str, imageha
     return out
 
 
-def match_official_images(official_urls: list[str], image_info: list[dict], max_page_images: int = 10) -> dict:
+def match_official_images(official_urls: list[str], image_info: list[dict], max_page_images: int = 10,
+                          model: str | None = None) -> dict:
     official = official_hashes(official_urls)
-    big = [i for i in image_info if (i.get("w") or 0) >= 240 and (i.get("h") or 0) >= 240 and i.get("src", "").startswith("http")]
+    big = [i for i in image_info if max(i.get("w") or 0, i.get("h") or 0) >= 300 and min(i.get("w") or 0, i.get("h") or 0) >= 100 and i.get("src", "").startswith("http")]
     seen, page_imgs = set(), []
-    for i in sorted(big, key=lambda i: -(i["w"] * i["h"])):
+    # skip wide banners (navigation / campaign teasers) and prefer images that name the model
+    big = [i for i in big if i["w"] / max(1, i["h"]) <= 2.0]
+    key = (model or "").lower().replace(" ", "")
+
+    def rank(i):
+        text = (i.get("src", "") + " " + (i.get("alt") or "")).lower().replace(" ", "").replace("-", "")
+        mentions = bool(key) and key.replace("-", "") in text
+        return (not mentions, "product" not in text, -(i["w"] * i["h"]))
+
+    for i in sorted(big, key=rank):
         if i["src"] not in seen:
             seen.add(i["src"])
             page_imgs.append(i)

@@ -25,7 +25,11 @@ export default function Criteria() {
     setTimeout(() => setSaved(null), 1500);
   };
 
-  const shown = useMemo(() => items.filter((c) => block === "all" || c.block === block), [items, block]);
+  const order = Object.keys(BLOCKS);
+  const shown = useMemo(
+    () => items.filter((c) => block === "all" || c.block === block)
+      .sort((a, b) => order.indexOf(a.block) - order.indexOf(b.block) || a.code.localeCompare(b.code)),
+    [items, block]);
 
   return (
     <div className="space-y-5">

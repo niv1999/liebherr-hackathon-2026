@@ -1,0 +1,2252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liebherr LPR Monitor — Retailer Scorecard &amp; Assessment Detail</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              ink: '#0F172A',
+              cyan: '#0284C7',
+              cyanLight: '#E0F2FE',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .card-elevated {
+      background-color: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.03);
+    }
+    .score-ring-arc {
+      transition: stroke-dashoffset 0.55s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.3s ease;
+    }
+    .bar-animate {
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease;
+    }
+    /* Architectural Mockup Notes Mode */
+    body.show-mockup-notes .mockup-zone {
+      position: relative;
+      outline: 1.5px dashed #0284C7;
+      outline-offset: 3px;
+    }
+    .mockup-note-tag {
+      display: none;
+    }
+    body.show-mockup-notes .mockup-note-tag {
+      display: inline-flex;
+    }
+    @keyframes liftPulse {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+    .lift-pulse {
+      animation: liftPulse 0.35s ease-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Non-blocking Toast Notification Stack -->
+  <div id="toast-stack" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ===================================================================== -->
+  <!-- 1. TOP APPLICATION HEADER                                             -->
+  <!-- ===================================================================== -->
+  <header class="sticky top-0 z-30 bg-[#0F172A] text-white border-b border-slate-800">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between gap-4">
+        <!-- Left: Brand Identity + Primary Navigation -->
+        <div class="flex items-center gap-6 min-w-0">
+          <div class="flex items-center gap-2.5 shrink-0">
+            <div class="w-8 h-8 rounded-lg bg-[#0284C7]/20 border border-[#0284C7]/50 flex items-center justify-center">
+              <!-- Liebherr Precision Appliance Mark -->
+              <svg class="w-4 h-4 text-[#38BDF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="4" y="2" width="16" height="20" rx="2" />
+                <line x1="4" y1="13" x2="20" y2="13" />
+                <line x1="8" y1="5.5" x2="8" y2="10" stroke-linecap="round" />
+                <line x1="8" y1="16" x2="8" y2="19.5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <span class="font-bold tracking-tight text-sm sm:text-base text-white">Liebherr LPR Monitor</span>
+            <span class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-sky-500/15 text-sky-300 border border-sky-400/30">
+              <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+              Scorecard Prototype
+            </span>
+          </div>
+
+          <!-- Primary SaaS Navigation -->
+          <nav aria-label="Primary Navigation" class="hidden md:flex items-center gap-1 h-14">
+            <button
+              onclick="handleNavClick('Overview')"
+              data-nav="Overview"
+              class="nav-item h-full px-3 inline-flex items-center text-xs font-medium border-b-2 border-transparent text-slate-400 hover:text-white transition cursor-pointer"
+            >
+              Overview (All Retailers)
+            </button>
+            <button
+              onclick="handleNavClick('Retailer Scorecards')"
+              data-nav="Retailer Scorecards"
+              class="nav-item h-full px-3 inline-flex items-center text-xs font-semibold border-b-2 border-[#0284C7] text-white transition cursor-pointer"
+            >
+              Retailer Scorecards
+            </button>
+            <button
+              onclick="handleNavClick('Relevant Assortment 2026')"
+              data-nav="Relevant Assortment 2026"
+              class="nav-item h-full px-3 inline-flex items-center text-xs font-medium border-b-2 border-transparent text-slate-400 hover:text-white transition cursor-pointer"
+            >
+              Relevant Assortment (48 SKUs)
+            </button>
+            <button
+              onclick="handleNavClick('Criteria & Rules')"
+              data-nav="Criteria & Rules"
+              class="nav-item h-full px-3 inline-flex items-center text-xs font-medium border-b-2 border-transparent text-slate-400 hover:text-white transition cursor-pointer"
+            >
+              LPR Criteria &amp; Weights
+            </button>
+          </nav>
+        </div>
+
+        <!-- Right: Dataset Context Tag -->
+        <div class="flex items-center gap-2.5 text-xs shrink-0">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 tabular-nums">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            DACH Assessment · Q4 2026
+          </span>
+        </div>
+      </div>
+
+      <!-- Mobile Nav Strip -->
+      <nav aria-label="Mobile Navigation" class="flex md:hidden items-center gap-1.5 overflow-x-auto pb-2 text-xs">
+        <button onclick="handleNavClick('Overview')" data-nav="Overview" class="nav-item px-2.5 py-1 rounded text-slate-400 hover:text-white whitespace-nowrap cursor-pointer">Overview</button>
+        <button onclick="handleNavClick('Retailer Scorecards')" data-nav="Retailer Scorecards" class="nav-item px-2.5 py-1 rounded bg-[#0284C7] text-white font-semibold whitespace-nowrap cursor-pointer">Retailer Scorecards</button>
+        <button onclick="handleNavClick('Relevant Assortment 2026')" data-nav="Relevant Assortment 2026" class="nav-item px-2.5 py-1 rounded text-slate-400 hover:text-white whitespace-nowrap cursor-pointer">Assortment (48)</button>
+        <button onclick="handleNavClick('Criteria & Rules')" data-nav="Criteria & Rules" class="nav-item px-2.5 py-1 rounded text-slate-400 hover:text-white whitespace-nowrap cursor-pointer">Criteria</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Non-blocking Route Preview Banner (for sibling views) -->
+  <div id="route-banner" class="hidden bg-sky-50 border-b border-sky-200 text-slate-900">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded font-semibold bg-[#0284C7] text-white">Sibling View Preview</span>
+        <span id="route-banner-msg" class="font-medium text-slate-700"></span>
+      </div>
+      <button
+        onclick="handleNavClick('Retailer Scorecards')"
+        class="px-2.5 py-1 rounded-md font-semibold bg-[#0F172A] text-white hover:bg-slate-800 transition cursor-pointer"
+      >
+        Back to Retailer Scorecard
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- 2. BREADCRUMB & RETAILER SWITCHER BAR                                 -->
+  <!-- ===================================================================== -->
+  <section class="bg-white border-b border-slate-200 mockup-zone">
+    <span class="mockup-note-tag absolute top-2 right-4 z-10 px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-sky-100 text-sky-900 border border-sky-300">
+      Data: retailers.yaml + aggregated rules.py
+    </span>
+
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5 space-y-3">
+      <!-- Top Row: Breadcrumb + Controls (Mockup Notes Switch & Simulate Re-crawl) -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <!-- Breadcrumb -->
+        <nav aria-label="Breadcrumb" class="flex items-center flex-wrap gap-1.5 text-xs text-slate-500">
+          <button onclick="handleNavClick('Overview')" class="hover:text-[#0284C7] font-medium transition cursor-pointer">Overview (All Retailers)</button>
+          <svg class="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6" /></svg>
+          <span class="text-slate-600 font-medium">Retailer Scorecards</span>
+          <svg class="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6" /></svg>
+          <span id="breadcrumb-retailer" class="font-bold text-slate-900">MediaMarkt DE</span>
+        </nav>
+
+        <!-- Right Controls: Mockup Notes Toggle Switch + Simulate Re-crawl -->
+        <div class="flex items-center gap-3 self-start sm:self-auto">
+          <!-- Mockup Notes Toggle Switch -->
+          <label class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 hover:bg-slate-100 transition cursor-pointer select-none">
+            <span class="text-xs font-medium text-slate-700">Mockup Notes</span>
+            <span class="relative inline-flex items-center">
+              <input id="toggle-mockup-notes" type="checkbox" onchange="toggleMockupNotes(this.checked)" class="sr-only peer" />
+              <span class="w-8 h-4.5 bg-slate-300 rounded-full peer peer-checked:bg-[#0284C7] transition-colors block h-4"></span>
+              <span class="absolute left-0.5 top-0.5 w-3 h-3 bg-white rounded-full shadow-2xs transition-transform peer-checked:translate-x-4"></span>
+            </span>
+          </label>
+
+          <!-- Simulate Re-crawl Button -->
+          <button
+            id="btn-recrawl"
+            onclick="simulateRecrawl()"
+            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#0284C7] text-white hover:bg-sky-700 shadow-2xs transition cursor-pointer"
+          >
+            <svg id="recrawl-spinner" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+              <path d="M16 16h5v5" />
+            </svg>
+            <span id="recrawl-text">Simulate Re-crawl</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Interactive Retailer Selector Pills + Compact Dropdown -->
+      <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-2.5 pt-2.5 border-t border-slate-100">
+        <div id="retailer-pills-bar" class="flex flex-wrap items-center gap-2">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <div class="flex items-center gap-2 self-start xl:self-auto">
+          <label for="retailer-dropdown" class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 shrink-0">Retailer:</label>
+          <select
+            id="retailer-dropdown"
+            onchange="switchRetailer(this.value)"
+            class="text-xs font-medium bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0284C7]/25 focus:border-[#0284C7] cursor-pointer"
+          >
+            <option value="mediamarkt">MediaMarkt DE (mediamarkt.de) — 82%</option>
+            <option value="otto">Otto DE (otto.de) — 93%</option>
+            <option value="amazon">Amazon DE (amazon.de) — 68%</option>
+            <option value="saturn">Saturn DE (saturn.de) — 79%</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN WORKSPACE                                                        -->
+  <!-- ===================================================================== -->
+  <main class="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- =================================================================== -->
+    <!-- 3. RETAILER EXECUTIVE SUMMARY HERO CARD                             -->
+    <!-- =================================================================== -->
+    <section id="retailer-hero-card" class="card-elevated p-5 sm:p-6 mockup-zone transition-opacity duration-200">
+      <span class="mockup-note-tag absolute -top-2.5 left-4 px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-sky-100 text-sky-900 border border-sky-300">
+        Data: retailers.yaml + aggregated rules.py (Weighted Pillar Rollup)
+      </span>
+
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-center">
+        <!-- Left (5 cols): Retailer Monogram, Identity, Channel & Crawl Metadata -->
+        <div class="xl:col-span-5 flex items-start gap-4">
+          <div id="hero-monogram" class="w-14 h-14 rounded-2xl bg-[#0F172A] text-white flex items-center justify-center font-bold text-lg tracking-tight shrink-0 border border-slate-700 shadow-2xs">
+            MM
+          </div>
+
+          <div class="space-y-2 min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 id="hero-retailer-name" class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                MediaMarkt DE
+              </h1>
+              <button
+                onclick="copyDomainUrl()"
+                title="Copy retailer domain"
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-sky-50 text-[#0284C7] border border-sky-200 hover:bg-sky-100 transition cursor-pointer"
+              >
+                <span id="hero-domain">mediamarkt.de</span>
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+              <span id="hero-channel" class="px-2.5 py-0.5 rounded-md font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                Authorized Omnichannel Retailer
+              </span>
+              <span id="hero-region" class="px-2.5 py-0.5 rounded-md font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                Germany / DACH
+              </span>
+            </div>
+
+            <div class="pt-1.5 border-t border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 tabular-nums">
+              <span>Crawled Assortment: <strong id="hero-sku-coverage" class="text-slate-800 font-semibold">42 / 48 target SKUs</strong></span>
+              <span>Last Crawl: <strong id="hero-last-crawled" class="text-slate-800 font-semibold">Nov 17, 2026 · 14:30 CET</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle (3 cols): Overall Retailer LPR Score Circular Gauge -->
+        <div class="xl:col-span-3 pt-4 xl:pt-0 xl:px-5 border-t xl:border-t-0 xl:border-x border-slate-200 flex items-center justify-center gap-4">
+          <div class="relative w-28 h-28 flex items-center justify-center shrink-0">
+            <svg class="w-28 h-28 -rotate-90" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="48" fill="none" stroke="#E2E8F0" stroke-width="10" />
+              <circle
+                id="hero-gauge-arc"
+                class="score-ring-arc"
+                cx="60"
+                cy="60"
+                r="48"
+                fill="none"
+                stroke="#F59E0B"
+                stroke-width="10"
+                stroke-linecap="round"
+                stroke-dasharray="301.59"
+                stroke-dashoffset="54.29"
+              />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center tabular-nums">
+              <span id="hero-score-num" class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">82%</span>
+              <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">LPR Score</span>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <span id="hero-status-badge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+              Strong Compliance
+            </span>
+            <div>
+              <span id="hero-delta-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 tabular-nums">
+                +4.2% vs Q3
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 leading-tight">Weighted across 8 LPR criteria</p>
+          </div>
+        </div>
+
+        <!-- Right (4 cols): 4 LPR Category Pillar Cards -->
+        <div id="hero-pillar-cards" class="xl:col-span-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- 4. MAIN TWO-COLUMN ASYMMETRIC GRID (~68% Left / ~32% Right)         -->
+    <!-- =================================================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- ================================================================= -->
+      <!-- LEFT COLUMN (~68% -> 8 of 12 cols): Tabbed Evaluation Workspace   -->
+      <!-- ================================================================= -->
+      <div class="lg:col-span-8 space-y-4 mockup-zone">
+        <span class="mockup-note-tag absolute -top-2.5 left-4 z-10 px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-sky-100 text-sky-900 border border-sky-300">
+          Data: criteria.yaml weights + products.json 2026 target assortment
+        </span>
+
+        <!-- Workspace Tabs Header -->
+        <div class="card-elevated overflow-hidden">
+          <div class="px-4 sm:px-5 pt-3 bg-slate-50/80 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-1" role="tablist">
+              <button
+                id="tab-btn-criteria"
+                onclick="switchWorkspaceTab('criteria')"
+                role="tab"
+                aria-selected="true"
+                class="px-3.5 py-2.5 text-xs font-semibold border-b-2 border-[#0284C7] text-[#0284C7] bg-white rounded-t-lg transition cursor-pointer"
+              >
+                LPR Criteria Compliance Breakdown (8)
+              </button>
+              <button
+                id="tab-btn-assortment"
+                onclick="switchWorkspaceTab('assortment')"
+                role="tab"
+                aria-selected="false"
+                class="px-3.5 py-2.5 text-xs font-medium border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition cursor-pointer"
+              >
+                Relevant Assortment Coverage (48 Target SKUs)
+              </button>
+            </div>
+
+            <div id="tab-context-hint" class="text-[11px] text-slate-500 pb-2 sm:pb-0">
+              Click any criterion row to inspect failing SKUs &amp; DOM patterns
+            </div>
+          </div>
+
+          <!-- ============================================================= -->
+          <!-- TAB 1 CONTENT: LPR CRITERIA COMPLIANCE BREAKDOWN              -->
+          <!-- ============================================================= -->
+          <div id="panel-criteria" class="divide-y divide-slate-200">
+            <!-- Criteria Filter Bar -->
+            <div class="p-4 bg-white flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+              <!-- Status Filter Pills -->
+              <div id="criteria-status-pills" class="inline-flex flex-wrap items-center gap-1 p-1 rounded-lg bg-slate-100 border border-slate-200/80 self-start">
+                <!-- Populated by JS -->
+              </div>
+
+              <!-- Pillar Dropdown + Search Input -->
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                <select
+                  id="criteria-pillar-select"
+                  onchange="updateCriteriaPillarFilter(this.value)"
+                  class="text-xs font-medium bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0284C7]/25 focus:border-[#0284C7] cursor-pointer"
+                >
+                  <option value="ALL">All Category Pillars</option>
+                  <option value="Brand & Naming Compliance">Brand &amp; Naming Compliance</option>
+                  <option value="Visuals & Rich Media">Visuals &amp; Rich Media</option>
+                  <option value="Technical Specs & EU Energy Labels">Technical Specs &amp; EU Energy Labels</option>
+                  <option value="Relevant Assortment Coverage">Relevant Assortment Coverage</option>
+                </select>
+
+                <div class="relative">
+                  <svg class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  <input
+                    id="criteria-search-input"
+                    type="text"
+                    oninput="updateCriteriaSearch(this.value)"
+                    placeholder="Filter rules or affected SKUs..."
+                    class="w-full sm:w-52 pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0284C7]/25 focus:border-[#0284C7]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Table Column Headers (Desktop) -->
+            <div class="hidden md:grid md:grid-cols-12 gap-3 px-5 py-2.5 bg-slate-50 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+              <div class="col-span-5">LPR Criterion &amp; Category Pillar</div>
+              <div class="col-span-1 text-center">Weight</div>
+              <div class="col-span-4">Retailer Assortment Pass Rate</div>
+              <div class="col-span-2 text-right">Score Impact</div>
+            </div>
+
+            <!-- Criteria Rows List -->
+            <div id="criteria-rows-container" class="divide-y divide-slate-200">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- ============================================================= -->
+          <!-- TAB 2 CONTENT: RELEVANT ASSORTMENT COVERAGE (48 TARGET SKUS)  -->
+          <!-- ============================================================= -->
+          <div id="panel-assortment" class="hidden divide-y divide-slate-200">
+            <!-- Assortment Summary Strip -->
+            <div id="assortment-kpi-strip" class="p-4 bg-slate-50/60 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Assortment Filter Bar -->
+            <div class="p-4 bg-white flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+              <div id="assortment-status-pills" class="inline-flex flex-wrap items-center gap-1 p-1 rounded-lg bg-slate-100 border border-slate-200/80 self-start">
+                <!-- Populated by JS -->
+              </div>
+
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                <select
+                  id="assortment-category-select"
+                  onchange="updateAssortmentCategoryFilter(this.value)"
+                  class="text-xs font-medium bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0284C7]/25 focus:border-[#0284C7] cursor-pointer"
+                >
+                  <option value="ALL">All Product Categories</option>
+                  <option value="Fridge-Freezer">Fridge-Freezer</option>
+                  <option value="Built-in">Built-in</option>
+                  <option value="Freezer">Freezer</option>
+                  <option value="Wine">Wine</option>
+                </select>
+
+                <div class="relative">
+                  <svg class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  <input
+                    id="assortment-search-input"
+                    type="text"
+                    oninput="updateAssortmentSearch(this.value)"
+                    placeholder="Search SKU or model..."
+                    class="w-full sm:w-48 pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0284C7]/25 focus:border-[#0284C7]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Assortment Table -->
+            <div class="overflow-x-auto max-h-[620px] overflow-y-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead class="sticky top-0 z-10 bg-slate-50 border-b border-slate-200 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                  <tr>
+                    <th class="py-2.5 px-4">Target SKU</th>
+                    <th class="py-2.5 px-3">Liebherr 2026 Model</th>
+                    <th class="py-2.5 px-3">Category</th>
+                    <th class="py-2.5 px-3">Catalog Status</th>
+                    <th class="py-2.5 px-3">Listing Health</th>
+                    <th class="py-2.5 px-4">Audit Note</th>
+                  </tr>
+                </thead>
+                <tbody id="assortment-table-body" class="divide-y divide-slate-200 bg-white">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- RIGHT COLUMN (~32% -> 4 of 12 cols): Simulator & Trend            -->
+      <!-- ================================================================= -->
+      <div class="lg:col-span-4 space-y-6 mockup-zone">
+        <span class="mockup-note-tag absolute -top-2.5 left-4 z-10 px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-sky-100 text-sky-900 border border-sky-300">
+          Action: Score Lift Simulator &amp; Historical Runs
+        </span>
+
+        <!-- Card 1: Interactive Score Lift Simulator -->
+        <section class="card-elevated p-5 space-y-4">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#0284C7]">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" />
+                </svg>
+                What-If Remediation Planner
+              </div>
+              <h2 class="text-base font-bold text-slate-900 mt-0.5">Score Lift Simulator</h2>
+              <p class="text-xs text-slate-500 mt-0.5">Select retailer-level fixes to model LPR score recovery.</p>
+            </div>
+          </div>
+
+          <!-- Projected Score Banner -->
+          <div id="projected-score-box" class="p-3.5 rounded-xl bg-slate-900 text-white space-y-2.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-slate-300 font-medium">Projected Retailer LPR Score</span>
+              <button onclick="resetSimulator()" class="text-[11px] text-sky-400 hover:text-sky-300 font-medium cursor-pointer">
+                Reset
+              </button>
+            </div>
+
+            <div class="flex items-baseline justify-between gap-2 tabular-nums">
+              <div class="flex items-baseline gap-2">
+                <span id="sim-base-score" class="text-sm font-medium text-slate-400">82.0%</span>
+                <span class="text-slate-500">→</span>
+                <span id="sim-projected-score" class="text-2xl font-bold text-white">82.0%</span>
+              </div>
+              <span id="sim-delta-pill" class="px-2 py-0.5 rounded-full text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                +0.0 pts
+              </span>
+            </div>
+
+            <!-- Dual-layer Progress Bar (Current + Simulated Lift) -->
+            <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden flex">
+              <div id="sim-bar-base" class="h-full bg-slate-500 transition-all duration-300" style="width: 82%"></div>
+              <div id="sim-bar-lift" class="h-full bg-[#38BDF8] transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Actionable Checkboxes -->
+          <div id="simulator-actions-list" class="space-y-2.5">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </section>
+
+        <!-- Card 2: Retailer LPR Score Trend -->
+        <section class="card-elevated p-5 space-y-3.5">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Retailer LPR Score Trend</h2>
+              <p class="text-xs text-slate-500 mt-0.5">4-cycle assessment history vs. DACH benchmark (<strong class="text-slate-700 tabular-nums">80.5%</strong>).</p>
+            </div>
+          </div>
+
+          <!-- Responsive SVG Area/Line Chart -->
+          <div id="trend-chart-container" class="pt-1">
+            <!-- Populated dynamically via JS -->
+          </div>
+
+          <!-- Cycle Summary Chips -->
+          <div id="trend-cycles-grid" class="grid grid-cols-4 gap-1.5 pt-2 border-t border-slate-100 text-center tabular-nums">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT DATA MODEL & INTERACTIVE RENDERING                         -->
+  <!-- ===================================================================== -->
+  <script>
+    // -----------------------------------------------------------------------
+    // 1. 2026 RELEVANT ASSORTMENT TARGET CATALOG (48 TARGET SKUS)
+    // -----------------------------------------------------------------------
+    const TARGET_ASSORTMENT_48 = [
+      { sku: "9916428-00", model: "CBNsda 5723 Plus BioFresh", category: "Fridge-Freezer" },
+      { sku: "9916430-00", model: "CBNsfc 5723 Plus BioFresh", category: "Fridge-Freezer" },
+      { sku: "9916442-00", model: "CBNbda 5723 Plus BioFresh BlackSteel", category: "Fridge-Freezer" },
+      { sku: "9916455-00", model: "CBNbsa 575i Prime BioFresh", category: "Fridge-Freezer" },
+      { sku: "9916460-00", model: "CBNsda 575i Prime BioFresh", category: "Fridge-Freezer" },
+      { sku: "9916471-00", model: "CNsfd 5703 Pure NoFrost", category: "Fridge-Freezer" },
+      { sku: "9916475-00", model: "CNd 5703 Pure NoFrost", category: "Fridge-Freezer" },
+      { sku: "9916482-00", model: "CNsfc 5723 Plus NoFrost", category: "Fridge-Freezer" },
+      { sku: "9916490-00", model: "CNbda 5723 Plus NoFrost BlackSteel", category: "Fridge-Freezer" },
+      { sku: "9916504-00", model: "KGNsdc 57Z03 Pure NoFrost", category: "Fridge-Freezer" },
+      { sku: "9916512-00", model: "CBNsda 5223 Plus BioFresh", category: "Fridge-Freezer" },
+      { sku: "9916518-00", model: "CNsfd 5203 Pure NoFrost", category: "Fridge-Freezer" },
+      { sku: "9916525-00", model: "CBNstc 778i Peak BioFresh", category: "Fridge-Freezer" },
+      { sku: "9916531-00", model: "CBNbsa 775i Prime BioFresh", category: "Fridge-Freezer" },
+      { sku: "9915810-00", model: "KBbs 4370 Premium BioFresh", category: "Fridge-Freezer" },
+      { sku: "9915814-00", model: "KBs 4350 Prime BioFresh", category: "Fridge-Freezer" },
+
+      { sku: "9917102-00", model: "ICBdi 5182 Peak BioFresh", category: "Built-in" },
+      { sku: "9917108-00", model: "ICBNdi 5183 Peak BioFresh NoFrost", category: "Built-in" },
+      { sku: "9917115-00", model: "ICBNci 5153 Prime BioFresh NoFrost", category: "Built-in" },
+      { sku: "9917120-00", model: "ICNdi 5173 Peak NoFrost", category: "Built-in" },
+      { sku: "9917126-00", model: "ICNd 5153 Prime NoFrost", category: "Built-in" },
+      { sku: "9917133-00", model: "ICNe 5133 Plus NoFrost", category: "Built-in" },
+      { sku: "9917140-00", model: "ICe 5103 Pure SmartFrost", category: "Built-in" },
+      { sku: "9917148-00", model: "IRBdi 5180 Peak BioFresh", category: "Built-in" },
+      { sku: "9917152-00", model: "IRBd 5150 Prime BioFresh", category: "Built-in" },
+      { sku: "9917160-00", model: "IRBe 5120 Plus BioFresh", category: "Built-in" },
+      { sku: "9917166-00", model: "IRd 5100 Pure Built-In Fridge", category: "Built-in" },
+      { sku: "9917172-00", model: "IRBd 4550 Prime BioFresh 140cm", category: "Built-in" },
+      { sku: "9917180-00", model: "IRBe 4120 Plus BioFresh 122cm", category: "Built-in" },
+      { sku: "9917188-00", model: "IRe 3900 Pure 88cm Undercounter", category: "Built-in" },
+
+      { sku: "9917405-00", model: "SIFNe 5188 Peak NoFrost", category: "Freezer" },
+      { sku: "9917410-00", model: "SIFNf 5128 Plus NoFrost", category: "Freezer" },
+      { sku: "9917416-00", model: "SIFNe 4556 Prime NoFrost", category: "Freezer" },
+      { sku: "9917422-00", model: "SIGN 3576 Premium NoFrost", category: "Freezer" },
+      { sku: "9917430-00", model: "SFNsdd 5267 Prime NoFrost", category: "Freezer" },
+      { sku: "9917435-00", model: "SFNsfe 5247 Plus NoFrost", category: "Freezer" },
+      { sku: "9917441-00", model: "SFNbdd 5267 Prime BlackSteel", category: "Freezer" },
+      { sku: "9917448-00", model: "FNd 525i Prime NoFrost", category: "Freezer" },
+      { sku: "9917452-00", model: "FNsdd 5257 Prime NoFrost", category: "Freezer" },
+      { sku: "9917460-00", model: "FNd 465i Prime NoFrost", category: "Freezer" },
+
+      { sku: "9917802-00", model: "WPbl 5001 GrandCru Selection", category: "Wine" },
+      { sku: "9917808-00", model: "WPgbi 7473 Vinidor Selection", category: "Wine" },
+      { sku: "9917814-00", model: "WKb 4612 GrandCru Wine Cabinet", category: "Wine" },
+      { sku: "9917820-00", model: "WTes 5872 Vinidor 3-Zone", category: "Wine" },
+      { sku: "9917826-00", model: "EWTdf 3553 Vinidor Built-In", category: "Wine" },
+      { sku: "9917832-00", model: "EWTgb 1683 Vinidor Built-In", category: "Wine" },
+      { sku: "9917838-00", model: "UWTgb 1682 Vinidor Undercounter", category: "Wine" },
+      { sku: "9917844-00", model: "WPbl 4201 GrandCru Selection", category: "Wine" }
+    ];
+
+    // -----------------------------------------------------------------------
+    // 2. RETAILER PROFILES & AGGREGATED SCORECARDS
+    // -----------------------------------------------------------------------
+    const RETAILERS = {
+      mediamarkt: {
+        id: "mediamarkt",
+        name: "MediaMarkt DE",
+        monogram: "MM",
+        monogramBg: "bg-[#0F172A] text-white border-slate-700",
+        domain: "mediamarkt.de",
+        channel: "Authorized Omnichannel Retailer",
+        region: "Germany / DACH",
+        score: 82,
+        delta: "+4.2% vs Q3",
+        deltaPositive: true,
+        listedCount: 42,
+        totalTargetSkus: 48,
+        lastCrawled: "Nov 17, 2026 · 14:30 CET",
+        pillars: [
+          { name: "Brand & Naming Compliance", weight: "20%", score: 92 },
+          { name: "Visuals & Rich Media", weight: "30%", score: 78 },
+          { name: "Technical Specs & EU Energy Labels", weight: "35%", score: 80 },
+          { name: "Relevant Assortment Coverage", weight: "15%", score: 88 }
+        ],
+        criteria: [
+          {
+            id: "LPR-01",
+            title: "Official Liebherr Model Naming & Series Prefix",
+            pillar: "Brand & Naming Compliance",
+            weight: 10,
+            passedCount: 40,
+            totalCount: 42,
+            passRate: 95.2,
+            deduction: -0.5,
+            pattern: "40 of 42 crawled PDPs include the canonical Liebherr brand prefix, exact model code, and series tier (Pure/Plus/Prime/Peak). 2 older 2025 listings omit the 'Plus' tier suffix.",
+            ruleLogic: "rules.py::check_canonical_title() → Regex match ^(LIEBHERR|Liebherr)\\s+[A-Z]{2,5}\\s?\\d{3,4}.*(Pure|Plus|Prime|Peak|GrandCru|Vinidor)",
+            affectedListings: [
+              { sku: "9916430-00", model: "CBNsfc 5723 Plus BioFresh", detail: "H1 title omits 'Plus' series tier ('LIEBHERR CBNsfc 5723 Kühl-Gefrierkombination')" },
+              { sku: "9917435-00", model: "SFNsfe 5247 Plus NoFrost", detail: "H1 title omits 'Plus' series tier" }
+            ]
+          },
+          {
+            id: "LPR-02",
+            title: "EU Energy Label (A–G) & EPREL Datasheet Link",
+            pillar: "Technical Specs & EU Energy Labels",
+            weight: 15,
+            passedCount: 34,
+            totalCount: 42,
+            passRate: 81.0,
+            deduction: -2.9,
+            pattern: "8 out of 42 product detail pages display the energy class as plain text in the spec table or link an outdated 2024 PDF instead of the current 2026 EPREL Product Information Sheet.",
+            ruleLogic: "rules.py::check_eprel_datasheet() → Verify energy_badge in [A..G] AND pds_pdf_url HTTP 200 AND revision_year >= 2026",
+            affectedListings: [
+              { sku: "9916428-00", model: "CBNsda 5723 Plus BioFresh", detail: "Linked datasheet PDF is outdated 2024 revision (Rev. 2024-09)" },
+              { sku: "9917133-00", model: "ICNe 5133 Plus NoFrost", detail: "Missing clickable Produktdatenblatt PDF link near buy box" },
+              { sku: "9917410-00", model: "SIFNf 5128 Plus NoFrost", detail: "Outdated 2024 datasheet PDF linked" },
+              { sku: "9917814-00", model: "WKb 4612 GrandCru Wine Cabinet", detail: "Energy class G text shown without EPREL datasheet link" }
+            ]
+          },
+          {
+            id: "LPR-03",
+            title: "Energy Efficiency Class Icon on Main Gallery Image",
+            pillar: "Visuals & Rich Media",
+            weight: 12,
+            passedCount: 31,
+            totalCount: 42,
+            passRate: 73.8,
+            deduction: -3.1,
+            pattern: "11 out of 42 listings lack the mandatory EU Energy Class arrow badge in the primary gallery viewport or second slot, particularly across built-in and wine cabinet SKUs.",
+            ruleLogic: "images.py::detect_energy_label_graphic() → OCR & template match EU 2021/2026 A–G arrow badge in gallery slots [0..2]",
+            affectedListings: [
+              { sku: "9917102-00", model: "ICBdi 5182 Peak BioFresh", detail: "No EU Energy Label graphic in gallery slots 1–3" },
+              { sku: "9917120-00", model: "ICNdi 5173 Peak NoFrost", detail: "Energy label graphic omitted from image carousel" },
+              { sku: "9917802-00", model: "WPbl 5001 GrandCru Selection", detail: "Missing EU Energy Label graphic in gallery" }
+            ]
+          },
+          {
+            id: "LPR-04",
+            title: "Minimum 5 High-Resolution Product Images (>= 1000px)",
+            pillar: "Visuals & Rich Media",
+            weight: 10,
+            passedCount: 35,
+            totalCount: 42,
+            passRate: 83.3,
+            deduction: -1.7,
+            pattern: "35 of 42 PDPs render 5+ high-res images (>= 1000px). 7 listings have only 3–4 images and omit the technical CAD niche/dimension schematic.",
+            ruleLogic: "images.py::validate_gallery_completeness() → count(img.width >= 1000) >= 5 AND has_cad_dimension_diagram == True",
+            affectedListings: [
+              { sku: "9916428-00", model: "CBNsda 5723 Plus BioFresh", detail: "5 images present, but CAD dimensional line drawing is missing" },
+              { sku: "9917148-00", model: "IRBdi 5180 Peak BioFresh", detail: "Only 4 images uploaded; missing 178cm niche diagram" },
+              { sku: "9917448-00", model: "FNd 525i Prime NoFrost", detail: "Only 3 images uploaded (800×800px low-res thumbnails)" }
+            ]
+          },
+          {
+            id: "LPR-05",
+            title: "Core Technology Callouts (BioFresh / NoFrost / DuoCooling)",
+            pillar: "Brand & Naming Compliance",
+            weight: 10,
+            passedCount: 38,
+            totalCount: 42,
+            passRate: 90.5,
+            deduction: -1.0,
+            pattern: "Strong compliance (90.5%): Core Liebherr technologies (BioFresh ~0°C, NoFrost, DuoCooling) are present in feature bullets across 38 listings. 4 SmartSteel models omit the finish trademark.",
+            ruleLogic: "rules.py::check_usp_keywords() → Match required model-specific USP tokens from products.json",
+            affectedListings: [
+              { sku: "9916428-00", model: "CBNsda 5723 Plus BioFresh", detail: "Color listed as 'Edelstahl'; 'SmartSteel' trademark omitted" },
+              { sku: "9917108-00", model: "ICBNdi 5183 Peak BioFresh NoFrost", detail: "'HydroBreeze' mist feature omitted from bullet list" }
+            ]
+          },
+          {
+            id: "LPR-06",
+            title: "Structured Technical Dimensions, Niche Size & Volume Specs",
+            pillar: "Technical Specs & EU Energy Labels",
+            weight: 20,
+            passedCount: 33,
+            totalCount: 42,
+            passRate: 78.6,
+            deduction: -4.3,
+            pattern: "Biggest weighted drag (-4.3 pts): While freestanding dimensions are accurate, 9 built-in appliances list only appliance height (177.0 cm) and omit mandatory kitchen niche tolerance ranges (177.2–178.8 cm).",
+            ruleLogic: "rules.py::check_structured_specs() → Validate H×W×D, niche_range (if built-in), total_liters, and noise_db",
+            affectedListings: [
+              { sku: "9917102-00", model: "ICBdi 5182 Peak BioFresh", detail: "Missing min/max niche height range (177.2–178.8 cm) in spec table" },
+              { sku: "9917115-00", model: "ICBNci 5153 Prime BioFresh NoFrost", detail: "Door-on-door (Festtürmontage) mounting type left blank" },
+              { sku: "9917152-00", model: "IRBd 5150 Prime BioFresh", detail: "BioFresh compartment net volume split omitted" }
+            ]
+          },
+          {
+            id: "LPR-07",
+            title: "Official Liebherr Brand Logo & A+ / Rich Media Module",
+            pillar: "Visuals & Rich Media",
+            weight: 8,
+            passedCount: 33,
+            totalCount: 42,
+            passRate: 78.6,
+            deduction: -1.7,
+            pattern: "33 of 42 PDPs render the official Liebherr brand banner and below-the-fold Rich Media / A+ feature modules. 9 newer 2026 SKUs fall back to plain HTML text descriptions.",
+            ruleLogic: "extract.py::detect_rich_media_module() → Presence of official Liebherr brand logo + modular feature showcase",
+            affectedListings: [
+              { sku: "9916525-00", model: "CBNstc 778i Peak BioFresh", detail: "Plain text description only; Peak A+ showcase missing" },
+              { sku: "9917808-00", model: "WPgbi 7473 Vinidor Selection", detail: "Vinidor rich media module not embedded" }
+            ]
+          },
+          {
+            id: "LPR-08",
+            title: "Relevant Assortment Stock & Buy-Box Availability",
+            pillar: "Relevant Assortment Coverage",
+            weight: 15,
+            passedCount: 37,
+            totalCount: 42,
+            passRate: 88.1,
+            deduction: -1.8,
+            pattern: "42 of 48 target SKUs are cataloged; 37 of those 42 have an active 1P MediaMarkt buy box with <= 4 day delivery. 5 listed SKUs currently show 'Temporarily unavailable online'.",
+            ruleLogic: "rules.py::check_buybox_availability() → seller_is_1p == True AND stock_status == 'IN_STOCK'",
+            affectedListings: [
+              { sku: "9916455-00", model: "CBNbsa 575i Prime BioFresh", detail: "Listed on site, but online delivery currently out of stock" },
+              { sku: "9917441-00", model: "SFNbdd 5267 Prime BlackSteel", detail: "Currently marked 'Bald wieder verfügbar' (no buy box)" }
+            ]
+          }
+        ],
+        simulatorActions: [
+          {
+            id: "sim-mm-1",
+            title: "Populate built-in niche tolerance ranges & specs on 9 PDPs",
+            ruleRef: "LPR-06",
+            affectedText: "Fixes 9 built-in listings",
+            lift: 4.3,
+            checked: false
+          },
+          {
+            id: "sim-mm-2",
+            title: "Add EU Energy Class badge overlay on 11 hero gallery images",
+            ruleRef: "LPR-03",
+            affectedText: "Fixes 11 gallery stacks",
+            lift: 3.1,
+            checked: false
+          },
+          {
+            id: "sim-mm-3",
+            title: "Update & link current 2026 EPREL datasheet PDFs on 8 PDPs",
+            ruleRef: "LPR-02",
+            affectedText: "Fixes 8 datasheet links",
+            lift: 2.9,
+            checked: false
+          },
+          {
+            id: "sim-mm-4",
+            title: "Onboard 6 missing 2026 Relevant Assortment SKUs (Wine & Built-In)",
+            ruleRef: "Assortment",
+            affectedText: "42 → 48 target SKUs",
+            lift: 1.9,
+            checked: false
+          }
+        ],
+        trend: [
+          { cycle: "H1 2025", score: 71.5 },
+          { cycle: "H2 2025", score: 74.8 },
+          { cycle: "Q1 2026", score: 77.8 },
+          { cycle: "Current", score: 82.0 }
+        ],
+        missingSkus: ["9916531-00", "9917180-00", "9917188-00", "9917826-00", "9917832-00", "9917844-00"],
+        issueSkus: ["9916428-00", "9916430-00", "9916455-00", "9916525-00", "9917102-00", "9917108-00", "9917115-00", "9917120-00", "9917133-00", "9917148-00", "9917152-00", "9917410-00", "9917435-00", "9917441-00", "9917448-00", "9917802-00", "9917808-00", "9917814-00"]
+      },
+
+      otto: {
+        id: "otto",
+        name: "Otto DE",
+        monogram: "OT",
+        monogramBg: "bg-[#0284C7] text-white border-sky-500",
+        domain: "otto.de",
+        channel: "Authorized Omnichannel Retailer",
+        region: "Germany / DACH",
+        score: 93,
+        delta: "+1.8% vs Q3",
+        deltaPositive: true,
+        listedCount: 46,
+        totalTargetSkus: 48,
+        lastCrawled: "Nov 17, 2026 · 13:50 CET",
+        pillars: [
+          { name: "Brand & Naming Compliance", weight: "20%", score: 98 },
+          { name: "Visuals & Rich Media", weight: "30%", score: 94 },
+          { name: "Technical Specs & EU Energy Labels", weight: "35%", score: 90 },
+          { name: "Relevant Assortment Coverage", weight: "15%", score: 96 }
+        ],
+        criteria: [
+          {
+            id: "LPR-01",
+            title: "Official Liebherr Model Naming & Series Prefix",
+            pillar: "Brand & Naming Compliance",
+            weight: 10,
+            passedCount: 46,
+            totalCount: 46,
+            passRate: 100.0,
+            deduction: 0.0,
+            pattern: "100% compliant across all 46 crawled Otto DE listings. Automated PIM feed integration ensures canonical Liebherr model naming and series tiers.",
+            ruleLogic: "rules.py::check_canonical_title() → 46/46 exact matches",
+            affectedListings: [
+              { sku: "9915810-00", model: "KBbs 4370 Premium BioFresh", detail: "Verified benchmark: 'Liebherr Standkühlschrank KBbs 4370 Premium BioFresh BlackSteel'" }
+            ]
+          },
+          {
+            id: "LPR-02",
+            title: "EU Energy Label (A–G) & EPREL Datasheet Link",
+            pillar: "Technical Specs & EU Energy Labels",
+            weight: 15,
+            passedCount: 44,
+            totalCount: 46,
+            passRate: 95.7,
+            deduction: -0.6,
+            pattern: "44 of 46 PDPs serve valid 2026 EPREL datasheet PDFs directly adjacent to the EU energy efficiency badge. 2 newly onboarded wine cabinets still reference Q1 2025 PDFs.",
+            ruleLogic: "rules.py::check_eprel_datasheet() → 44/46 HTTP 200 + 2026 hash match",
+            affectedListings: [
+              { sku: "9917838-00", model: "UWTgb 1682 Vinidor Undercounter", detail: "Datasheet PDF points to older 2025 revision" },
+              { sku: "9917844-00", model: "WPbl 4201 GrandCru Selection", detail: "Datasheet PDF points to older 2025 revision" }
+            ]
+          },
+          {
+            id: "LPR-03",
+            title: "Energy Efficiency Class Icon on Main Gallery Image",
+            pillar: "Visuals & Rich Media",
+            weight: 12,
+            passedCount: 45,
+            totalCount: 46,
+            passRate: 97.8,
+            deduction: -0.3,
+            pattern: "45 of 46 listings include both the inline A–G efficiency arrow and full EU label graphic in gallery slot #2.",
+            ruleLogic: "images.py::detect_energy_label_graphic() → 45/46 verified",
+            affectedListings: [
+              { sku: "9917838-00", model: "UWTgb 1682 Vinidor Undercounter", detail: "Full EU label graphic placed in slot #6 instead of slot #2" }
+            ]
+          },
+          {
+            id: "LPR-04",
+            title: "Minimum 5 High-Resolution Product Images (>= 1000px)",
+            pillar: "Visuals & Rich Media",
+            weight: 10,
+            passedCount: 43,
+            totalCount: 46,
+            passRate: 93.5,
+            deduction: -0.7,
+            pattern: "43 of 46 listings feature 6–8 high-resolution 1600×1600px renders including CAD dimensional diagrams. 3 built-in models lack the ventilation clearance schematic.",
+            ruleLogic: "images.py::validate_gallery_completeness() → 43/46 verified",
+            affectedListings: [
+              { sku: "9917166-00", model: "IRd 5100 Pure Built-In Fridge", detail: "CAD niche diagram missing from gallery" },
+              { sku: "9917188-00", model: "IRe 3900 Pure 88cm Undercounter", detail: "Only 4 gallery images present" }
+            ]
+          },
+          {
+            id: "LPR-05",
+            title: "Core Technology Callouts (BioFresh / NoFrost / DuoCooling)",
+            pillar: "Brand & Naming Compliance",
+            weight: 10,
+            passedCount: 44,
+            totalCount: 46,
+            passRate: 95.7,
+            deduction: -0.4,
+            pattern: "44 of 46 PDPs highlight Liebherr proprietary technologies in structured bullets. 2 Premium models mention SoftSystem door damping without naming SoftTelescopic rails.",
+            ruleLogic: "rules.py::check_usp_keywords() → 44/46 verified",
+            affectedListings: [
+              { sku: "9915810-00", model: "KBbs 4370 Premium BioFresh", detail: "'SoftSystem' present; 'SoftTelescopic' drawer rail name omitted" }
+            ]
+          },
+          {
+            id: "LPR-06",
+            title: "Structured Technical Dimensions, Niche Size & Volume Specs",
+            pillar: "Technical Specs & EU Energy Labels",
+            weight: 20,
+            passedCount: 39,
+            totalCount: 46,
+            passRate: 84.8,
+            deduction: -3.0,
+            pattern: "Primary area for improvement (-3.0 pts): 7 built-in listings display exterior appliance measurements but omit the min/max kitchen niche height range in the structured attribute table.",
+            ruleLogic: "rules.py::check_structured_specs() → 39/46 verified",
+            affectedListings: [
+              { sku: "9917140-00", model: "ICe 5103 Pure SmartFrost", detail: "Niche height range (177.2–178.8 cm) missing from spec table" },
+              { sku: "9917160-00", model: "IRBe 5120 Plus BioFresh", detail: "Niche width tolerance (56–57 cm) omitted" },
+              { sku: "9917416-00", model: "SIFNe 4556 Prime NoFrost", detail: "140cm built-in niche dimensions incomplete" }
+            ]
+          },
+          {
+            id: "LPR-07",
+            title: "Official Liebherr Brand Logo & A+ / Rich Media Module",
+            pillar: "Visuals & Rich Media",
+            weight: 8,
+            passedCount: 44,
+            totalCount: 46,
+            passRate: 95.7,
+            deduction: -0.3,
+            pattern: "44 of 46 PDPs feature full Liebherr brand shop-in-shop banners and interactive feature storytelling blocks.",
+            ruleLogic: "extract.py::detect_rich_media_module() → 44/46 verified",
+            affectedListings: [
+              { sku: "9917188-00", model: "IRe 3900 Pure 88cm Undercounter", detail: "Standard text description without A+ module" }
+            ]
+          },
+          {
+            id: "LPR-08",
+            title: "Relevant Assortment Stock & Buy-Box Availability",
+            pillar: "Relevant Assortment Coverage",
+            weight: 15,
+            passedCount: 44,
+            totalCount: 46,
+            passRate: 95.7,
+            deduction: -0.7,
+            pattern: "Benchmark leader in DACH assortment coverage (46/48 SKUs listed) with 95.7% active 1P Otto buy-box availability and 2-man kitchen delivery.",
+            ruleLogic: "rules.py::check_buybox_availability() → 44/46 verified",
+            affectedListings: [
+              { sku: "9916531-00", model: "CBNbsa 775i Prime BioFresh", detail: "4-week delivery lead time (temporarily backordered)" }
+            ]
+          }
+        ],
+        simulatorActions: [
+          {
+            id: "sim-ot-1",
+            title: "Add structured kitchen niche tolerance specs on 7 built-in PDPs",
+            ruleRef: "LPR-06",
+            affectedText: "Fixes 7 built-in listings",
+            lift: 3.0,
+            checked: false
+          },
+          {
+            id: "sim-ot-2",
+            title: "Upload CAD dimension schematics on 3 built-in models",
+            ruleRef: "LPR-04",
+            affectedText: "Fixes 3 gallery stacks",
+            lift: 0.7,
+            checked: false
+          },
+          {
+            id: "sim-ot-3",
+            title: "Onboard final 2 missing 2026 Relevant Assortment SKUs",
+            ruleRef: "Assortment",
+            affectedText: "46 → 48 target SKUs",
+            lift: 0.8,
+            checked: false
+          }
+        ],
+        trend: [
+          { cycle: "H1 2025", score: 87.2 },
+          { cycle: "H2 2025", score: 89.5 },
+          { cycle: "Q1 2026", score: 91.2 },
+          { cycle: "Current", score: 93.0 }
+        ],
+        missingSkus: ["9916490-00", "9917441-00"],
+        issueSkus: ["9915810-00", "9916531-00", "9917140-00", "9917160-00", "9917166-00", "9917188-00", "9917416-00", "9917838-00", "9917844-00"]
+      },
+
+      amazon: {
+        id: "amazon",
+        name: "Amazon DE",
+        monogram: "AZ",
+        monogramBg: "bg-amber-600 text-white border-amber-500",
+        domain: "amazon.de",
+        channel: "Marketplace & 1P Retail",
+        region: "Germany / DACH",
+        score: 68,
+        delta: "-3.1% vs Q3",
+        deltaPositive: false,
+        listedCount: 47,
+        totalTargetSkus: 48,
+        lastCrawled: "Nov 17, 2026 · 11:14 CET",
+        pillars: [
+          { name: "Brand & Naming Compliance", weight: "20%", score: 71 },
+          { name: "Visuals & Rich Media", weight: "30%", score: 62 },
+          { name: "Technical Specs & EU Energy Labels", weight: "35%", score: 64 },
+          { name: "Relevant Assortment Coverage", weight: "15%", score: 85 }
+        ],
+        criteria: [
+          {
+            id: "LPR-01",
+            title: "Official Liebherr Model Naming & Series Prefix",
+            pillar: "Brand & Naming Compliance",
+            weight: 10,
+            passedCount: 31,
+            totalCount: 47,
+            passRate: 66.0,
+            deduction: -3.4,
+            pattern: "16 out of 47 Amazon DE titles strip out Liebherr series tiers ('Peak', 'Prime', 'Plus') or append third-party seller keyword stuffing, hurting brand consistency.",
+            ruleLogic: "rules.py::check_canonical_title() → 31/47 exact matches",
+            affectedListings: [
+              { sku: "9917405-00", model: "SIFNe 5188 Peak NoFrost", detail: "H1 strips 'Peak' and 'NoFrost': 'Liebherr SIFNe 5188 Einbau-Gefrierschrank 178 cm'" },
+              { sku: "9916455-00", model: "CBNbsa 575i Prime BioFresh", detail: "H1 omits 'Prime' tier designation" },
+              { sku: "9917102-00", model: "ICBdi 5182 Peak BioFresh", detail: "H1 omits 'Peak' tier designation" }
+            ]
+          },
+          {
+            id: "LPR-02",
+            title: "EU Energy Label (A–G) & EPREL Datasheet Link",
+            pillar: "Technical Specs & EU Energy Labels",
+            weight: 15,
+            passedCount: 29,
+            totalCount: 47,
+            passRate: 61.7,
+            deduction: -5.7,
+            pattern: "Critical compliance drag (-5.7 pts): 18 of 47 listings either return HTTP 404 on the linked Produktdatenblatt PDF or omit the statutory EPREL datasheet link altogether.",
+            ruleLogic: "rules.py::check_eprel_datasheet() → 18 HTTP 404 or missing PDF links",
+            affectedListings: [
+              { sku: "9917405-00", model: "SIFNe 5188 Peak NoFrost", detail: "Product Information Sheet URL returned HTTP 404 Not Found" },
+              { sku: "9916442-00", model: "CBNbda 5723 Plus BioFresh BlackSteel", detail: "EPREL datasheet PDF link missing from energy popover" },
+              { sku: "9917108-00", model: "ICBNdi 5183 Peak BioFresh NoFrost", detail: "Product Information Sheet URL returned HTTP 404" },
+              { sku: "9917802-00", model: "WPbl 5001 GrandCru Selection", detail: "Missing EU Energy Label datasheet attachment" }
+            ]
+          },
+          {
+            id: "LPR-03",
+            title: "Energy Efficiency Class Icon on Main Gallery Image",
+            pillar: "Visuals & Rich Media",
+            weight: 12,
+            passedCount: 30,
+            totalCount: 47,
+            passRate: 63.8,
+            deduction: -4.3,
+            pattern: "17 of 47 Amazon listings rely solely on the widget badge and omit the mandatory EU Energy Label graphic in the main image carousel.",
+            ruleLogic: "images.py::detect_energy_label_graphic() → 30/47 verified",
+            affectedListings: [
+              { sku: "9916471-00", model: "CNsfd 5703 Pure NoFrost", detail: "EU Energy Label graphic missing from image thumbnails" },
+              { sku: "9917126-00", model: "ICNd 5153 Prime NoFrost", detail: "EU Energy Label graphic missing from image thumbnails" },
+              { sku: "9917430-00", model: "SFNsdd 5267 Prime NoFrost", detail: "EU Energy Label graphic missing from image thumbnails" }
+            ]
+          },
+          {
+            id: "LPR-04",
+            title: "Minimum 5 High-Resolution Product Images (>= 1000px)",
+            pillar: "Visuals & Rich Media",
+            weight: 10,
+            passedCount: 27,
+            totalCount: 47,
+            passRate: 57.4,
+            deduction: -4.3,
+            pattern: "20 of 47 listings contain only 2–4 images and are missing CAD niche schematics and interior drawer detail renders.",
+            ruleLogic: "images.py::validate_gallery_completeness() → 27/47 verified",
+            affectedListings: [
+              { sku: "9917405-00", model: "SIFNe 5188 Peak NoFrost", detail: "Only 3 images uploaded; missing 178cm niche diagram & IceMaker shot" },
+              { sku: "9917120-00", model: "ICNdi 5173 Peak NoFrost", detail: "Only 3 images uploaded; missing CAD installation drawing" },
+              { sku: "9916504-00", model: "KGNsdc 57Z03 Pure NoFrost", detail: "Only 4 images uploaded; interior BioFresh/NoFrost shot missing" }
+            ]
+          },
+          {
+            id: "LPR-05",
+            title: "Core Technology Callouts (BioFresh / NoFrost / DuoCooling)",
+            pillar: "Brand & Naming Compliance",
+            weight: 10,
+            passedCount: 35,
+            totalCount: 47,
+            passRate: 74.5,
+            deduction: -2.6,
+            pattern: "12 of 47 listings have truncated 3- or 4-bullet lists (below the 5-bullet LPR standard) and omit key USPs such as plumbed IceMaker or DuoCooling.",
+            ruleLogic: "rules.py::check_usp_keywords() → 35/47 verified",
+            affectedListings: [
+              { sku: "9917405-00", model: "SIFNe 5188 Peak NoFrost", detail: "Only 4 feature bullets; plumbed IceMaker USP completely omitted" },
+              { sku: "9916475-00", model: "CNd 5703 Pure NoFrost", detail: "DuoCooling two-circuit explanation omitted from bullets" }
+            ]
+          },
+          {
+            id: "LPR-06",
+            title: "Structured Technical Dimensions, Niche Size & Volume Specs",
+            pillar: "Technical Specs & EU Energy Labels",
+            weight: 20,
+            passedCount: 31,
+            totalCount: 47,
+            passRate: 66.0,
+            deduction: -6.8,
+            pattern: "Largest single point loss (-6.8 pts): 16 listings have incomplete or swapped L×W×H dimensions in Amazon's technical details table and omit built-in niche dimensions.",
+            ruleLogic: "rules.py::check_structured_specs() → 31/47 verified",
+            affectedListings: [
+              { sku: "9917405-00", model: "SIFNe 5188 Peak NoFrost", detail: "Lists 55.9 × 54.6 × 177 cm appliance size; built-in niche tolerance missing" },
+              { sku: "9916460-00", model: "CBNsda 575i Prime BioFresh", detail: "Depth and width values transposed in technical details table" },
+              { sku: "9917148-00", model: "IRBdi 5180 Peak BioFresh", detail: "BioFresh net capacity (L) missing from attribute table" }
+            ]
+          },
+          {
+            id: "LPR-07",
+            title: "Official Liebherr Brand Logo & A+ / Rich Media Module",
+            pillar: "Visuals & Rich Media",
+            weight: 8,
+            passedCount: 31,
+            totalCount: 47,
+            passRate: 66.0,
+            deduction: -2.7,
+            pattern: "16 of 47 listings lack Amazon A+ Brand Story modules, reducing visual differentiation on Prime and Peak flagship appliances.",
+            ruleLogic: "extract.py::detect_rich_media_module() → 31/47 verified",
+            affectedListings: [
+              { sku: "9917405-00", model: "SIFNe 5188 Peak NoFrost", detail: "No Amazon A+ content module attached" },
+              { sku: "9916525-00", model: "CBNstc 778i Peak BioFresh", detail: "No Amazon A+ content module attached" }
+            ]
+          },
+          {
+            id: "LPR-08",
+            title: "Relevant Assortment Stock & Buy-Box Availability",
+            pillar: "Relevant Assortment Coverage",
+            weight: 15,
+            passedCount: 40,
+            totalCount: 47,
+            passRate: 85.1,
+            deduction: -2.2,
+            pattern: "47 of 48 target SKUs are listed on Amazon DE, but 7 listings have lost the primary buy box to unauthorized 3P marketplace resellers.",
+            ruleLogic: "rules.py::check_buybox_availability() → 7 listings won by 3P resellers",
+            affectedListings: [
+              { sku: "9916482-00", model: "CNsfc 5723 Plus NoFrost", detail: "Buy box held by 3P seller (+€140 above UVP)" },
+              { sku: "9917452-00", model: "FNsdd 5257 Prime NoFrost", detail: "1P Amazon stock depleted; 3P marketplace offer active" }
+            ]
+          }
+        ],
+        simulatorActions: [
+          {
+            id: "sim-az-1",
+            title: "Sync structured L×W×H & niche dimensions via Vendor Central feed",
+            ruleRef: "LPR-06",
+            affectedText: "Fixes 16 spec tables",
+            lift: 6.8,
+            checked: false
+          },
+          {
+            id: "sim-az-2",
+            title: "Re-upload & repair 18 broken/missing EPREL datasheet PDF links",
+            ruleRef: "LPR-02",
+            affectedText: "Fixes 18 datasheet 404s",
+            lift: 5.7,
+            checked: false
+          },
+          {
+            id: "sim-az-3",
+            title: "Push full 6-image PIM gallery + EU Energy Label graphics on 20 SKUs",
+            ruleRef: "LPR-03 / LPR-04",
+            affectedText: "Fixes 20 image stacks",
+            lift: 6.4,
+            checked: false
+          },
+          {
+            id: "sim-az-4",
+            title: "Restore canonical 'Peak/Prime/Plus' series prefixes in 16 H1 titles",
+            ruleRef: "LPR-01",
+            affectedText: "Fixes 16 H1 titles",
+            lift: 3.4,
+            checked: false
+          }
+        ],
+        trend: [
+          { cycle: "H1 2025", score: 74.0 },
+          { cycle: "H2 2025", score: 72.4 },
+          { cycle: "Q1 2026", score: 71.1 },
+          { cycle: "Current", score: 68.0 }
+        ],
+        missingSkus: ["9917832-00"],
+        issueSkus: ["9916442-00", "9916455-00", "9916460-00", "9916471-00", "9916475-00", "9916482-00", "9916504-00", "9916525-00", "9917102-00", "9917108-00", "9917120-00", "9917126-00", "9917148-00", "9917405-00", "9917430-00", "9917452-00", "9917802-00"]
+      },
+
+      saturn: {
+        id: "saturn",
+        name: "Saturn DE",
+        monogram: "ST",
+        monogramBg: "bg-slate-800 text-sky-400 border-slate-700",
+        domain: "saturn.de",
+        channel: "Authorized Omnichannel Retailer",
+        region: "Germany / DACH",
+        score: 79,
+        delta: "+2.5% vs Q3",
+        deltaPositive: true,
+        listedCount: 40,
+        totalTargetSkus: 48,
+        lastCrawled: "Nov 17, 2026 · 14:12 CET",
+        pillars: [
+          { name: "Brand & Naming Compliance", weight: "20%", score: 90 },
+          { name: "Visuals & Rich Media", weight: "30%", score: 74 },
+          { name: "Technical Specs & EU Energy Labels", weight: "35%", score: 78 },
+          { name: "Relevant Assortment Coverage", weight: "15%", score: 80 }
+        ],
+        criteria: [
+          {
+            id: "LPR-01",
+            title: "Official Liebherr Model Naming & Series Prefix",
+            pillar: "Brand & Naming Compliance",
+            weight: 10,
+            passedCount: 37,
+            totalCount: 40,
+            passRate: 92.5,
+            deduction: -0.8,
+            pattern: "37 of 40 crawled Saturn DE listings use canonical Liebherr model naming. 3 listings omit series tier designations.",
+            ruleLogic: "rules.py::check_canonical_title() → 37/40 verified",
+            affectedListings: [
+              { sku: "9916430-00", model: "CBNsfc 5723 Plus BioFresh", detail: "Omits 'Plus' series tier in H1 title" },
+              { sku: "9917435-00", model: "SFNsfe 5247 Plus NoFrost", detail: "Omits 'Plus' series tier in H1 title" }
+            ]
+          },
+          {
+            id: "LPR-02",
+            title: "EU Energy Label (A–G) & EPREL Datasheet Link",
+            pillar: "Technical Specs & EU Energy Labels",
+            weight: 15,
+            passedCount: 31,
+            totalCount: 40,
+            passRate: 77.5,
+            deduction: -3.4,
+            pattern: "Mirrors parent MediaMarktSaturn feed: 9 of 40 listings link outdated 2024 datasheet PDFs or lack clickable EPREL links.",
+            ruleLogic: "rules.py::check_eprel_datasheet() → 31/40 verified",
+            affectedListings: [
+              { sku: "9916428-00", model: "CBNsda 5723 Plus BioFresh", detail: "Outdated 2024 datasheet PDF linked" },
+              { sku: "9917133-00", model: "ICNe 5133 Plus NoFrost", detail: "Missing EPREL datasheet PDF link" }
+            ]
+          },
+          {
+            id: "LPR-03",
+            title: "Energy Efficiency Class Icon on Main Gallery Image",
+            pillar: "Visuals & Rich Media",
+            weight: 12,
+            passedCount: 28,
+            totalCount: 40,
+            passRate: 70.0,
+            deduction: -3.6,
+            pattern: "12 of 40 listings lack the EU Energy Class arrow badge in the primary gallery viewport.",
+            ruleLogic: "images.py::detect_energy_label_graphic() → 28/40 verified",
+            affectedListings: [
+              { sku: "9917102-00", model: "ICBdi 5182 Peak BioFresh", detail: "Missing EU Energy Label graphic in gallery" },
+              { sku: "9917120-00", model: "ICNdi 5173 Peak NoFrost", detail: "Missing EU Energy Label graphic in gallery" }
+            ]
+          },
+          {
+            id: "LPR-04",
+            title: "Minimum 5 High-Resolution Product Images (>= 1000px)",
+            pillar: "Visuals & Rich Media",
+            weight: 10,
+            passedCount: 31,
+            totalCount: 40,
+            passRate: 77.5,
+            deduction: -2.3,
+            pattern: "9 of 40 listings have fewer than 5 high-res images or omit the technical CAD niche/dimension schematic.",
+            ruleLogic: "images.py::validate_gallery_completeness() → 31/40 verified",
+            affectedListings: [
+              { sku: "9916428-00", model: "CBNsda 5723 Plus BioFresh", detail: "Missing CAD dimensional line drawing" },
+              { sku: "9917448-00", model: "FNd 525i Prime NoFrost", detail: "Only 3 gallery images uploaded" }
+            ]
+          },
+          {
+            id: "LPR-05",
+            title: "Core Technology Callouts (BioFresh / NoFrost / DuoCooling)",
+            pillar: "Brand & Naming Compliance",
+            weight: 10,
+            passedCount: 35,
+            totalCount: 40,
+            passRate: 87.5,
+            deduction: -1.3,
+            pattern: "35 of 40 listings feature complete Liebherr technology bullet points; 5 listings truncate SmartSteel and HydroBreeze descriptions.",
+            ruleLogic: "rules.py::check_usp_keywords() → 35/40 verified",
+            affectedListings: [
+              { sku: "9916428-00", model: "CBNsda 5723 Plus BioFresh", detail: "'SmartSteel' surface trademark omitted" }
+            ]
+          },
+          {
+            id: "LPR-06",
+            title: "Structured Technical Dimensions, Niche Size & Volume Specs",
+            pillar: "Technical Specs & EU Energy Labels",
+            weight: 20,
+            passedCount: 31,
+            totalCount: 40,
+            passRate: 77.5,
+            deduction: -4.5,
+            pattern: "9 built-in listings omit exact kitchen niche height/width tolerance ranges in the specification table.",
+            ruleLogic: "rules.py::check_structured_specs() → 31/40 verified",
+            affectedListings: [
+              { sku: "9917102-00", model: "ICBdi 5182 Peak BioFresh", detail: "Niche height range (177.2–178.8 cm) omitted" },
+              { sku: "9917115-00", model: "ICBNci 5153 Prime BioFresh NoFrost", detail: "Door-on-door mounting type omitted" }
+            ]
+          },
+          {
+            id: "LPR-07",
+            title: "Official Liebherr Brand Logo & A+ / Rich Media Module",
+            pillar: "Visuals & Rich Media",
+            weight: 8,
+            passedCount: 30,
+            totalCount: 40,
+            passRate: 75.0,
+            deduction: -2.0,
+            pattern: "30 of 40 PDPs embed Liebherr A+ showcase modules; 10 listings use plain text copy.",
+            ruleLogic: "extract.py::detect_rich_media_module() → 30/40 verified",
+            affectedListings: [
+              { sku: "9916525-00", model: "CBNstc 778i Peak BioFresh", detail: "Plain text description only" }
+            ]
+          },
+          {
+            id: "LPR-08",
+            title: "Relevant Assortment Stock & Buy-Box Availability",
+            pillar: "Relevant Assortment Coverage",
+            weight: 15,
+            passedCount: 33,
+            totalCount: 40,
+            passRate: 82.5,
+            deduction: -2.6,
+            pattern: "40 of 48 target SKUs are cataloged on Saturn DE; 33 have active online buy-box stock while 7 show store-pickup only.",
+            ruleLogic: "rules.py::check_buybox_availability() → 33/40 verified",
+            affectedListings: [
+              { sku: "9916455-00", model: "CBNbsa 575i Prime BioFresh", detail: "Marktabholung only (online shipping unavailable)" }
+            ]
+          }
+        ],
+        simulatorActions: [
+          {
+            id: "sim-st-1",
+            title: "Sync built-in niche tolerance dimensions across 9 PDPs",
+            ruleRef: "LPR-06",
+            affectedText: "Fixes 9 built-in listings",
+            lift: 4.5,
+            checked: false
+          },
+          {
+            id: "sim-st-2",
+            title: "Add EU Energy Class badge overlay on 12 hero gallery images",
+            ruleRef: "LPR-03",
+            affectedText: "Fixes 12 gallery stacks",
+            lift: 3.6,
+            checked: false
+          },
+          {
+            id: "sim-st-3",
+            title: "Replace outdated 2024 EPREL datasheet PDFs on 9 PDPs",
+            ruleRef: "LPR-02",
+            affectedText: "Fixes 9 datasheet links",
+            lift: 3.4,
+            checked: false
+          },
+          {
+            id: "sim-st-4",
+            title: "Onboard 8 missing 2026 Relevant Assortment SKUs",
+            ruleRef: "Assortment",
+            affectedText: "40 → 48 target SKUs",
+            lift: 2.5,
+            checked: false
+          }
+        ],
+        trend: [
+          { cycle: "H1 2025", score: 69.8 },
+          { cycle: "H2 2025", score: 73.1 },
+          { cycle: "Q1 2026", score: 76.5 },
+          { cycle: "Current", score: 79.0 }
+        ],
+        missingSkus: ["9916531-00", "9917180-00", "9917188-00", "9917820-00", "9917826-00", "9917832-00", "9917838-00", "9917844-00"],
+        issueSkus: ["9916428-00", "9916430-00", "9916455-00", "9916525-00", "9917102-00", "9917115-00", "9917120-00", "9917133-00", "9917435-00", "9917448-00"]
+      }
+    };
+
+    const SIBLING_ROUTE_INFO = {
+      "Overview": "Overview (All Retailers) — Cross-retailer executive leaderboard comparing MediaMarkt DE (82%), Otto DE (93%), Amazon DE (68%), and Saturn DE (79%).",
+      "Relevant Assortment 2026": "Relevant Assortment (48 SKUs) — Master 2026 Liebherr DACH product registry with EPREL efficiency classes, UVP prices, and required media assets.",
+      "Criteria & Rules": "LPR Criteria & Weights — Configuration of the 8 weighted LPR assessment rules (criteria.yaml) and threshold bands."
+    };
+
+    // -----------------------------------------------------------------------
+    // 3. APPLICATION STATE
+    // -----------------------------------------------------------------------
+    const state = {
+      activeRetailerId: "mediamarkt",
+      activeWorkspaceTab: "criteria",     // 'criteria' | 'assortment'
+      criteriaStatusFilter: "all",        // 'all' | 'drags' | 'compliant'
+      criteriaPillarFilter: "ALL",
+      criteriaSearch: "",
+      expandedCriteria: new Set(["LPR-02", "LPR-06"]),
+      assortmentStatusFilter: "all",      // 'all' | 'compliant' | 'issues' | 'missing'
+      assortmentCategoryFilter: "ALL",
+      assortmentSearch: "",
+      checkedSimIds: new Set(),
+      mockupNotes: false
+    };
+
+    function getRetailer() {
+      return RETAILERS[state.activeRetailerId];
+    }
+
+    // Semantic Helpers (>=90% Emerald, 70-89% Amber, <70% Rose)
+    function getSemanticTheme(pct) {
+      if (pct >= 90) {
+        return {
+          badgeCls: "bg-emerald-50 text-emerald-700 border-emerald-200",
+          barCls: "bg-emerald-500",
+          strokeColor: "#10B981",
+          textCls: "text-emerald-700",
+          label: "Compliant"
+        };
+      }
+      if (pct >= 70) {
+        return {
+          badgeCls: "bg-amber-50 text-amber-800 border-amber-200",
+          barCls: "bg-amber-500",
+          strokeColor: "#F59E0B",
+          textCls: "text-amber-800",
+          label: "Needs Attention"
+        };
+      }
+      return {
+        badgeCls: "bg-rose-50 text-rose-700 border-rose-200",
+        barCls: "bg-rose-500",
+        strokeColor: "#F43F5E",
+        textCls: "text-rose-700",
+        label: "Critical Drag"
+      };
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    // -----------------------------------------------------------------------
+    // 4. RENDERING FUNCTIONS
+    // -----------------------------------------------------------------------
+    function renderAll() {
+      renderRetailerSwitcher();
+      renderHeroCard();
+      renderCriteriaTab();
+      renderAssortmentTab();
+      renderSimulatorCard();
+      renderTrendCard();
+    }
+
+    function renderRetailerSwitcher() {
+      const current = getRetailer();
+      document.getElementById("breadcrumb-retailer").textContent = current.name;
+      document.getElementById("retailer-dropdown").value = current.id;
+
+      const pillsBar = document.getElementById("retailer-pills-bar");
+      pillsBar.innerHTML = Object.values(RETAILERS).map(r => {
+        const isActive = r.id === state.activeRetailerId;
+        const theme = getSemanticTheme(r.score);
+        const dotCls = r.score >= 90 ? "bg-emerald-500" : r.score >= 70 ? "bg-amber-500" : "bg-rose-500";
+
+        const btnCls = isActive
+          ? "bg-[#0F172A] text-white border-[#0F172A] shadow-2xs"
+          : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300";
+
+        return `
+          <button
+            onclick="switchRetailer('${r.id}')"
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border transition cursor-pointer tabular-nums ${btnCls}"
+          >
+            <span class="w-2 h-2 rounded-full ${dotCls}"></span>
+            <span class="font-semibold">${r.name}</span>
+            <span class="px-1.5 py-0.2 rounded text-[11px] font-bold ${isActive ? 'bg-[#0284C7] text-white' : theme.badgeCls + ' border'}">
+              ${r.score}%
+            </span>
+            <span class="hidden sm:inline text-[11px] ${isActive ? 'text-slate-300' : 'text-slate-400'}">
+              ${r.delta} · ${r.listedCount}/${r.totalTargetSkus} SKUs
+            </span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderHeroCard() {
+      const r = getRetailer();
+      const theme = getSemanticTheme(r.score);
+
+      // Left Identity
+      const monoEl = document.getElementById("hero-monogram");
+      monoEl.textContent = r.monogram;
+      monoEl.className = `w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-lg tracking-tight shrink-0 border shadow-2xs ${r.monogramBg}`;
+
+      document.getElementById("hero-retailer-name").textContent = r.name;
+      document.getElementById("hero-domain").textContent = r.domain;
+      document.getElementById("hero-channel").textContent = r.channel;
+      document.getElementById("hero-region").textContent = r.region;
+      document.getElementById("hero-sku-coverage").textContent = `${r.listedCount} / ${r.totalTargetSkus} target SKUs`;
+      document.getElementById("hero-last-crawled").textContent = r.lastCrawled;
+
+      // Middle Score Ring Gauge
+      const circumference = 301.59; // 2 * pi * 48
+      const offset = circumference - (r.score / 100) * circumference;
+      const arcEl = document.getElementById("hero-gauge-arc");
+      arcEl.style.strokeDashoffset = offset;
+      arcEl.style.stroke = theme.strokeColor;
+
+      document.getElementById("hero-score-num").textContent = `${r.score}%`;
+
+      const statusLabel = r.score >= 90 ? "Benchmark Leader" : r.score >= 80 ? "Strong Compliance" : r.score >= 70 ? "Needs Attention" : "Action Required";
+      const statusBadge = document.getElementById("hero-status-badge");
+      statusBadge.textContent = statusLabel;
+      statusBadge.className = `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${theme.badgeCls}`;
+
+      const deltaBadge = document.getElementById("hero-delta-badge");
+      deltaBadge.textContent = r.delta;
+      deltaBadge.className = r.deltaPositive
+        ? "inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 tabular-nums"
+        : "inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 tabular-nums";
+
+      // Right 4 Category Pillar Cards
+      document.getElementById("hero-pillar-cards").innerHTML = r.pillars.map(p => {
+        const pTheme = getSemanticTheme(p.score);
+        return `
+          <div class="p-3 rounded-xl bg-slate-50/90 border border-slate-200/90 flex flex-col justify-between gap-2">
+            <div class="flex items-start justify-between gap-2">
+              <span class="text-xs font-semibold text-slate-800 leading-snug">${p.name}</span>
+              <span class="text-[10px] font-medium text-slate-400 tabular-nums shrink-0">Wt ${p.weight}</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-xs tabular-nums">
+                <span class="font-bold text-slate-900">${p.score}%</span>
+                <span class="text-[10px] font-semibold ${pTheme.textCls}">${pTheme.label}</span>
+              </div>
+              <div class="w-full h-1.5 rounded-full bg-slate-200/80 overflow-hidden">
+                <div class="bar-animate h-full rounded-full ${pTheme.barCls}" style="width: ${p.score}%"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderCriteriaTab() {
+      const r = getRetailer();
+      const totalCnt = r.criteria.length;
+      const dragsCnt = r.criteria.filter(c => c.passRate < 90).length;
+      const compliantCnt = r.criteria.filter(c => c.passRate >= 90).length;
+
+      // Filter Pills
+      const pills = [
+        { key: "all", label: `All Criteria (${totalCnt})` },
+        { key: "drags", label: `Score Drags (<90%) (${dragsCnt})` },
+        { key: "compliant", label: `Compliant (>=90%) (${compliantCnt})` }
+      ];
+
+      document.getElementById("criteria-status-pills").innerHTML = pills.map(p => {
+        const active = state.criteriaStatusFilter === p.key;
+        const cls = active
+          ? "bg-white text-slate-900 font-semibold shadow-2xs"
+          : "text-slate-600 hover:text-slate-900 font-medium";
+        return `
+          <button
+            onclick="setCriteriaStatusFilter('${p.key}')"
+            class="px-2.5 py-1 rounded-md text-xs tabular-nums transition cursor-pointer ${cls}"
+          >
+            ${p.label}
+          </button>
+        `;
+      }).join("");
+
+      // Filter Criteria
+      const q = state.criteriaSearch.trim().toLowerCase();
+      const filtered = r.criteria.filter(c => {
+        if (state.criteriaStatusFilter === "drags" && c.passRate >= 90) return false;
+        if (state.criteriaStatusFilter === "compliant" && c.passRate < 90) return false;
+        if (state.criteriaPillarFilter !== "ALL" && c.pillar !== state.criteriaPillarFilter) return false;
+        if (!q) return true;
+        return (
+          c.id.toLowerCase().includes(q) ||
+          c.title.toLowerCase().includes(q) ||
+          c.pillar.toLowerCase().includes(q) ||
+          c.pattern.toLowerCase().includes(q) ||
+          c.affectedListings.some(a => a.sku.toLowerCase().includes(q) || a.model.toLowerCase().includes(q))
+        );
+      });
+
+      const container = document.getElementById("criteria-rows-container");
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center space-y-1.5 bg-white">
+            <p class="text-sm font-semibold text-slate-800">No criteria match your active filter</p>
+            <p class="text-xs text-slate-500">Reset the status pill, pillar dropdown, or search keyword to view all 8 LPR criteria.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(c => {
+        const isExpanded = state.expandedCriteria.has(c.id);
+        const theme = getSemanticTheme(c.passRate);
+        const isZeroDeduction = Math.abs(c.deduction) < 0.05;
+        const deductionCls = isZeroDeduction
+          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+          : c.passRate < 70
+          ? "bg-rose-50 text-rose-700 border-rose-200"
+          : "bg-amber-50 text-amber-800 border-amber-200";
+        const deductionText = isZeroDeduction ? "0.0 pts" : `${c.deduction.toFixed(1)} pts`;
+
+        return `
+          <div class="bg-white transition">
+            <!-- Clickable Summary Row -->
+            <div
+              onclick="toggleCriterionDrawer('${c.id}')"
+              class="px-4 sm:px-5 py-4 hover:bg-slate-50/80 transition cursor-pointer grid grid-cols-1 md:grid-cols-12 gap-3 items-center"
+            >
+              <!-- Col 1-5: Criterion ID + Title + Pillar Tag -->
+              <div class="md:col-span-5 space-y-1.5 min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[11px] font-bold text-slate-800 tabular-nums">
+                    ${c.id}
+                  </span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border ${theme.badgeCls}">
+                    ${theme.label}
+                  </span>
+                  <span class="text-[11px] font-medium text-[#0284C7] truncate">
+                    ${c.pillar}
+                  </span>
+                </div>
+                <h3 class="text-xs sm:text-sm font-semibold text-slate-900 leading-snug">
+                  ${escapeHtml(c.title)}
+                </h3>
+              </div>
+
+              <!-- Col 6: Rule Weight -->
+              <div class="md:col-span-1 flex md:justify-center items-center gap-2 text-xs tabular-nums">
+                <span class="md:hidden text-slate-400">Weight:</span>
+                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-semibold border border-slate-200/80">
+                  ${c.weight} pts
+                </span>
+              </div>
+
+              <!-- Col 7-10: Retailer Assortment Pass Rate + Horizontal Bar -->
+              <div class="md:col-span-4 space-y-1.5">
+                <div class="flex items-center justify-between text-xs tabular-nums">
+                  <span class="text-slate-600 font-medium">${c.passedCount} / ${c.totalCount} listings</span>
+                  <span class="font-bold text-slate-900">${c.passRate.toFixed(1)}%</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                  <div class="bar-animate h-full rounded-full ${theme.barCls}" style="width: ${c.passRate}%"></div>
+                </div>
+              </div>
+
+              <!-- Col 11-12: Score Deduction + Expand Chevron -->
+              <div class="md:col-span-2 flex items-center justify-between md:justify-end gap-2.5 tabular-nums">
+                <span class="md:hidden text-xs text-slate-400">Score Impact:</span>
+                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold border ${deductionCls}">
+                  ${deductionText}
+                </span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform shrink-0 ${isExpanded ? 'rotate-180 text-[#0284C7]' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Expandable Retailer Evidence Drawer -->
+            ${isExpanded ? `
+              <div class="px-4 sm:px-5 pb-4 pt-1 bg-slate-50/70 border-t border-slate-100">
+                <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3.5 shadow-2xs">
+                  <!-- Aggregate Retailer Pattern -->
+                  <div class="space-y-1">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Aggregate Retailer Pattern (${r.name})</div>
+                    <p class="text-xs text-slate-700 leading-relaxed">${escapeHtml(c.pattern)}</p>
+                  </div>
+
+                  <!-- Rule Check Logic (rules.py) -->
+                  <div class="p-2.5 rounded-lg bg-[#0F172A] text-slate-200 space-y-1">
+                    <div class="text-[10px] font-semibold uppercase tracking-wider text-[#38BDF8]">Rule Check Logic (rules.py)</div>
+                    <div class="font-mono text-[11px] text-emerald-300 overflow-x-auto">${escapeHtml(c.ruleLogic)}</div>
+                  </div>
+
+                  <!-- Affected Listings Sample (Drill-Down Evidence) -->
+                  <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                        ${isZeroDeduction ? "Verified Benchmark Listing Sample" : `Affected Listings Sample (${c.totalCount - c.passedCount} failing on ${r.name})`}
+                      </span>
+                      <span class="text-[11px] text-slate-400">Supporting evidence for retailer score</span>
+                    </div>
+
+                    <div class="divide-y divide-slate-200 rounded-lg border border-slate-200 overflow-hidden text-xs">
+                      ${c.affectedListings.map(item => `
+                        <div class="px-3 py-2 bg-slate-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                          <div class="flex items-center gap-2 min-w-0">
+                            <span class="px-1.5 py-0.5 rounded bg-white border border-slate-200 font-mono text-[11px] font-semibold text-slate-700 tabular-nums shrink-0">
+                              ${item.sku}
+                            </span>
+                            <span class="font-semibold text-slate-900 truncate">${escapeHtml(item.model)}</span>
+                          </div>
+                          <span class="text-[11px] ${isZeroDeduction ? 'text-emerald-700' : 'text-rose-700'} font-medium">
+                            ${escapeHtml(item.detail)}
+                          </span>
+                        </div>
+                      `).join("")}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ` : ""}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function getRetailerAssortmentRows() {
+      const r = getRetailer();
+      const missingSet = new Set(r.missingSkus);
+      const issueSet = new Set(r.issueSkus);
+
+      return TARGET_ASSORTMENT_48.map((prod, idx) => {
+        if (missingSet.has(prod.sku)) {
+          return {
+            ...prod,
+            status: "missing",
+            statusLabel: "Missing Gap",
+            health: null,
+            note: `Not listed in ${r.domain} crawled catalog`
+          };
+        }
+        if (issueSet.has(prod.sku)) {
+          const sampleHealth = r.id === "amazon" ? 61 + (idx % 18) : 74 + (idx % 14);
+          return {
+            ...prod,
+            status: "issues",
+            statusLabel: "Listed · Issues",
+            health: sampleHealth,
+            note: r.id === "amazon"
+              ? "Missing EPREL PDF / truncated H1 or specs"
+              : "Missing CAD schematic or 2024 PDF revision"
+          };
+        }
+        const compliantHealth = 92 + (idx % 8);
+        return {
+          ...prod,
+          status: "compliant",
+          statusLabel: "Listed · Compliant",
+          health: compliantHealth,
+          note: "All LPR naming, EU label & gallery checks passed"
+        };
+      });
+    }
+
+    function renderAssortmentTab() {
+      const r = getRetailer();
+      const rows = getRetailerAssortmentRows();
+
+      const compliantCnt = rows.filter(x => x.status === "compliant").length;
+      const issuesCnt = rows.filter(x => x.status === "issues").length;
+      const missingCnt = rows.filter(x => x.status === "missing").length;
+
+      // KPI Strip
+      document.getElementById("assortment-kpi-strip").innerHTML = `
+        <div class="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-medium text-slate-500">Listed &amp; Compliant (&gt;=90%)</div>
+            <div class="text-lg font-bold text-emerald-700 tabular-nums mt-0.5">${compliantCnt} SKUs</div>
+          </div>
+          <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 tabular-nums">
+            ${Math.round((compliantCnt / 48) * 100)}%
+          </span>
+        </div>
+        <div class="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-medium text-slate-500">Listed with LPR Issues</div>
+            <div class="text-lg font-bold text-amber-800 tabular-nums mt-0.5">${issuesCnt} SKUs</div>
+          </div>
+          <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 tabular-nums">
+            ${Math.round((issuesCnt / 48) * 100)}%
+          </span>
+        </div>
+        <div class="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-medium text-slate-500">Missing from Retailer Catalog</div>
+            <div class="text-lg font-bold text-rose-700 tabular-nums mt-0.5">${missingCnt} SKUs</div>
+          </div>
+          <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200 tabular-nums">
+            ${Math.round((missingCnt / 48) * 100)}%
+          </span>
+        </div>
+      `;
+
+      // Filter Pills
+      const pills = [
+        { key: "all", label: `All Target SKUs (48)` },
+        { key: "compliant", label: `Compliant (${compliantCnt})` },
+        { key: "issues", label: `With Issues (${issuesCnt})` },
+        { key: "missing", label: `Missing Gaps (${missingCnt})` }
+      ];
+
+      document.getElementById("assortment-status-pills").innerHTML = pills.map(p => {
+        const active = state.assortmentStatusFilter === p.key;
+        const cls = active
+          ? "bg-white text-slate-900 font-semibold shadow-2xs"
+          : "text-slate-600 hover:text-slate-900 font-medium";
+        return `
+          <button
+            onclick="setAssortmentStatusFilter('${p.key}')"
+            class="px-2.5 py-1 rounded-md text-xs tabular-nums transition cursor-pointer ${cls}"
+          >
+            ${p.label}
+          </button>
+        `;
+      }).join("");
+
+      const q = state.assortmentSearch.trim().toLowerCase();
+      const filtered = rows.filter(item => {
+        if (state.assortmentStatusFilter !== "all" && item.status !== state.assortmentStatusFilter) return false;
+        if (state.assortmentCategoryFilter !== "ALL" && item.category !== state.assortmentCategoryFilter) return false;
+        if (!q) return true;
+        return item.sku.toLowerCase().includes(q) || item.model.toLowerCase().includes(q) || item.category.toLowerCase().includes(q);
+      });
+
+      const tbody = document.getElementById("assortment-table-body");
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 px-4 text-center text-slate-500">
+              No target SKUs match the selected filter criteria.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => {
+        const statusCls = item.status === "compliant"
+          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+          : item.status === "issues"
+          ? "bg-amber-50 text-amber-800 border-amber-200"
+          : "bg-rose-50 text-rose-700 border-rose-200";
+
+        const healthHtml = item.health !== null
+          ? `<span class="font-bold tabular-nums ${item.health >= 90 ? 'text-emerald-700' : item.health >= 70 ? 'text-amber-800' : 'text-rose-700'}">${item.health}%</span>`
+          : `<span class="text-slate-400 font-medium">—</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition">
+            <td class="py-2.5 px-4 font-mono text-[11px] font-semibold text-slate-700 tabular-nums whitespace-nowrap">${item.sku}</td>
+            <td class="py-2.5 px-3 font-semibold text-slate-900">${escapeHtml(item.model)}</td>
+            <td class="py-2.5 px-3 text-slate-600 whitespace-nowrap">
+              <span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[11px] font-medium">${item.category}</span>
+            </td>
+            <td class="py-2.5 px-3 whitespace-nowrap">
+              <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold border ${statusCls}">
+                ${item.statusLabel}
+              </span>
+            </td>
+            <td class="py-2.5 px-3 whitespace-nowrap">${healthHtml}</td>
+            <td class="py-2.5 px-4 text-[11px] text-slate-500">${escapeHtml(item.note)}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderSimulatorCard() {
+      const r = getRetailer();
+      const baseScore = r.score;
+
+      let totalLift = 0;
+      r.simulatorActions.forEach(act => {
+        if (state.checkedSimIds.has(act.id)) {
+          totalLift += act.lift;
+        }
+      });
+
+      const projected = Math.min(100, baseScore + totalLift);
+
+      document.getElementById("sim-base-score").textContent = `${baseScore.toFixed(1)}%`;
+      const projEl = document.getElementById("sim-projected-score");
+      projEl.textContent = `${projected.toFixed(1)}%`;
+      projEl.classList.remove("lift-pulse");
+      void projEl.offsetWidth;
+      projEl.classList.add("lift-pulse");
+
+      const deltaPill = document.getElementById("sim-delta-pill");
+      deltaPill.textContent = `+${totalLift.toFixed(1)} pts`;
+      deltaPill.className = totalLift > 0
+        ? "px-2 py-0.5 rounded-full text-xs font-bold bg-sky-500/20 text-[#38BDF8] border border-sky-400/40"
+        : "px-2 py-0.5 rounded-full text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700";
+
+      document.getElementById("sim-bar-base").style.width = `${baseScore}%`;
+      document.getElementById("sim-bar-lift").style.width = `${Math.min(100 - baseScore, totalLift)}%`;
+
+      document.getElementById("simulator-actions-list").innerHTML = r.simulatorActions.map(act => {
+        const isChecked = state.checkedSimIds.has(act.id);
+        const cardCls = isChecked
+          ? "border-[#0284C7] bg-sky-50/50"
+          : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/70";
+
+        return `
+          <label class="p-3 rounded-xl border transition flex items-start gap-2.5 cursor-pointer select-none ${cardCls}">
+            <input
+              type="checkbox"
+              ${isChecked ? "checked" : ""}
+              onchange="toggleSimAction('${act.id}')"
+              class="mt-0.5 w-4 h-4 rounded border-slate-300 text-[#0284C7] focus:ring-[#0284C7] cursor-pointer"
+            />
+            <div class="min-w-0 flex-1 space-y-1">
+              <div class="text-xs font-semibold text-slate-900 leading-snug">${escapeHtml(act.title)}</div>
+              <div class="flex flex-wrap items-center justify-between gap-1 text-[11px] tabular-nums">
+                <span class="text-slate-500">${act.ruleRef} · ${act.affectedText}</span>
+                <span class="px-1.5 py-0.2 rounded font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  +${act.lift.toFixed(1)} pts
+                </span>
+              </div>
+            </div>
+          </label>
+        `;
+      }).join("");
+    }
+
+    function renderTrendCard() {
+      const r = getRetailer();
+      const points = r.trend;
+      const benchmark = 80.5;
+
+      // SVG Coordinate System: width 320, height 150
+      const W = 320;
+      const H = 150;
+      const padL = 32;
+      const padR = 18;
+      const padT = 18;
+      const padB = 26;
+      const minVal = 55;
+      const maxVal = 100;
+
+      const xStep = (W - padL - padR) / (points.length - 1);
+      const getX = i => padL + i * xStep;
+      const getY = val => padT + ((maxVal - val) / (maxVal - minVal)) * (H - padT - padB);
+
+      const coords = points.map((pt, i) => ({
+        x: getX(i),
+        y: getY(pt.score),
+        label: pt.cycle,
+        score: pt.score
+      }));
+
+      const linePath = coords.map((c, i) => `${i === 0 ? "M" : "L"} ${c.x.toFixed(1)} ${c.y.toFixed(1)}`).join(" ");
+      const areaPath = `${linePath} L ${coords[coords.length - 1].x.toFixed(1)} ${(H - padB).toFixed(1)} L ${coords[0].x.toFixed(1)} ${(H - padB).toFixed(1)} Z`;
+      const benchY = getY(benchmark).toFixed(1);
+
+      const lineColor = r.score >= 90 ? "#10B981" : r.score >= 70 ? "#0284C7" : "#F43F5E";
+
+      document.getElementById("trend-chart-container").innerHTML = `
+        <svg viewBox="0 0 ${W} ${H}" class="w-full h-auto overflow-visible select-none">
+          <defs>
+            <linearGradient id="trendAreaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.22" />
+              <stop offset="100%" stop-color="${lineColor}" stop-opacity="0.0" />
+            </linearGradient>
+          </defs>
+
+          <!-- Horizontal Grid Lines (60%, 80%, 100%) -->
+          ${[60, 80, 100].map(g => {
+            const gy = getY(g).toFixed(1);
+            return `
+              <line x1="${padL}" y1="${gy}" x2="${W - padR}" y2="${gy}" stroke="#E2E8F0" stroke-width="1" />
+              <text x="${padL - 6}" y="${Number(gy) + 3}" text-anchor="end" fill="#94A3B8" font-size="9" font-family="Inter, sans-serif">${g}%</text>
+            `;
+          }).join("")}
+
+          <!-- DACH Retailer Average Benchmark Line (80.5%) -->
+          <line x1="${padL}" y1="${benchY}" x2="${W - padR}" y2="${benchY}" stroke="#F59E0B" stroke-width="1.3" stroke-dasharray="4 3" />
+          <text x="${W - padR}" y="${Number(benchY) - 4}" text-anchor="end" fill="#B45309" font-size="8.5" font-weight="600" font-family="Inter, sans-serif">
+            DACH Avg 80.5%
+          </text>
+
+          <!-- Area Fill & Score Line -->
+          <path d="${areaPath}" fill="url(#trendAreaGrad)" />
+          <path d="${linePath}" fill="none" stroke="${lineColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+
+          <!-- Data Points & Labels -->
+          ${coords.map((c, idx) => {
+            const isLast = idx === coords.length - 1;
+            return `
+              <circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="${isLast ? 4.5 : 3.5}" fill="#FFFFFF" stroke="${lineColor}" stroke-width="2.2" />
+              <text x="${c.x.toFixed(1)}" y="${(c.y - 8).toFixed(1)}" text-anchor="middle" fill="#0F172A" font-size="9.5" font-weight="${isLast ? '700' : '600'}" font-family="Inter, sans-serif">
+                ${c.score.toFixed(1)}%
+              </text>
+              <text x="${c.x.toFixed(1)}" y="${H - 6}" text-anchor="middle" fill="${isLast ? '#0F172A' : '#64748B'}" font-size="9" font-weight="${isLast ? '700' : '500'}" font-family="Inter, sans-serif">
+                ${c.label}
+              </text>
+            `;
+          }).join("")}
+        </svg>
+      `;
+
+      document.getElementById("trend-cycles-grid").innerHTML = points.map((pt, idx) => {
+        const isLast = idx === points.length - 1;
+        return `
+          <div class="p-1.5 rounded-lg ${isLast ? 'bg-sky-50 border border-sky-200' : 'bg-slate-50'}">
+            <div class="text-[10px] text-slate-400 font-medium">${pt.cycle}</div>
+            <div class="text-xs font-bold ${isLast ? 'text-[#0284C7]' : 'text-slate-800'}">${pt.score.toFixed(1)}%</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // -----------------------------------------------------------------------
+    // 5. INTERACTION HANDLERS
+    // -----------------------------------------------------------------------
+    function switchRetailer(retailerId) {
+      state.activeRetailerId = retailerId;
+      state.checkedSimIds.clear();
+      state.criteriaStatusFilter = "all";
+      state.criteriaPillarFilter = "ALL";
+      state.criteriaSearch = "";
+      document.getElementById("criteria-pillar-select").value = "ALL";
+      document.getElementById("criteria-search-input").value = "";
+
+      // Auto-expand the top 2 failing criteria for the newly selected retailer
+      const r = getRetailer();
+      const topDrags = [...r.criteria]
+        .sort((a, b) => a.deduction - b.deduction)
+        .slice(0, 2)
+        .map(c => c.id);
+      state.expandedCriteria = new Set(topDrags);
+
+      renderAll();
+      showToast(`Switched scorecard to ${r.name} (${r.score}% LPR Score)`);
+    }
+
+    function switchWorkspaceTab(tab) {
+      state.activeWorkspaceTab = tab;
+      const btnCrit = document.getElementById("tab-btn-criteria");
+      const btnAssort = document.getElementById("tab-btn-assortment");
+      const panelCrit = document.getElementById("panel-criteria");
+      const panelAssort = document.getElementById("panel-assortment");
+      const hint = document.getElementById("tab-context-hint");
+
+      if (tab === "criteria") {
+        btnCrit.className = "px-3.5 py-2.5 text-xs font-semibold border-b-2 border-[#0284C7] text-[#0284C7] bg-white rounded-t-lg transition cursor-pointer";
+        btnAssort.className = "px-3.5 py-2.5 text-xs font-medium border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition cursor-pointer";
+        panelCrit.classList.remove("hidden");
+        panelAssort.classList.add("hidden");
+        hint.textContent = "Click any criterion row to inspect failing SKUs & DOM patterns";
+      } else {
+        btnAssort.className = "px-3.5 py-2.5 text-xs font-semibold border-b-2 border-[#0284C7] text-[#0284C7] bg-white rounded-t-lg transition cursor-pointer";
+        btnCrit.className = "px-3.5 py-2.5 text-xs font-medium border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition cursor-pointer";
+        panelAssort.classList.remove("hidden");
+        panelCrit.classList.add("hidden");
+        hint.textContent = "Tracking 48 target SKUs from Relevant_Assortment_2026";
+      }
+    }
+
+    function setCriteriaStatusFilter(mode) {
+      state.criteriaStatusFilter = mode;
+      renderCriteriaTab();
+    }
+
+    function updateCriteriaPillarFilter(val) {
+      state.criteriaPillarFilter = val;
+      renderCriteriaTab();
+    }
+
+    function updateCriteriaSearch(val) {
+      state.criteriaSearch = val;
+      renderCriteriaTab();
+    }
+
+    function toggleCriterionDrawer(ruleId) {
+      if (state.expandedCriteria.has(ruleId)) {
+        state.expandedCriteria.delete(ruleId);
+      } else {
+        state.expandedCriteria.add(ruleId);
+      }
+      renderCriteriaTab();
+    }
+
+    function setAssortmentStatusFilter(mode) {
+      state.assortmentStatusFilter = mode;
+      renderAssortmentTab();
+    }
+
+    function updateAssortmentCategoryFilter(val) {
+      state.assortmentCategoryFilter = val;
+      renderAssortmentTab();
+    }
+
+    function updateAssortmentSearch(val) {
+      state.assortmentSearch = val;
+      renderAssortmentTab();
+    }
+
+    function toggleSimAction(simId) {
+      if (state.checkedSimIds.has(simId)) {
+        state.checkedSimIds.delete(simId);
+      } else {
+        state.checkedSimIds.add(simId);
+      }
+      renderSimulatorCard();
+    }
+
+    function resetSimulator() {
+      state.checkedSimIds.clear();
+      renderSimulatorCard();
+      showToast("Score Lift Simulator reset");
+    }
+
+    function toggleMockupNotes(enabled) {
+      state.mockupNotes = enabled;
+      document.body.classList.toggle("show-mockup-notes", enabled);
+      showToast(enabled ? "Mockup architectural data notes enabled" : "Mockup notes hidden");
+    }
+
+    function simulateRecrawl() {
+      const btn = document.getElementById("btn-recrawl");
+      const spinner = document.getElementById("recrawl-spinner");
+      const text = document.getElementById("recrawl-text");
+      const hero = document.getElementById("retailer-hero-card");
+
+      btn.disabled = true;
+      spinner.classList.add("animate-spin");
+      text.textContent = "Re-crawling Assortment...";
+      hero.classList.add("opacity-60");
+
+      setTimeout(() => {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, "0");
+        const mm = String(now.getMinutes()).padStart(2, "0");
+        const r = getRetailer();
+        r.lastCrawled = `Nov 17, 2026 · ${hh}:${mm} CET (Just now)`;
+
+        document.getElementById("hero-last-crawled").textContent = r.lastCrawled;
+        btn.disabled = false;
+        spinner.classList.remove("animate-spin");
+        text.textContent = "Simulate Re-crawl";
+        hero.classList.remove("opacity-60");
+
+        showToast(`Re-crawl completed for ${r.name} (${r.listedCount}/${r.totalTargetSkus} SKUs)`);
+      }, 850);
+    }
+
+    function handleNavClick(tabName) {
+      const banner = document.getElementById("route-banner");
+      const msg = document.getElementById("route-banner-msg");
+
+      document.querySelectorAll(".nav-item").forEach(btn => {
+        const isMatch = btn.getAttribute("data-nav") === tabName;
+        if (btn.closest(".hidden.md\\:flex")) {
+          btn.className = isMatch
+            ? "nav-item h-full px-3 inline-flex items-center text-xs font-semibold border-b-2 border-[#0284C7] text-white transition cursor-pointer"
+            : "nav-item h-full px-3 inline-flex items-center text-xs font-medium border-b-2 border-transparent text-slate-400 hover:text-white transition cursor-pointer";
+        } else {
+          btn.className = isMatch
+            ? "nav-item px-2.5 py-1 rounded bg-[#0284C7] text-white font-semibold whitespace-nowrap cursor-pointer"
+            : "nav-item px-2.5 py-1 rounded text-slate-400 hover:text-white whitespace-nowrap cursor-pointer";
+        }
+      });
+
+      if (tabName === "Retailer Scorecards") {
+        banner.classList.add("hidden");
+      } else {
+        msg.textContent = SIBLING_ROUTE_INFO[tabName] || `${tabName} view preview.`;
+        banner.classList.remove("hidden");
+      }
+    }
+
+    function copyDomainUrl() {
+      const domain = "https://www." + getRetailer().domain;
+      const temp = document.createElement("textarea");
+      temp.value = domain;
+      document.body.appendChild(temp);
+      temp.select();
+      try {
+        document.execCommand("copy");
+        showToast(`Copied ${domain}`);
+      } catch (e) {
+        showToast(domain);
+      }
+      document.body.removeChild(temp);
+    }
+
+    function showToast(message) {
+      const stack = document.getElementById("toast-stack");
+      const toast = document.createElement("div");
+      toast.className = "pointer-events-auto flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#0F172A] text-white text-xs font-medium shadow-lg border border-slate-700 transition-opacity duration-300";
+      toast.innerHTML = `
+        <span class="w-1.5 h-1.5 rounded-full bg-[#38BDF8]"></span>
+        <span>${escapeHtml(message)}</span>
+      `;
+      stack.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => toast.remove(), 300);
+      }, 2400);
+    }
+
+    // Initialize UI on Load
+    window.addEventListener("DOMContentLoaded", () => {
+      renderAll();
+    });
+  </script>
+</body>
+</html>

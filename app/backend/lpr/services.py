@@ -60,7 +60,8 @@ def run_summary(run: AuditRun | None, prev: AuditRun | None = None) -> dict | No
         "checked_count": run.checked_count, "applicable_count": run.applicable_count,
         "return_risk_count": run.return_risk_count, "reference_count": run.reference_count,
         "listed_count": run.listed_count, "available_count": run.available_count,
-        "block_scores": run.block_scores, "error": run.error, "status_label": status_label(run),
+        "block_scores": run.block_scores, "sk_scores": run.sk_scores, "brand_page_url": run.brand_page_url,
+        "error": run.error, "status_label": status_label(run),
     }
 
 
@@ -89,11 +90,43 @@ def rescore(s: Session, run_id: int) -> AuditRun:
     run = s.get(AuditRun, run_id)
     verdicts = s.exec(select(Verdict).where(Verdict.run_id == run_id)).all()
     crit = {c.id: c for c in s.exec(select(Criterion)).all()}
-    for k, v in score(verdicts, crit).items():
+    sk_of = {p.id: p.sk for p in s.exec(select(Product)).all()}
+    for k, v in score(verdicts, crit, sk_of).items():
         setattr(run, k, v)
     s.add(run)
     s.commit()
     return run
+
+
+ASSET_LINKS = {  # rule_key -> which official Liebherr assets help to fix it (feature #24 "one-click asset recovery")
+    "official_images": ("images", "Official product images"),
+    "energy_label_and_sheet": ("energy_label_2021|eu_product_fiche", "Energy label / EU product data sheet"),
+    "manual_available": ("operating_instructions", "Operating instructions"),
+    "videos_present": ("videos", "Liebherr feature videos"),
+    "dimensions_text": ("dimensional_drawing|spec_sheet", "Dimensional drawing / spec sheet"),
+    "tech_data_complete": ("spec_sheet", "Spec sheet"),
+    "hinge_and_handle": ("spec_sheet", "Spec sheet"),
+    "key_features_count": ("features", "Official feature texts and images"),
+    "ai_feature_benefits": ("features", "Official feature texts and images"),
+}
+
+
+def asset_links(rule_key: str | None, product: Product | None) -> list[dict]:
+    if not product or rule_key not in ASSET_LINKS:
+        return []
+    keys, label = ASSET_LINKS[rule_key]
+    data = product.data or {}
+    out = []
+    for k in keys.split("|"):
+        if k == "images":
+            out += [{"label": f"{label} {i + 1}", "url": u} for i, u in enumerate((data.get("images") or [])[:3])]
+        elif k == "videos":
+            out += [{"label": f"Video: {v['feature']}", "url": v["url"]} for v in (data.get("videos") or [])[:4]]
+        elif k == "features":
+            out += [{"label": f"Feature image: {f['title']}", "url": f["image"]} for f in (data.get("key_features") or [])[:5] if f.get("image")]
+        elif (data.get("documents") or {}).get(k):
+            out.append({"label": f"{label} ({k.replace('_', ' ')})", "url": data["documents"][k]})
+    return out
 
 
 def todo_list(s: Session, run_id: int) -> list[dict]:
@@ -104,7 +137,10 @@ def todo_list(s: Session, run_id: int) -> list[dict]:
             continue
         c = v["criterion"]
         g = groups.setdefault(c["id"], {"criterion": c, "products": [], "suggested_fix": v["suggested_fix"],
-                                        "due_date": v["due_date"], "evidence": [], "verdict_ids": []})
+                                        "due_date": v["due_date"], "evidence": [], "verdict_ids": [], "assets": []})
+        if v["product"] and not g["assets"]:
+            crit_row = s.get(Criterion, c["id"])
+            g["assets"] = asset_links(crit_row.rule_key if crit_row else None, s.get(Product, v["product"]["id"]))
         g["products"].append(v["product"]["model"] if v["product"] else None)
         g["verdict_ids"].append(v["id"])
         g["evidence"].append({"product": v["product"]["model"] if v["product"] else None,
@@ -133,7 +169,7 @@ def retailer_overview(s: Session, retailer: Retailer) -> dict:
         g["criterion"] = v["criterion"]
         st = v["status"]
         g["pass" if st == "pass" else "fail" if st == "fail" else "other"] += 1
-        g["verdicts"].append({k: v[k] for k in ("id", "status", "reasoning", "screenshot_url", "product", "source")})
+        g["verdicts"].append({k: v[k] for k in ("id", "status", "original_status", "reasoning", "screenshot_url", "product", "source", "confidence", "evidence", "overridden", "override_by", "override_comment", "suggested_fix", "due_date")})
         if st == "fail" and v["criterion"]["return_risk"]:
             out["return_risks"].append({"criterion": v["criterion"]["title"], "code": v["criterion"]["code"],
                                         "product": v["product"]["model"] if v["product"] else None,

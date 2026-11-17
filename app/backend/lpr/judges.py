@@ -106,3 +106,41 @@ def run_judge(kind: str, ctx: CheckContext, criteria: list[Criterion], tool_fact
         out[c.id] = CheckResult(status, j.reasoning, {"quotes": j.evidence, "ai_verdict": j.verdict, "judge": kind},
                                 j.confidence, source="ai")
     return out
+
+
+def run_verify(ctx: CheckContext, criteria: list[Criterion], rule_results: dict[int, CheckResult],
+               tiles: list[Path]) -> dict[int, CheckResult]:
+    """Escalation: the rule check did not find the information in the page text. The vision judge looks at
+    screenshots of the WHOLE page (tiles, top to bottom). Found -> pass; not found -> the rule fail is confirmed."""
+    provider = get_provider()
+    if not provider.available:
+        return {}
+    blocks = "\n\n".join(
+        f"### {c.code}: {c.title}\nThe text rule reported: {rule_results[c.id].reasoning}\n"
+        "Is this information VISIBLY present anywhere on the page screenshots? PASS if you can see it "
+        "(quote where), FAIL if it is not there, UNSURE if unreadable." for c in criteria)
+    prompt = (f"{ROLE['vision']}\nYou get {len(tiles)} screenshots of the same page, from top to bottom.\n"
+              "An automatic text check could not find some information. Double-check each item below.\n\n"
+              f"## Product\n{_product_facts(ctx)}\n\n## Items to verify\n{blocks}")
+    try:
+        batch: BatchJudgement = provider.judge(prompt, tiles, schema=BatchJudgement)
+    except Exception:
+        return {}  # keep the rule results
+    out = {}
+    by_code = {r.code.strip().upper(): r for r in batch.results}
+    for c in criteria:
+        j = by_code.get(c.code.upper())
+        rule = rule_results[c.id]
+        if j is None:
+            continue
+        ev = {**rule.evidence, "escalated": True, "vision_verdict": j.verdict, "vision_quotes": j.evidence}
+        if j.verdict == "pass" and j.confidence >= settings.AI_CONFIDENCE_THRESHOLD:
+            out[c.id] = CheckResult("pass", "Not found in the page text, but the vision judge found it on the page: "
+                                    f"{j.reasoning}", ev, j.confidence, source="ai")
+        elif j.verdict == "fail":
+            out[c.id] = CheckResult("fail", f"{rule.reasoning} Confirmed by the vision judge on the full page.",
+                                    ev, max(j.confidence, 0.8), source="rule")
+        else:
+            out[c.id] = CheckResult("needs_human", f"{rule.reasoning} The vision judge could not confirm it either way.",
+                                    ev, j.confidence, source="ai")
+    return out

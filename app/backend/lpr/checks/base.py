@@ -18,6 +18,7 @@ class CheckContext:
     robots_txt: str | None = None
     image_info: list[dict] = field(default_factory=list)
     screenshot_path: str | None = None
+    fullpage_path: str | None = None
     feedback_examples: list[dict] = field(default_factory=list)
 
 

@@ -17,15 +17,15 @@ All paths relative to `Hackathon 2026/`.
 - Use: expected specs per model, official image URLs for image matching (perceptual hash), official feature list for "≥5 key features", document checks.
 
 ## 2. Assortment 2026 (SK classes, prices)
-`4_Relevant_Assortment_2026_Liebherr.xlsx` (root and in package). Sheet "Artikelstamm HH VKHB 2026", 369 rows, 59 cols, German headers.
+`docs/challenge/Liebherr_Challenge_Package/4_Relevant_Assortment_2026_Liebherr.xlsx`. Sheet "Artikelstamm HH VKHB 2026", 369 rows, 59 cols, German headers.
 - Col G `Vertriebsartikel` (e.g. `Re 1200 001 20`), col H `Verkaufsbezeichnung` (`Re 1200-20` — matches CSV `SalesArticleDisplay`), EAN col F.
 - **Col R (index 17) `Sortimentsklasse` = SK**: values '1','2','3' (+ some ints 2/3), '-' (50, none), 'frei' (7). Normalise to str.
 - Col Q `Kalkulationsgruppe`: 1–3 built-in SK1–3, 4–6 freestanding SK1–3, 7 accessories, 0 SK-free.
 - Also: UVP price (list price from 01.02.2026), Neuheit/Auslauf (new/discontinued), series, dimensions, volumes, energy class, noise.
 
 ## 3. LPR criteria
-- `Liebherr_Challenge_Package/3_LPR_Online_Assessment_2024_CUSTOMER_EN.xlsx` → flattened to `knowledge_criteria_raw.txt` (91 lines: section | criterion | subsection | SK relevance | question | comment). Plain-language version with automatability tags: `knowledge/briefing.md` §5.
-- Slide deck with explanations: `Liebherr_Challenge_Package/2_Introduction_LPR_Online_EN_2.pdf` (64 slides).
+- `docs/challenge/Liebherr_Challenge_Package/3_LPR_Online_Assessment_2024_CUSTOMER_EN.xlsx` → flattened to `knowledge/knowledge_criteria_raw.txt` (91 lines: section | criterion | subsection | SK relevance | question | comment). Plain-language version with automatability tags: `knowledge/briefing.md` §5.
+- Slide deck with explanations: `docs/challenge/Liebherr_Challenge_Package/2_Introduction_LPR_Online_EN_2.pdf` (64 slides).
 
 ## 4. Brand page assets (2026_09 "EmpCo-Update")
 `data/brand_assets/2026_09_LPR-Markenseiten_Assets_EmpCo-Update/` (videos removed; originals in zip 6):
@@ -40,8 +40,8 @@ All paths relative to `Hackathon 2026/`.
 - `2026_09_Übersicht_Update_Bilder-Videos-PDFs.pdf` = overview of what changed; `Liebherr_YouTube-Videoübersicht.pdf` = YouTube video links.
 
 ## 5. Other
-- `zoom_transcript.txt` — kickoff Zoom (Liebherr part 00:47:50–01:04:30).
+- `knowledge/zoom_transcript.txt` — kickoff Zoom (Liebherr part 00:47:50–01:04:30).
 - `knowledge/research.md` — company/market/legal/AI-readiness research with sources.
-- `knowledge/briefing.md` — full plain-language briefing (also as `Liebherr_Briefing.pdf`).
-- `0_260413_Season School DeThi Paper Design Thinking*.pdf` — HNU's design thinking method (Schallmo/Williams/Lang) + Tim Brown HBR.
+- `knowledge/briefing.md` — full plain-language briefing (also as `docs/deliverables/Liebherr_Briefing.pdf`).
+- `docs/design-thinking/0_260413_Season School DeThi Paper Design Thinking*.pdf` — HNU's design thinking method (Schallmo/Williams/Lang) + Tim Brown HBR.
 - Retailer example brand pages (from guideline): expert Markenwelt, EURONICS Liebherr page, EP: Liebherr Markenwelt.

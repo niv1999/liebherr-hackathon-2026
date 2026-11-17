@@ -1,5 +1,6 @@
 // Builds Liebherr5_DesignThinking_Journey.pptx — light, visual, white & blue.
 // Run: APPLY_THEME=<pptx skill>/scripts/apply_theme.js NODE_PATH=<node_modules> node build_journey_deck.js out.pptx <imgdir>
+// Needs liebherr_logo.png (app/backend/lpr/reference/) and empathy.jpg in <imgdir>.
 const pptxgen = require("pptxgenjs");
 const path = require("path");
 const React = require("react");
@@ -12,17 +13,18 @@ const OUT = process.argv[2];
 const IMG = process.argv[3] || __dirname;
 
 const THEME = {
-  name: "Liebherr5 White Blue",
+  name: "Liebherr5 Liebherr Style",
   headFontFace: "Arial",
   bodyFontFace: "Calibri",
   colors: {
-    dk1: "1F2937", lt1: "FFFFFF", dk2: "0B2D5B", lt2: "EEF4FC",
-    accent1: "1F5FAD", accent2: "6B7280", accent3: "D6E3F5",
+    dk1: "1F1F1F", lt1: "FFFFFF", dk2: "1F1F1F", lt2: "F2F2F2",
+    accent1: "3A3A3A", accent2: "6E6E6E", accent3: "D9D9D9",
     accent4: "E5E7EB", accent5: "C2410C", accent6: "15803D",
-    hlink: "1F5FAD", folHlink: "6B7280",
+    hlink: "3A3A3A", folHlink: "6B7280",
   },
 };
 const H = THEME.colors;
+const YEL = "FFD000"; // Liebherr yellow accent
 
 async function icon(name, color) {
   const svg = ReactDOMServer.renderToStaticMarkup(React.createElement(fa[name], { color: "#" + color, size: 256 }));
@@ -54,13 +56,13 @@ async function icon(name, color) {
   const PH = ["Define Design Challenge", "Understand Design Challenge", "Define Viewpoints", "Generate Ideas", "Develop Prototypes", "Test Prototypes", "Integrate Prototype"];
   const T = (s, text, o) => s.addText(text, Object.assign({ margin: 0, isTextBox: true, valign: "top", color: C.text1, fontSize: 14 }, o));
   const dot = (s, n, x, y, d, filled) => {
-    s.addShape(pres.shapes.OVAL, { x, y, w: d, h: d, fill: { color: filled ? H.accent1 : H.lt1 }, line: { color: filled ? H.accent1 : H.accent3, width: 1.5 }, objectName: `Phase ${n}` });
-    T(s, String(n), { x, y, w: d, h: d, fontSize: d > 0.45 ? 16 : 11, bold: true, align: "center", valign: "middle", color: filled ? C.background1 : C.accent2 });
+    s.addShape(pres.shapes.OVAL, { x, y, w: d, h: d, fill: { color: filled ? YEL : H.lt1 }, line: { color: filled ? YEL : H.accent3, width: 1.5 }, objectName: `Phase ${n}` });
+    T(s, String(n), { x, y, w: d, h: d, fontSize: d > 0.45 ? 16 : 11, bold: true, align: "center", valign: "middle", color: filled ? C.text1 : C.accent2 });
   };
   const iconCircle = async (s, name, x, y, d, filled) => {
-    s.addShape(pres.shapes.OVAL, { x, y, w: d, h: d, fill: { color: filled ? H.accent1 : H.lt2 }, line: { color: filled ? H.accent1 : H.lt2 }, objectName: "Icon circle" });
+    s.addShape(pres.shapes.OVAL, { x, y, w: d, h: d, fill: { color: filled ? YEL : H.lt2 }, line: { color: filled ? YEL : H.lt2 }, objectName: "Icon circle" });
     const p = d * 0.27;
-    s.addImage({ data: await icon(name, filled ? H.lt1 : H.accent1), x: x + p, y: y + p, w: d - 2 * p, h: d - 2 * p, altText: name, objectName: "Icon" });
+    s.addImage({ data: await icon(name, filled ? H.dk1 : H.accent1), x: x + p, y: y + p, w: d - 2 * p, h: d - 2 * p, altText: name, objectName: "Icon" });
   };
   const card = (s, x, y, w, h, fill) => s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.1, fill: { color: fill || H.lt2 }, line: { color: fill || H.lt2 }, objectName: "Card" });
   const todoTag = (s, x, y) => {
@@ -82,8 +84,8 @@ async function icon(name, color) {
   // decorative circles (title + end)
   const deco = async (s) => {
     s.addShape(pres.shapes.OVAL, { x: 5.9, y: 0.85, w: 3.9, h: 3.9, fill: { color: H.lt2 }, line: { color: H.lt2 }, objectName: "Deco big" });
-    s.addShape(pres.shapes.OVAL, { x: 6.7, y: 1.65, w: 2.3, h: 2.3, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Deco circle" });
-    s.addImage({ data: await icon("FaMagnifyingGlassChart", H.lt1), x: 7.3, y: 2.25, w: 1.1, h: 1.1, altText: "Audit icon", objectName: "Deco icon" });
+    s.addShape(pres.shapes.OVAL, { x: 6.7, y: 1.65, w: 2.3, h: 2.3, fill: { color: YEL }, line: { color: YEL }, objectName: "Deco circle" });
+    s.addImage({ data: await icon("FaMagnifyingGlassChart", H.dk1), x: 7.3, y: 2.25, w: 1.1, h: 1.1, altText: "Audit icon", objectName: "Deco icon" });
   };
 
   // 1 — Title
@@ -94,14 +96,16 @@ async function icon(name, color) {
     T(s, "LIEBHERR CHALLENGE  ·  DESIGN THINKING", { x: 0.6, y: 0.8, w: 5.6, h: 0.3, fontSize: 11, bold: true, charSpacing: 2, color: C.accent1 });
     T(s, "Our Design Thinking journey", { x: 0.6, y: 1.4, w: 5.6, h: 1.6, fontSize: 36, bold: true, color: C.text2, valign: "bottom", fontFace: THEME.headFontFace });
     T(s, "Smarter webshop checks for Liebherr", { x: 0.6, y: 3.15, w: 5.6, h: 0.6, fontSize: 18, color: C.accent1 });
-    T(s, "Team Liebherr 5  ·  HNU Winter School 2026", { x: 0.6, y: 4.6, w: 5.6, h: 0.3, fontSize: 12, color: C.accent2 });
+    T(s, "CHALLENGE PARTNER", { x: 0.6, y: 3.95, w: 3, h: 0.25, fontSize: 9, bold: true, charSpacing: 2, color: C.accent2 });
+    s.addImage({ path: path.join(IMG, "liebherr_logo.png"), x: 0.6, y: 4.25, w: 1.8, h: 1.8 * 99 / 800, altText: "Liebherr logo", objectName: "Partner logo" });
+    T(s, "Team Liebherr 5  ·  HNU Winter School 2026", { x: 0.6, y: 4.75, w: 5.6, h: 0.3, fontSize: 12, color: C.accent2 });
   }
 
   // 2 — Journey
   {
     const s = slide("Where we are", null, "Intro");
     s.addShape(pres.shapes.LINE, { x: 0.95, y: 2.95, w: 7.8, h: 0, line: { color: H.accent3, width: 3 }, objectName: "Line" });
-    s.addShape(pres.shapes.LINE, { x: 0.95, y: 2.95, w: 5.2, h: 0, line: { color: H.accent1, width: 3 }, objectName: "Progress" });
+    s.addShape(pres.shapes.LINE, { x: 0.95, y: 2.95, w: 5.2, h: 0, line: { color: YEL, width: 3 }, objectName: "Progress" });
     for (let i = 0; i < 7; i++) {
       const x = 0.5 + i * 1.3;
       dot(s, i + 1, x + 0.15, 2.65, 0.6, i < 5);
@@ -171,7 +175,7 @@ async function icon(name, color) {
   // 6 — Phase 2 quote
   {
     const s = slide("What Liebherr told us", 2, "Phase 2");
-    T(s, "“", { x: 0.5, y: 1.2, w: 1, h: 1.2, fontSize: 96, bold: true, color: C.accent3, fontFace: "Cambria" });
+    T(s, "“", { x: 0.5, y: 1.2, w: 1, h: 1.2, fontSize: 96, bold: true, color: YEL, fontFace: "Cambria" });
     T(s, "When I give them 4% for pictures, then everyone should have the 4% for pictures.", { x: 1.3, y: 1.65, w: 7.6, h: 1.4, fontSize: 26, italic: true, color: C.text2, valign: "middle" });
     T(s, "Liebherr, kickoff call", { x: 1.3, y: 3.1, w: 6, h: 0.3, fontSize: 13, color: C.accent2 });
     card(s, 1.3, 3.75, 7.6, 0.85);

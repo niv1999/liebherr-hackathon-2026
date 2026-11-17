@@ -180,58 +180,96 @@ async function icon(name, color) {
     T(s, "Every rating must be fair and backed by proof.", { x: 2.3, y: 3.75, w: 6.4, h: 0.85, fontSize: 17, bold: true, color: C.text2, valign: "middle" });
   }
 
-  // 7 — Phase 3 Bob
+  // 7 — Phase 3: Bob persona
   pres.addSection({ title: "Phase 3" });
   {
     const s = slide("Meet Bob, our typical user", 3, "Phase 3");
-    s.addImage({ path: path.join(IMG, "empathy.jpg"), x: 0.5, y: 1.4, w: 4.4, h: 4.4 / 1.776, rounding: false, altText: "Photo of our User Empathy Map", objectName: "Empathy map photo" });
-    T(s, "Our User Empathy Map", { x: 0.5, y: 3.95, w: 4.4, h: 0.3, fontSize: 11, color: C.accent2 });
-    T(s, "Bob, 35", { x: 5.3, y: 1.4, w: 4.2, h: 0.45, fontSize: 22, bold: true, color: C.text2 });
-    T(s, "Checks retailer webshops for Liebherr", { x: 5.3, y: 1.85, w: 4.2, h: 0.3, fontSize: 13, color: C.accent2 });
-    const rows = [["FaFileExcel", "Spends his day in Excel"], ["FaFaceFrown", "Feels overwhelmed and burned out"], ["FaRobot", "Fears AI will replace him"]];
-    for (let i = 0; i < 3; i++) {
-      const y = 2.4 + i * 0.75;
-      await iconCircle(s, rows[i][0], 5.3, y, 0.55, false);
-      T(s, rows[i][1], { x: 6.0, y, w: 3.5, h: 0.55, fontSize: 15, valign: "middle" });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.35, w: 3.1, h: 2.0, rectRadius: 0.12, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Persona card" });
+    s.addShape(pres.shapes.OVAL, { x: 0.7, y: 1.55, w: 0.8, h: 0.8, fill: { color: H.lt1 }, line: { color: H.lt1 }, objectName: "Avatar" });
+    s.addImage({ data: await icon("FaUser", H.accent1), x: 0.9, y: 1.73, w: 0.4, h: 0.44, altText: "Bob", objectName: "Avatar icon" });
+    T(s, "Bob, 35", { x: 1.65, y: 1.6, w: 1.9, h: 0.4, fontSize: 22, bold: true, color: C.background1 });
+    T(s, "LPR auditor at Liebherr", { x: 1.65, y: 2.0, w: 1.9, h: 0.3, fontSize: 12, color: C.accent3 });
+    T(s, "Single, no children · 2-room flat · funny · loves board games", { x: 0.7, y: 2.55, w: 2.75, h: 0.7, fontSize: 12.5, color: C.background1 });
+    s.addImage({ path: path.join(IMG, "empathy.jpg"), x: 0.5, y: 3.5, w: 3.1, h: 3.1 / 1.776, altText: "Photo of our User Empathy Map", objectName: "Empathy map photo" });
+    const cards = [
+      ["FaUsers", "Relationships", "A lot of friends and a big family"],
+      ["FaUserGroup", "Influencers", "His older brother works in the same field. His best friend at work is the reason he stayed at the company."],
+      ["FaCat", "What he enjoys", "Playing with his cat, going to the pub, reading detective novels"],
+      ["FaHouse", "His environment", "At home: his room, his cat, the kitchen, city noise. At work: his office and his friend."],
+    ];
+    for (let i = 0; i < 4; i++) {
+      const col = i % 2, row = Math.floor(i / 2);
+      const x = 3.85 + col * 2.875, y = 1.35 + row * 1.85;
+      card(s, x, y, 2.775, 1.7);
+      await iconCircle(s, cards[i][0], x + 0.18, y + 0.18, 0.5, true);
+      T(s, cards[i][1], { x: x + 0.8, y: y + 0.18, w: 1.85, h: 0.5, fontSize: 14, bold: true, color: C.text2, valign: "middle" });
+      T(s, cards[i][2], { x: x + 0.18, y: y + 0.8, w: 2.45, h: 0.85, fontSize: 11.5 });
     }
   }
-
-  // 8 — Phase 3 needs
+  // 8 — Phase 3: Bob at work
   {
-    const s = slide("What Bob needs most", 3, "Phase 3");
-    const needs = [
-      ["FaRobot", "Automatic check of the criteria"], ["FaChartColumn", "One score per retailer"], ["FaChartLine", "Score history over time"],
-      ["FaBolt", "Much faster than by hand"], ["FaShieldHalved", "Data privacy and legal rules"], ["FaHandshake", "Confidence to defend a rating"],
+    const s = slide("Bob at work: what he sees, thinks and needs", 3, "Phase 3");
+    const cards = [
+      ["FaEye", "Sees", "A lot of Excel, all day long", false],
+      ["FaEarListen", "Hears", "Typing, phone calls, notifications on his phone", false],
+      ["FaCommentDots", "Says", "Complains about his job, and that AI will soon replace him", false],
+      ["FaCloudRain", "Thinks & feels", "Wants the workday to end so he can rest. A bit down, but still optimistic.", false],
+      ["FaTriangleExclamation", "Frustrations & worries", "Time-consuming work, burned out, overwhelmed. Biggest fear: being replaced by AI.", true],
+      ["FaBullseye", "Job to be done", "Feels stuck in his comfort zone. A new AI tool would give him more responsibility and new skills.", true],
     ];
     for (let i = 0; i < 6; i++) {
       const col = i % 3, row = Math.floor(i / 3);
-      const x = 0.5 + col * 3.05, y = 1.4 + row * 1.35;
-      card(s, x, y, 2.85, 1.15);
-      await iconCircle(s, needs[i][0], x + 0.2, y + 0.25, 0.65, true);
-      T(s, needs[i][1], { x: x + 1.0, y, w: 1.7, h: 1.15, fontSize: 14, bold: true, color: C.text2, valign: "middle" });
+      const x = 0.5 + col * 3.05, y = 1.35 + row * 1.85;
+      const hi = cards[i][3];
+      card(s, x, y, 2.85, 1.7, hi ? H.accent1 : H.lt2);
+      await iconCircle(s, cards[i][0], x + 0.18, y + 0.18, 0.5, !hi);
+      T(s, cards[i][1], { x: x + 0.8, y: y + 0.18, w: 1.95, h: 0.5, fontSize: 14, bold: true, color: hi ? C.background1 : C.text2, valign: "middle" });
+      T(s, cards[i][2], { x: x + 0.18, y: y + 0.8, w: 2.5, h: 0.85, fontSize: 12, color: hi ? C.background1 : C.text1 });
     }
-    T(s, "A selection of the 9 needs the team rated “very important” (20 needs in total).", { x: 0.5, y: 4.25, w: 9, h: 0.3, fontSize: 12, color: C.accent2 });
-    todoTag(s, 0.5, 4.65);
-    T(s, "User Journey and final 3–5 prioritized needs", { x: 2.0, y: 4.65, w: 7, h: 0.28, fontSize: 12, valign: "middle" });
+  }
+  // 9 — Phase 3: all needs
+  {
+    const s = slide("User Needs: what Bob expects from a tool", 3, "Phase 3");
+    const cols = [
+      ["FaGears", "Functions", [[1, "Automatic LPR criteria check"], [1, "Final score per retailer"], [1, "Scoring history over time"], [1, "AI-readiness score"], [0, "Evidence for every verdict"], [0, "Feedback / to-do list for retailer"], [0, "Override the AI verdict"], [0, "Filter retailers by criteria"]]],
+      ["FaClipboardCheck", "Requirements", [[1, "AI tool that improves over time"], [1, "Much faster than manual checks"], [1, "Data privacy and legal rules"], [0, "Reliable, correct results"], [0, "Fair and the same for all retailers"], [0, "Easy without technical knowledge"], [0, "Criteria editable without coding"]]],
+      ["FaFaceSmile", "Experience", [[1, "Confidence to defend a rating"], [1, "Less repetitive manual work"], [0, "Overview: top and weak retailers"], [0, "Control over the verdicts"], [0, "Transparent talks with retailers"]]],
+    ];
+    for (let c = 0; c < 3; c++) {
+      const [ic, h, items] = cols[c];
+      const x = 0.5 + c * 3.05;
+      card(s, x, 1.3, 2.85, 3.55);
+      await iconCircle(s, ic, x + 0.18, 1.42, 0.45, true);
+      T(s, h, { x: x + 0.75, y: 1.42, w: 2.0, h: 0.45, fontSize: 15, bold: true, color: C.text2, valign: "middle" });
+      items.forEach(([v, t], i) => {
+        const y = 2.02 + i * 0.35;
+        s.addShape(pres.shapes.OVAL, { x: x + 0.22, y: y + 0.09, w: 0.14, h: 0.14, fill: { color: v ? H.accent1 : H.lt1 }, line: { color: H.accent1, width: 1.25 }, objectName: "Rating dot" });
+        T(s, t, { x: x + 0.48, y, w: 2.3, h: 0.32, fontSize: 11.5, bold: !!v, valign: "middle", color: v ? C.text2 : C.text1 });
+      });
+    }
+    s.addShape(pres.shapes.OVAL, { x: 0.5, y: 5.02, w: 0.14, h: 0.14, fill: { color: H.accent1 }, line: { color: H.accent1, width: 1.25 }, objectName: "Legend" });
+    T(s, "very important", { x: 0.7, y: 4.95, w: 1.4, h: 0.28, fontSize: 11, valign: "middle" });
+    s.addShape(pres.shapes.OVAL, { x: 2.1, y: 5.02, w: 0.14, h: 0.14, fill: { color: H.lt1 }, line: { color: H.accent1, width: 1.25 }, objectName: "Legend" });
+    T(s, "important   ·   no need was rated “not important”", { x: 2.3, y: 4.95, w: 5, h: 0.28, fontSize: 11, valign: "middle" });
   }
 
-  // 9 — Next
+  // 10 — Next
   pres.addSection({ title: "Next" });
   {
     const s = slide("Coming next", null, "Next");
-    const nx = [["FaLightbulb", 4, "Ideas"], ["FaCubes", 5, "Prototype"], ["FaVial", 6, "Test"], ["FaBriefcase", 7, "Business model"]];
-    for (let i = 0; i < 4; i++) {
+    const nx = [["FaRoute", "Phase 3", "User Journey + top 3–5 needs"], ["FaLightbulb", "Phase 4", "Ideas"], ["FaCubes", "Phase 5", "Prototype"], ["FaVial", "Phase 6", "Test"], ["FaBriefcase", "Phase 7", "Business model"]];
+    for (let i = 0; i < 5; i++) {
       const [ic, n, h] = nx[i];
-      const x = 0.5 + i * 2.3;
-      s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.4, w: 2.1, h: 3.0, rectRadius: 0.1, fill: { color: H.lt1 }, line: { color: H.accent3, width: 1.25, dashType: "dash" }, objectName: "Next card" });
-      await iconCircle(s, ic, x + 0.6, 1.7, 0.9, false);
-      T(s, `Phase ${n}`, { x, y: 2.8, w: 2.1, h: 0.3, fontSize: 12, color: C.accent2, align: "center" });
-      T(s, h, { x, y: 3.1, w: 2.1, h: 0.4, fontSize: 17, bold: true, color: C.text2, align: "center" });
-      todoTag(s, x + 0.375, 3.8);
+      const x = 0.5 + i * 1.83;
+      s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.4, w: 1.68, h: 3.0, rectRadius: 0.1, fill: { color: H.lt1 }, line: { color: H.accent3, width: 1.25, dashType: "dash" }, objectName: "Next card" });
+      await iconCircle(s, ic, x + 0.44, 1.7, 0.8, false);
+      T(s, n, { x, y: 2.65, w: 1.68, h: 0.3, fontSize: 12, color: C.accent2, align: "center" });
+      T(s, h, { x: x + 0.1, y: 2.95, w: 1.48, h: 0.7, fontSize: 15, bold: true, color: C.text2, align: "center" });
+      todoTag(s, x + 0.165, 3.85);
     }
   }
 
-  // 10 — End
+  // 11 — End
   {
     const s = pres.addSlide({ masterName: "TITLE", sectionTitle: "Next" });
     await deco(s);

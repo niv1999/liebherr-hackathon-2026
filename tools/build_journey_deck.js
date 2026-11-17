@@ -101,18 +101,16 @@ async function icon(name, color) {
   {
     const s = slide("Where we are", null, "Intro");
     s.addShape(pres.shapes.LINE, { x: 0.95, y: 2.95, w: 7.8, h: 0, line: { color: H.accent3, width: 3 }, objectName: "Line" });
-    s.addShape(pres.shapes.LINE, { x: 0.95, y: 2.95, w: 3.9, h: 0, line: { color: H.accent1, width: 3 }, objectName: "Progress" });
+    s.addShape(pres.shapes.LINE, { x: 0.95, y: 2.95, w: 5.2, h: 0, line: { color: H.accent1, width: 3 }, objectName: "Progress" });
     for (let i = 0; i < 7; i++) {
       const x = 0.5 + i * 1.3;
-      dot(s, i + 1, x + 0.15, 2.65, 0.6, i < 4);
-      T(s, PH[i], { x: x - 0.05, y: 3.45, w: 1.3, h: 0.6, fontSize: 12, bold: i < 4, align: "center", color: i < 4 ? C.text2 : C.accent2 });
+      dot(s, i + 1, x + 0.15, 2.65, 0.6, i < 5);
+      T(s, PH[i], { x: x - 0.05, y: 3.45, w: 1.3, h: 0.6, fontSize: 12, bold: i < 5, align: "center", color: i < 5 ? C.text2 : C.accent2 });
     }
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.65, y: 2.0, w: 2.9, h: 0.38, rectRadius: 0.19, fill: { color: H.lt2 }, line: { color: H.lt2 }, objectName: "Done pill" });
-    T(s, "Done", { x: 0.65, y: 2.0, w: 2.9, h: 0.38, fontSize: 12, bold: true, color: C.accent1, align: "center", valign: "middle" });
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 3.95, y: 2.0, w: 1.2, h: 0.38, rectRadius: 0.19, fill: { color: H.accent3 }, line: { color: H.accent3 }, objectName: "Progress pill" });
-    T(s, "In progress", { x: 3.95, y: 2.0, w: 1.2, h: 0.38, fontSize: 12, bold: true, color: C.text2, align: "center", valign: "middle" });
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 5.35, y: 2.0, w: 4.1, h: 0.38, rectRadius: 0.19, fill: { color: H.lt1 }, line: { color: H.accent3, width: 1, dashType: "dash" }, objectName: "Next pill" });
-    T(s, "Next", { x: 5.35, y: 2.0, w: 4.1, h: 0.38, fontSize: 12, bold: true, color: C.accent2, align: "center", valign: "middle" });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.65, y: 2.0, w: 5.8, h: 0.38, rectRadius: 0.19, fill: { color: H.lt2 }, line: { color: H.lt2 }, objectName: "Done pill" });
+    T(s, "Done", { x: 0.65, y: 2.0, w: 5.8, h: 0.38, fontSize: 12, bold: true, color: C.accent1, align: "center", valign: "middle" });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 6.6, y: 2.0, w: 2.85, h: 0.38, rectRadius: 0.19, fill: { color: H.lt1 }, line: { color: H.accent3, width: 1, dashType: "dash" }, objectName: "Next pill" });
+    T(s, "Next", { x: 6.6, y: 2.0, w: 2.85, h: 0.38, fontSize: 12, bold: true, color: C.accent2, align: "center", valign: "middle" });
   }
 
   // 3 — Challenge
@@ -324,19 +322,103 @@ async function icon(name, color) {
     T(s, "2 idea profiles", { x: 6.4, y: 4.4, w: 3, h: 0.28, fontSize: 12, valign: "middle" });
   }
 
+  // Phase 5 — HeLPR hero
+  pres.addSection({ title: "Phase 5" });
+  {
+    const s = slide("Meet HeLPR, our prototype", 5, "Phase 5");
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.35, w: 3.6, h: 3.65, rectRadius: 0.12, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Hero card" });
+    await iconCircle(s, "FaMagnifyingGlassChart", 0.75, 1.6, 0.8, false);
+    T(s, "HeLPR", { x: 0.75, y: 2.6, w: 3.2, h: 0.7, fontSize: 40, bold: true, color: C.background1, fontFace: THEME.headFontFace });
+    T(s, "Checks retailer webshops against the LPR criteria, with proof for every verdict", { x: 0.75, y: 3.35, w: 3.15, h: 1.0, fontSize: 15, color: C.background1 });
+    T(s, "Web app · AI judge + rule checks", { x: 0.75, y: 4.5, w: 3.2, h: 0.3, fontSize: 11, color: C.accent3 });
+    const tiles = [
+      ["FaRankingStar", "Overview", "Ranking of all retailers and the score trend"],
+      ["FaClipboardCheck", "Scorecard", "Every criterion with evidence. Bob can correct the verdict or teach the AI."],
+      ["FaSliders", "Criteria & weights", "Change priorities, switch criteria on or off, edit the AI instructions"],
+      ["FaFilePdf", "Reports", "A to-do list for the retailer, as PDF or Excel"],
+    ];
+    for (let i = 0; i < 4; i++) {
+      const col = i % 2, row = Math.floor(i / 2);
+      const x = 4.35 + col * 2.6, y = 1.35 + row * 1.875;
+      card(s, x, y, 2.5, 1.775);
+      await iconCircle(s, tiles[i][0], x + 0.18, y + 0.18, 0.5, true);
+      T(s, tiles[i][1], { x: x + 0.8, y: y + 0.18, w: 1.6, h: 0.5, fontSize: 14, bold: true, color: C.text2, valign: "middle" });
+      T(s, tiles[i][2], { x: x + 0.18, y: y + 0.8, w: 2.2, h: 0.9, fontSize: 11.5 });
+    }
+  }
+  // Phase 5 — how an audit works
+  {
+    const s = slide("How an audit works", 5, "Phase 5");
+    const st = [
+      ["FaListOl", "Plan", "Picks 1–2 Liebherr products per SK class in each shop"],
+      ["FaGears", "Check", "Rules first, AI judge second, a human last"],
+      ["FaUserCheck", "Review", "If the AI is unsure, the criterion goes to Bob"],
+      ["FaChartColumn", "Report", "Weighted score, return risks, to-do list"],
+    ];
+    for (let i = 0; i < 4; i++) {
+      const x = 0.5 + i * 2.3;
+      card(s, x, 1.35, 2.1, 2.5);
+      await iconCircle(s, st[i][0], x + 0.7, 1.55, 0.7, true);
+      T(s, `${i + 1}  ${st[i][1]}`, { x, y: 2.4, w: 2.1, h: 0.4, fontSize: 16, bold: true, color: C.text2, align: "center" });
+      T(s, st[i][2], { x: x + 0.15, y: 2.85, w: 1.8, h: 0.9, fontSize: 12, align: "center" });
+      if (i < 3) T(s, "›", { x: x + 2.07, y: 2.3, w: 0.26, h: 0.5, fontSize: 28, bold: true, color: C.accent3, align: "center", valign: "middle" });
+    }
+    const chips = [["FaStopwatch", "1–3 min per retailer"], ["FaCalendarCheck", "Weekly automatic audits"], ["FaBan", "Blocked shop → by hand"]];
+    for (let i = 0; i < 3; i++) {
+      const x = 0.5 + i * 3.05;
+      s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 4.2, w: 2.85, h: 0.65, rectRadius: 0.32, fill: { color: H.lt1 }, line: { color: H.accent3, width: 1.25 }, objectName: "Chip" });
+      await iconCircle(s, chips[i][0], x + 0.1, 4.27, 0.5, false);
+      T(s, chips[i][1], { x: x + 0.7, y: 4.2, w: 2.1, h: 0.65, fontSize: 13, bold: true, color: C.text2, valign: "middle" });
+    }
+  }
+  // Phase 5 — needs to features
+  {
+    const s = slide("From Bob’s needs to HeLPR’s features", 5, "Phase 5");
+    T(s, "BOB NEEDS…", { x: 0.5, y: 1.3, w: 3.8, h: 0.28, fontSize: 10, bold: true, charSpacing: 1, color: C.accent2 });
+    T(s, "…SO HeLPR HAS", { x: 4.95, y: 1.3, w: 4.5, h: 0.28, fontSize: 10, bold: true, charSpacing: 1, color: C.accent1 });
+    const rows = [
+      ["Automatic check of the LPR criteria", "Audits on demand or every week"],
+      ["One score per retailer", "Weighted LPR score per SK class, ranking"],
+      ["Score history over time", "LPR score trend and audit history"],
+      ["AI-readiness score", "Separate AI-ready score and AI shopper test"],
+      ["Confidence to defend a rating", "Evidence: screenshot and reasoning"],
+      ["Control over the verdicts", "Correct verdict, teach the AI"],
+      ["Criteria editable without coding", "Criteria & weights page"],
+    ];
+    rows.forEach(([a, b], i) => {
+      const y = 1.65 + i * 0.48;
+      card(s, 0.5, y, 4.0, 0.4);
+      T(s, a, { x: 0.65, y, w: 3.8, h: 0.4, fontSize: 12.5, valign: "middle" });
+      T(s, "→", { x: 4.5, y, w: 0.45, h: 0.4, fontSize: 16, bold: true, color: C.accent1, align: "center", valign: "middle" });
+      s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 4.95, y, w: 4.55, h: 0.4, rectRadius: 0.08, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Feature" });
+      T(s, b, { x: 5.1, y, w: 4.35, h: 0.4, fontSize: 12.5, bold: true, color: C.background1, valign: "middle" });
+    });
+  }
+  // Phase 5 — screenshots
+  {
+    const s = slide("HeLPR in action", 5, "Phase 5");
+    [["Overview: ranking of the retailers"], ["Scorecard: one retailer, with evidence"]].forEach(([cap], i) => {
+      const x = 0.5 + i * 4.6;
+      s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.35, w: 4.4, h: 2.75, rectRadius: 0.1, fill: { color: H.lt2 }, line: { color: H.accent3, width: 1.25, dashType: "dash" }, objectName: "Screenshot frame" });
+      todoTag(s, x + 1.525, 2.45);
+      T(s, "Paste a screenshot here", { x, y: 2.85, w: 4.4, h: 0.3, fontSize: 11, color: C.accent2, align: "center" });
+      T(s, cap, { x, y: 4.2, w: 4.4, h: 0.3, fontSize: 13, bold: true, color: C.text2, align: "center" });
+    });
+  }
+
   // 10 — Next
   pres.addSection({ title: "Next" });
   {
     const s = slide("Coming next", null, "Next");
-    const nx = [["FaRoute", "Phase 3", "User Journey + top 3–5 needs"], ["FaLightbulb", "Phase 4", "2 idea profiles"], ["FaCubes", "Phase 5", "Prototype (build started)"], ["FaVial", "Phase 6", "Test"], ["FaBriefcase", "Phase 7", "Business model"]];
-    for (let i = 0; i < 5; i++) {
+    const nx = [["FaRoute", "Phase 3", "User Journey + top needs"], ["FaLightbulb", "Phase 4", "2 idea profiles"], ["FaVial", "Phase 6", "Test with Liebherr"], ["FaBriefcase", "Phase 7", "Business model"]];
+    for (let i = 0; i < 4; i++) {
       const [ic, n, h] = nx[i];
-      const x = 0.5 + i * 1.83;
-      s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.4, w: 1.68, h: 3.0, rectRadius: 0.1, fill: { color: H.lt1 }, line: { color: H.accent3, width: 1.25, dashType: "dash" }, objectName: "Next card" });
-      await iconCircle(s, ic, x + 0.44, 1.7, 0.8, false);
-      T(s, n, { x, y: 2.65, w: 1.68, h: 0.3, fontSize: 12, color: C.accent2, align: "center" });
-      T(s, h, { x: x + 0.1, y: 2.95, w: 1.48, h: 0.7, fontSize: 15, bold: true, color: C.text2, align: "center" });
-      todoTag(s, x + 0.165, 3.85);
+      const x = 0.5 + i * 2.3;
+      s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.4, w: 2.1, h: 3.0, rectRadius: 0.1, fill: { color: H.lt1 }, line: { color: H.accent3, width: 1.25, dashType: "dash" }, objectName: "Next card" });
+      await iconCircle(s, ic, x + 0.65, 1.7, 0.8, false);
+      T(s, n, { x, y: 2.65, w: 2.1, h: 0.3, fontSize: 12, color: C.accent2, align: "center" });
+      T(s, h, { x: x + 0.1, y: 2.95, w: 1.9, h: 0.7, fontSize: 15, bold: true, color: C.text2, align: "center" });
+      todoTag(s, x + 0.375, 3.85);
     }
   }
 

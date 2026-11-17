@@ -22,6 +22,8 @@ export default function Retailer({ refreshKey, onRunAudit }) {
 
   useEffect(() => {
     api.retailers().then((rs) => {
+      const blocked = (r) => Boolean(r.access_note || r.latest_run?.blocked);
+      rs = [...rs].sort((a, b) => blocked(a) - blocked(b));  // blocked shops last
       setRetailers(rs);
       if (!id && rs.length) {
         const first = rs.find((r) => r.latest_run && !r.latest_run.blocked) || rs[0];

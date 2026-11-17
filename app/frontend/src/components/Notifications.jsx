@@ -57,7 +57,7 @@ export default function Notifications({ refreshKey }) {
             {items.length === 0 && <p className="p-4 text-xs text-slate-500">{t("No notifications yet.")}</p>}
             {items.map((n) => (
               <button key={n.id} onClick={() => openItem(n)}
-                className={`w-full text-left px-4 py-3 flex gap-3 cursor-pointer transition ${n.read ? "opacity-60 hover:opacity-100 hover:bg-slate-50" : "bg-sky-50 hover:bg-sky-100 border-l-4 border-brand"}`}>
+                className={`w-full text-left px-4 py-3 flex gap-3 cursor-pointer transition ${n.read ? "opacity-60 hover:opacity-100 hover:bg-slate-50" : "bg-sky-50 hover:bg-sky-100 border-l-4 border-l-brand"}`}>
                 <span className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${n.read ? "bg-transparent" : "bg-brand"}`} />
                 <span className="min-w-0">
                   <span className={`block text-xs ${n.read ? "font-medium" : "font-bold"}`}>{n.title}</span>

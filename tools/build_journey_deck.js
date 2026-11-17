@@ -42,17 +42,13 @@ async function icon(name, color) {
     title: "TITLE",
     background: { color: C.background1 },
     objects: [
-      { placeholder: { options: { name: "title", type: "title", x: 0.6, y: 1.4, w: 5.6, h: 1.6, fontSize: 36, bold: true, color: C.text2, align: "left", valign: "bottom", margin: 0 }, text: "" } },
-      { placeholder: { options: { name: "body", type: "body", x: 0.6, y: 3.15, w: 5.6, h: 0.6, fontSize: 18, color: C.accent1, align: "left", valign: "top", margin: 0 }, text: "" } },
     ],
   });
   pres.defineSlideMaster({
     title: "CONTENT",
     background: { color: C.background1 },
     objects: [
-      { placeholder: { options: { name: "title", type: "title", x: 0.5, y: 0.5, w: 9.0, h: 0.6, fontSize: 28, bold: true, color: C.text2, align: "left", valign: "middle", margin: 0 }, text: "" } },
     ],
-    slideNumber: { x: 9.0, y: 5.22, w: 0.5, h: 0.25, fontSize: 9, color: C.accent2, align: "right" },
   });
 
   const PH = ["Define Design Challenge", "Understand Design Challenge", "Define Viewpoints", "Generate Ideas", "Develop Prototypes", "Test Prototypes", "Integrate Prototype"];
@@ -71,9 +67,12 @@ async function icon(name, color) {
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: 1.35, h: 0.28, rectRadius: 0.05, fill: { color: H.lt1 }, line: { color: H.accent1, width: 1, dashType: "dash" }, objectName: "TO COMPLETE tag" });
     T(s, "[TO COMPLETE]", { x, y, w: 1.35, h: 0.28, fontSize: 10, bold: true, align: "center", valign: "middle", color: C.accent1 });
   };
+  let slideNo = 1;
   const slide = (title, phase, section) => {
     const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: section });
-    s.addText(title, { placeholder: "title" });
+    T(s, title, { x: 0.5, y: 0.5, w: 9.0, h: 0.6, fontSize: 28, bold: true, color: C.text2, valign: "middle", fontFace: THEME.headFontFace });
+    slideNo++;
+    T(s, String(slideNo), { x: 9.0, y: 5.22, w: 0.5, h: 0.25, fontSize: 9, color: C.accent2, align: "right" });
     if (phase) {
       dot(s, phase, 0.5, 0.17, 0.26, true);
       T(s, `PHASE ${phase}  ·  ${PH[phase - 1].toUpperCase()}`, { x: 0.85, y: 0.17, w: 6, h: 0.26, fontSize: 10, bold: true, charSpacing: 1, color: C.accent1, valign: "middle" });
@@ -82,9 +81,9 @@ async function icon(name, color) {
   };
   // decorative circles (title + end)
   const deco = async (s) => {
-    s.addShape(pres.shapes.OVAL, { x: 6.5, y: 0.7, w: 4.2, h: 4.2, fill: { color: H.lt2 }, line: { color: H.lt2 }, objectName: "Deco big" });
-    s.addShape(pres.shapes.OVAL, { x: 7.35, y: 1.55, w: 2.5, h: 2.5, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Deco circle" });
-    s.addImage({ data: await icon("FaMagnifyingGlassChart", H.lt1), x: 8.0, y: 2.2, w: 1.2, h: 1.2, altText: "Audit icon", objectName: "Deco icon" });
+    s.addShape(pres.shapes.OVAL, { x: 5.9, y: 0.85, w: 3.9, h: 3.9, fill: { color: H.lt2 }, line: { color: H.lt2 }, objectName: "Deco big" });
+    s.addShape(pres.shapes.OVAL, { x: 6.7, y: 1.65, w: 2.3, h: 2.3, fill: { color: H.accent1 }, line: { color: H.accent1 }, objectName: "Deco circle" });
+    s.addImage({ data: await icon("FaMagnifyingGlassChart", H.lt1), x: 7.3, y: 2.25, w: 1.1, h: 1.1, altText: "Audit icon", objectName: "Deco icon" });
   };
 
   // 1 — Title
@@ -93,8 +92,8 @@ async function icon(name, color) {
     const s = pres.addSlide({ masterName: "TITLE", sectionTitle: "Intro" });
     await deco(s);
     T(s, "LIEBHERR CHALLENGE  ·  DESIGN THINKING", { x: 0.6, y: 0.8, w: 5.6, h: 0.3, fontSize: 11, bold: true, charSpacing: 2, color: C.accent1 });
-    s.addText("Our Design Thinking journey", { placeholder: "title" });
-    s.addText("Smarter webshop checks for Liebherr", { placeholder: "body" });
+    T(s, "Our Design Thinking journey", { x: 0.6, y: 1.4, w: 5.6, h: 1.6, fontSize: 36, bold: true, color: C.text2, valign: "bottom", fontFace: THEME.headFontFace });
+    T(s, "Smarter webshop checks for Liebherr", { x: 0.6, y: 3.15, w: 5.6, h: 0.6, fontSize: 18, color: C.accent1 });
     T(s, "Team Liebherr 5  ·  HNU Winter School 2026", { x: 0.6, y: 4.6, w: 5.6, h: 0.3, fontSize: 12, color: C.accent2 });
   }
 
@@ -345,8 +344,8 @@ async function icon(name, color) {
   {
     const s = pres.addSlide({ masterName: "TITLE", sectionTitle: "Next" });
     await deco(s);
-    s.addText("Thank you", { placeholder: "title" });
-    s.addText("Team Liebherr 5  ·  HNU Winter School 2026", { placeholder: "body" });
+    T(s, "Thank you", { x: 0.6, y: 1.4, w: 5.6, h: 1.6, fontSize: 36, bold: true, color: C.text2, valign: "bottom", fontFace: THEME.headFontFace });
+    T(s, "Team Liebherr 5  ·  HNU Winter School 2026", { x: 0.6, y: 3.15, w: 5.6, h: 0.6, fontSize: 18, color: C.accent1 });
   }
 
   await pres.writeFile({ fileName: OUT });

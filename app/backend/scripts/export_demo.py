@@ -1,7 +1,7 @@
 """Export the current audits as a demo snapshot for hosting (e.g. Hugging Face Spaces).
 
 Creates app/demo/ with:
-  lpr.db        copy of the database, cleaned: no AI connections / API keys, no demo notifications,
+  lpr.db        copy of the database, cleaned: no AI connections / API keys, schedule off,
                 file paths rewritten to the server's runtime folder (default /data)
   artifacts/    screenshots + product/brand page HTML of the audits (no search pages, no tiles)
   logos/        cached retailer logos
@@ -59,7 +59,6 @@ def main() -> None:
     cur.execute("DELETE FROM appsetting WHERE key = 'ai_active'")
     cur.execute("INSERT OR REPLACE INTO appsetting (key, value) VALUES ('ai_env_migrated', '{\"done\": true}')")
     cur.execute("UPDATE appsetting SET value = '{\"enabled\": false, \"interval_days\": 7}' WHERE key = 'schedule'")  # no auto-crawling from the demo host
-    cur.execute("DELETE FROM notification WHERE title LIKE '%(demo)%'")
     cur.execute("UPDATE notification SET read = 1")
     old = str(settings.ARTIFACTS_DIR.resolve())
     cols = {"pagesnapshot": ["html_path", "raw_html_path", "screenshot_path", "fullpage_path"], "verdict": ["screenshot_path"]}

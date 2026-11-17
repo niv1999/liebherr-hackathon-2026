@@ -177,3 +177,33 @@ export function ToastProvider({ children }) {
     </ToastCtx.Provider>
   );
 }
+
+/* ---------------------------------------------------------------- form field + switch */
+export function Field({ label, required = false, tip, children, className = "" }) {
+  return (
+    <div className={`flex flex-col gap-1 min-w-0 ${className}`}>
+      <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+        {label}
+        {required ? <span className="text-red-500 normal-case" title="Required">*</span> : <span className="normal-case font-normal tracking-normal text-slate-400">(optional)</span>}
+        {tip && <HelpTip text={tip} />}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+export const inputCls = "w-full text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-sky-200";
+
+export function Switch({ checked, onChange, label }) {
+  return (
+    <span className="inline-flex items-center gap-2">
+      <button type="button" role="switch" aria-checked={checked} onClick={() => onChange(!checked)} className="cursor-pointer shrink-0"
+        style={{ width: 36, height: 20, borderRadius: 999, position: "relative", padding: 0, border: "none",
+          background: checked ? "#0284C7" : "#CBD5E1", transition: "background .15s" }}>
+        <span style={{ position: "absolute", top: 2, left: checked ? 18 : 2, width: 16, height: 16, borderRadius: 999,
+          background: "#fff", boxShadow: "0 1px 2px rgba(15,23,42,.25)", transition: "left .15s" }} />
+      </button>
+      {label && <span className="text-sm">{label}</span>}
+    </span>
+  );
+}

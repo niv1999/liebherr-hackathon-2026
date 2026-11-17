@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, reviewerName, setReviewerName } from "../api.js";
-import { Button, HelpTip, fmtDate, useToast } from "../components/ui.jsx";
+import { Button, HelpTip, Switch, fmtDate, useToast } from "../components/ui.jsx";
 
 const MODELS = {
   gemini: [["gemini-2.5-flash", "Gemini 2.5 Flash (free tier)"], ["gemini-2.5-pro", "Gemini 2.5 Pro"]],
@@ -80,10 +80,7 @@ export default function Settings() {
         <section className={card}>
           <h2 className={h2}>Automatic audits</h2>
           <div className="flex flex-wrap items-center gap-3">
-            <label className="inline-flex items-center gap-2 text-sm cursor-pointer">
-              <input type="checkbox" checked={schedule.enabled} onChange={(e) => setSchedule({ ...schedule, enabled: e.target.checked })} className="accent-sky-600" />
-              Audit all retailers every
-            </label>
+            <Switch checked={schedule.enabled} onChange={(v) => setSchedule({ ...schedule, enabled: v })} label="Audit all retailers every" />
             <input type="number" min="1" value={schedule.interval_days} onChange={(e) => setSchedule({ ...schedule, interval_days: Number(e.target.value) })} className={`w-16 ${inputCls}`} />
             <span className="text-sm">days</span>
             <Button onClick={async () => { const s = await run(() => api.setSchedule({ enabled: schedule.enabled, interval_days: schedule.interval_days }), "Schedule saved"); if (s) setSchedule(s); }}>Save</Button>

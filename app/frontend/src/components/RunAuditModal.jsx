@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, reviewerName, setReviewerName } from "../api.js";
-import { Button, useToast } from "./ui.jsx";
+import { Button, Switch, useToast } from "./ui.jsx";
 
 // "Run audit" dialog: choose retailers, optionally the slow listing count, then start.
 export default function RunAuditModal({ preselected, onClose, onStarted }) {
@@ -53,15 +53,15 @@ export default function RunAuditModal({ preselected, onClose, onStarted }) {
             </label>
           ))}
         </div>
-        <label className="flex items-start gap-2.5 text-sm cursor-pointer">
-          <input type="checkbox" checked={listing} onChange={(e) => setListing(e.target.checked)} className="mt-1 accent-sky-600" />
-          <span>
+        <div className="flex items-start gap-2.5">
+          <Switch checked={listing} onChange={setListing} />
+          <span className="text-sm">
             Count listed &amp; available models
             <span className="block text-xs text-slate-500">Full assortment check · a few extra minutes</span>
           </span>
-        </label>
+        </div>
         <label className="block text-sm">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Your name</span>
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Your name <span className="normal-case font-normal tracking-normal">(optional)</span></span>
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Dominik"
             className="mt-1 w-full text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-200" />
         </label>

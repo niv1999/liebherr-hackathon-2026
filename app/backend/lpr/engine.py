@@ -19,7 +19,11 @@ def applicable(criteria: list[Criterion], page_types: tuple[str, ...], product: 
     # product criteria follow the product's SK class; shop-wide / brand criteria are checked once per retailer
     # (their SK relevance is applied in the per-SK score)
     return [c for c in criteria if c.active and c.page_type in page_types
+            and c.rule_key not in RUN_LEVEL_RULES  # decided once per audit elsewhere (e.g. by the listing count)
             and (product is None or c.page_type != "product" or c.applies_to_sk(sk))]
+
+
+RUN_LEVEL_RULES = {"available_per_sk"}
 
 
 def fullpage_tiles(fullpage_path: str | None, max_tiles: int = 5, tile_h: int = 1600) -> list[Path]:

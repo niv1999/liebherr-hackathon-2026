@@ -150,15 +150,20 @@ def todo_list(s: Session, run_id: int) -> list[dict]:
     return sorted(groups.values(), key=lambda g: (-g["criterion"]["weight"], g["criterion"]["code"]))
 
 
-def retailer_overview(s: Session, retailer: Retailer) -> dict:
-    runs = latest_runs(s, retailer.id, 2)
+def retailer_overview(s: Session, retailer: Retailer, run_id: int | None = None) -> dict:
+    q = select(AuditRun).where(AuditRun.retailer_id == retailer.id, AuditRun.status == "done")
+    if run_id:
+        q = q.where(AuditRun.id <= run_id)
+    runs = list(s.exec(q.order_by(AuditRun.id.desc()).limit(2)).all())
     run = runs[0] if runs else None
+    latest = latest_runs(s, retailer.id, 1)
     out = {"retailer": retailer, "latest_run": run_summary(run, runs[1] if len(runs) > 1 else None),
+           "is_latest": bool(run and latest and latest[0].id == run.id),
            "good": [], "missing": [], "needs_human": [], "return_risks": [], "listing": None, "history": []}
     hist = s.exec(select(AuditRun).where(AuditRun.retailer_id == retailer.id, AuditRun.status == "done")
                   .order_by(AuditRun.id)).all()
-    out["history"] = [{"run_id": r.id, "date": r.finished_at, "lpr_score": r.lpr_score,
-                       "ai_readiness_score": r.ai_readiness_score} for r in hist]
+    out["history"] = [{"run_id": r.id, "date": r.finished_at, "lpr_score": r.lpr_score, "blocked": r.blocked,
+                       "ai_readiness_score": r.ai_readiness_score, "started_by": r.started_by} for r in hist]
     if not run:
         return out
     per_crit: dict[int, dict] = defaultdict(lambda: {"pass": 0, "fail": 0, "other": 0, "verdicts": []})
@@ -186,6 +191,7 @@ def retailer_overview(s: Session, retailer: Retailer) -> dict:
     for key in ("good", "missing", "needs_human"):
         out[key].sort(key=lambda i: (-i["criterion"]["weight"], i["criterion"]["code"]))
     lrun = s.exec(select(AuditRun).where(AuditRun.retailer_id == retailer.id, AuditRun.status == "done",
+                                         AuditRun.id <= run.id,
                                          AuditRun.listed_count != None).order_by(AuditRun.id.desc())).first()  # noqa: E711
     checks = s.exec(select(ListingCheck).where(ListingCheck.run_id == lrun.id)).all() if lrun else []
     if checks:

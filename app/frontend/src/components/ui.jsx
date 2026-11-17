@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useState } from "react";
+import { useT } from "../prefs.jsx";
 // Small shared UI pieces in the style of the team's mockup (navy ink, cyan accent, white cards).
 
 export const BLOCKS = {
@@ -22,7 +23,7 @@ export function ScoreRing({ score, size = 112, label = "LPR score" }) {
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg viewBox="0 0 120 120" className="-rotate-90" style={{ width: size, height: size }}>
-        <circle cx="60" cy="60" r={r} fill="none" stroke="#E2E8F0" strokeWidth="10" />
+        <circle cx="60" cy="60" r={r} fill="none" stroke="var(--color-slate-200)" strokeWidth="10" />
         <circle cx="60" cy="60" r={r} fill="none" stroke={scoreColor(score)} strokeWidth="10" strokeLinecap="round"
           strokeDasharray={c} strokeDashoffset={c * (1 - pct / 100)} style={{ transition: "stroke-dashoffset .5s" }} />
       </svg>
@@ -52,9 +53,10 @@ const STATUS_STYLE = {
 const STATUS_TEXT = { pass: "Pass", fail: "Fail", needs_human: "Needs human", error: "Error", not_applicable: "n/a" };
 
 export function StatusPill({ status }) {
+  const t = useT();
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border ${STATUS_STYLE[status] || STATUS_STYLE.needs_human}`}>
-      {STATUS_TEXT[status] || status}
+      {t(STATUS_TEXT[status] || status)}
     </span>
   );
 }
@@ -68,26 +70,29 @@ const LABEL_STYLE = {
 };
 
 export function LabelBadge({ label }) {
+  const t = useT();
   if (!label) return null;
   return (
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${LABEL_STYLE[label] || "bg-slate-50 text-slate-600 border-slate-200"}`}>
-      {label}
+      {t(label)}
     </span>
   );
 }
 
 export function SourceTag({ source }) {
+  const t = useT();
   const map = { rule: ["Rule", "bg-slate-100 text-slate-600"], ai: ["AI", "bg-sky-50 text-sky-700"], manual: ["Manual", "bg-amber-50 text-amber-700"] };
-  const [t, c] = map[source] || [source, "bg-slate-100 text-slate-600"];
-  return <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide ${c}`}>{t}</span>;
+  const [label, c] = map[source] || [source, "bg-slate-100 text-slate-600"];
+  return <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide ${c}`}>{t(label)}</span>;
 }
 
 export function Delta({ value }) {
+  const t = useT();
   if (value == null) return null;
   const up = value >= 0;
   return (
     <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-semibold border tabular ${up ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-red-50 text-red-700 border-red-200"}`}>
-      {up ? "+" : ""}{value} vs last
+      {up ? "+" : ""}{value} {t("vs last")}
     </span>
   );
 }
@@ -180,11 +185,12 @@ export function ToastProvider({ children }) {
 
 /* ---------------------------------------------------------------- form field + switch */
 export function Field({ label, required = false, tip, children, className = "" }) {
+  const t = useT();
   return (
     <div className={`flex flex-col gap-1 min-w-0 ${className}`}>
       <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-        {label}
-        {required ? <span className="text-red-500 normal-case" title="Required">*</span> : <span className="normal-case font-normal tracking-normal text-slate-400">(optional)</span>}
+        {t(label)}
+        {required ? <span className="text-red-500 normal-case" title={t("Required")}>*</span> : <span className="normal-case font-normal tracking-normal text-slate-400">({t("optional")})</span>}
         {tip && <HelpTip text={tip} />}
       </span>
       {children}

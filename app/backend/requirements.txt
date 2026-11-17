@@ -3,7 +3,7 @@ uvicorn[standard]
 sqlmodel
 apscheduler
 google-genai
-playwright
+playwright==1.65.*
 httpx
 beautifulsoup4
 lxml

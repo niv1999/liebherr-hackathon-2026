@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { api, reviewerName, setReviewerName } from "../api.js";
+import { useT } from "../prefs.jsx";
 import { Button, Switch, useToast } from "./ui.jsx";
 
 // "Run audit" dialog: choose retailers, optionally the slow listing count, then start.
 export default function RunAuditModal({ preselected, onClose, onStarted }) {
   const toast = useToast();
+  const t = useT();
   const [retailers, setRetailers] = useState([]);
   const [selected, setSelected] = useState(new Set(preselected || []));
   const [listing, setListing] = useState(false);
@@ -31,7 +33,7 @@ export default function RunAuditModal({ preselected, onClose, onStarted }) {
     try {
       setReviewerName(name);
       await api.startAudit({ retailer_ids: [...selected], include_listing: listing, started_by: name || null });
-      toast(`Audit started for ${selected.size} retailer${selected.size > 1 ? "s" : ""}`);
+      toast(t("Audit started for {n} retailer(s)", { n: selected.size }));
       onStarted();
     } catch (e) {
       setError(e.message);
@@ -42,34 +44,34 @@ export default function RunAuditModal({ preselected, onClose, onStarted }) {
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center p-4" onClick={onClose}>
       <div className="card w-full max-w-md p-5 space-y-4" onClick={(e) => e.stopPropagation()}>
-        <h2 className="text-base font-bold">Run audit</h2>
+        <h2 className="text-base font-bold">{t("Run audit")}</h2>
         <div className="space-y-1.5">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Retailers</p>
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t("Retailers")}</p>
           {retailers.map((r) => (
             <label key={r.id} className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
               <input type="checkbox" checked={selected.has(r.id)} onChange={() => toggle(r.id)} className="accent-sky-600" />
               <span className="text-sm font-medium">{r.name}</span>
-              {r.access_note && <span className="ml-auto text-[10px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">blocks bots</span>}
+              {r.access_note && <span className="ml-auto text-[10px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{t("blocks bots")}</span>}
             </label>
           ))}
         </div>
         <div className="flex items-start gap-2.5">
           <Switch checked={listing} onChange={setListing} />
           <span className="text-sm">
-            Count listed &amp; available models
-            <span className="block text-xs text-slate-500">Full assortment check · a few extra minutes</span>
+            {t("Count listed & available models")}
+            <span className="block text-xs text-slate-500">{t("Full assortment check · a few extra minutes")}</span>
           </span>
         </div>
         <label className="block text-sm">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Your name <span className="normal-case font-normal tracking-normal">(optional)</span></span>
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Dominik"
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t("Your name")} <span className="normal-case font-normal tracking-normal">({t("optional")})</span></span>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("e.g. Dominik")}
             className="mt-1 w-full text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-200" />
         </label>
         {error && <p className="text-xs text-red-600">{error}</p>}
         <div className="flex justify-end gap-2">
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>{t("Cancel")}</Button>
           <Button onClick={start} disabled={busy || selected.size === 0}>
-            {busy ? "Starting…" : `Start audit (${selected.size})`}
+            {busy ? t("Starting…") : `${t("Start audit")} (${selected.size})`}
           </Button>
         </div>
       </div>

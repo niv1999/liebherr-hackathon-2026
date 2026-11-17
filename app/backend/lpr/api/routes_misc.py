@@ -78,7 +78,11 @@ def notifications(unread_only: bool = False, limit: int = 30, s: Session = Depen
     q = select(Notification).order_by(Notification.id.desc()).limit(limit)
     if unread_only:
         q = q.where(Notification.read == False)  # noqa: E712
-    return s.exec(q).all()
+    out = []
+    for n in s.exec(q).all():
+        run = s.get(AuditRun, n.run_id) if n.run_id else None
+        out.append({**n.model_dump(), "retailer_id": run.retailer_id if run else None})
+    return out
 
 
 @router.post("/api/notifications/{nid}/read")
@@ -168,10 +172,37 @@ def list_connections(s: Session = Depends(get_session)):
     return [_conn_out(c, active) for c in s.exec(select(AIConnection).order_by(AIConnection.id.desc())).all()]
 
 
+def check_key(provider: str, api_key: str) -> tuple[bool, str]:
+    """Cheap liveness check: list the provider's models with this key (no tokens used)."""
+    try:
+        if provider == "claude":
+            import anthropic
+            next(iter(anthropic.Anthropic(api_key=api_key, max_retries=0, timeout=15).models.list(limit=1)), None)
+        else:
+            from google import genai
+            client = genai.Client(api_key=api_key)  # keep a reference: the client closes when garbage-collected
+            next(iter(client.models.list()), None)
+        return True, "Key works"
+    except Exception as e:
+        msg = str(e)
+        if "401" in msg or "403" in msg or "invalid" in msg.lower() or "API key" in msg or "authentication" in msg.lower():
+            return False, "This API key was rejected by the provider."
+        return False, f"Could not reach the provider ({type(e).__name__})."
+
+
+@router.post("/api/ai/connections/test")
+def test_connection(body: AIConnectionIn):
+    ok, msg = check_key(body.provider, body.api_key.strip())
+    return {"valid": ok, "message": msg}
+
+
 @router.post("/api/ai/connections", status_code=201)
 def add_connection(body: AIConnectionIn, s: Session = Depends(get_session)):
-    """Save an API key as a named connection and start using it."""
+    """Test the API key, then save it as a named connection and start using it."""
     from datetime import date
+    ok, msg = check_key(body.provider, body.api_key.strip())
+    if not ok:
+        raise HTTPException(400, msg)
     name = (body.name or "").strip() or f"{MODEL_NAMES.get(body.model, body.model)} · {date.today().strftime('%d %b %Y')}"
     c = AIConnection(name=name, provider=body.provider, model=body.model, api_key=body.api_key.strip())
     s.add(c)

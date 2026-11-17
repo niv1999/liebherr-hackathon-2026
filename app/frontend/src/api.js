@@ -18,7 +18,7 @@ async function request(method, path, body) {
 export const api = {
   overview: () => request("GET", "/api/dashboard/overview"),
   retailers: () => request("GET", "/api/retailers"),
-  retailerOverview: (id) => request("GET", `/api/retailers/${id}/overview`),
+  retailerOverview: (id, runId) => request("GET", `/api/retailers/${id}/overview${runId ? `?run_id=${runId}` : ""}`),
   audits: (retailerId) => request("GET", `/api/audits${retailerId ? `?retailer_id=${retailerId}` : ""}`),
   todo: (runId) => request("GET", `/api/audits/${runId}/todo`),
   startAudit: (body) => request("POST", "/api/audits", body),
@@ -29,6 +29,8 @@ export const api = {
   updateCriterion: (id, body) => request("PATCH", `/api/criteria/${id}`, body),
   notifications: () => request("GET", "/api/notifications"),
   readAll: () => request("POST", "/api/notifications/read-all"),
+  markRead: (id) => request("POST", `/api/notifications/${id}/read`),
+  testAiConnection: (body) => request("POST", "/api/ai/connections/test", body),
   schedule: () => request("GET", "/api/settings/schedule"),
   setSchedule: (body) => request("PUT", "/api/settings/schedule", body),
   defaults: () => request("GET", "/api/settings/audit-defaults"),

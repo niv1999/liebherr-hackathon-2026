@@ -29,7 +29,7 @@ async def lifespan(app: FastAPI):
     jobs.stop_scheduler()
 
 
-app = FastAPI(title="LPR Inspector API", version="0.1", lifespan=lifespan)
+app = FastAPI(title="HeLPR API", version="0.1", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 for r in (routes_retailers, routes_criteria, routes_audits, routes_misc):
     app.include_router(r.router)
@@ -40,3 +40,19 @@ app.mount("/artifacts", StaticFiles(directory=settings.ARTIFACTS_DIR), name="art
 @app.get("/api/health")
 def health():
     return {"ok": True}
+
+
+# Serve the built frontend (app/frontend/dist) from the same server, so HeLPR runs as one service.
+_DIST = settings.APP_DIR / "frontend" / "dist"
+if _DIST.exists():
+    from fastapi import HTTPException
+    from fastapi.responses import FileResponse
+
+    app.mount("/assets", StaticFiles(directory=_DIST / "assets"), name="assets")
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def spa(path: str):
+        if path.startswith(("api/", "artifacts/")):
+            raise HTTPException(404)
+        f = _DIST / path
+        return FileResponse(f if path and f.is_file() else _DIST / "index.html")

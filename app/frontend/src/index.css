@@ -23,3 +23,44 @@ body {
 .tabular {
   font-variant-numeric: tabular-nums;
 }
+
+/* ---------------- dark mode: remap the palette used by the app ---------------- */
+html.dark {
+  color-scheme: dark;
+  --color-slate-50: #111a2b;
+  --color-slate-100: #1a2436;
+  --color-slate-200: #263247;
+  --color-slate-300: #35425a;
+  --color-slate-400: #7d8ba1;
+  --color-slate-500: #98a5b8;
+  --color-slate-600: #b4bfce;
+  --color-slate-700: #cfd7e2;
+  --color-slate-800: #e2e8f0;
+  --color-slate-900: #f1f5f9;
+  --color-sky-50: #0c2a3f;
+  --color-sky-100: #103550;
+  --color-sky-200: #1a4a6b;
+  --color-sky-700: #7cc4f0;
+  --color-emerald-50: #0b2e22;
+  --color-emerald-200: #14533c;
+  --color-emerald-700: #6ee7b7;
+  --color-red-50: #3a1418;
+  --color-red-200: #6b2228;
+  --color-red-600: #f87171;
+  --color-red-700: #fca5a5;
+  --color-amber-50: #33270b;
+  --color-amber-200: #5c4512;
+  --color-amber-800: #fcd34d;
+  --color-orange-50: #33200b;
+  --color-orange-700: #fdba74;
+  --color-violet-50: #241a3d;
+  --color-violet-700: #c4b5fd;
+}
+html.dark body { background: #0b1220; color: #e2e8f0; }
+html.dark .card { background: #0f1828; border-color: #263247; box-shadow: none; }
+html.dark .bg-white { background-color: #0f1828; }
+html.dark .text-ink { color: #f1f5f9; }
+html.dark .bg-ink { background-color: #020617; }
+html.dark input, html.dark select, html.dark textarea { color: #e2e8f0; }
+html.dark input::placeholder, html.dark textarea::placeholder { color: #6b7a90; }
+html.dark img.screenshot { opacity: 0.92; }

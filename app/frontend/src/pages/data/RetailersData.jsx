@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { api } from "../../api.js";
+import { EditIcon, IconButton } from "../../components/icons.jsx";
 import { Button, Field, ListSkeleton, RetailerLogo, inputCls, useToast } from "../../components/ui.jsx";
+import { useT } from "../../prefs.jsx";
 import { Toggle } from "./CriteriaData.jsx";
 
 const EMPTY = { name: "", base_url: "https://", brand_page_url: "", search_url: "", product_link_pattern: "", access_note: "" };
 
 export default function RetailersData() {
+  const t = useT();
   const toast = useToast();
   const [items, setItems] = useState(null);
   const [editing, setEditing] = useState(null); // retailer id | "new"
@@ -15,15 +18,15 @@ export default function RetailersData() {
 
   const toggle = async (r, active) => {
     await api.updateRetailer(r.id, { active });
-    toast(`${r.name} ${active ? "activated" : "deactivated"}`);
+    toast(t(active ? "{name} activated" : "{name} deactivated", { name: r.name }));
     load();
   };
 
   if (!items) return <ListSkeleton rows={6} />;
   return (
     <div className="space-y-4">
-      <div className="flex justify-end"><Button onClick={() => setEditing(editing === "new" ? null : "new")}>{editing === "new" ? "Cancel" : "+ New retailer"}</Button></div>
-      {editing === "new" && <RetailerForm initial={EMPTY} onSaved={() => { setEditing(null); load(); toast("Retailer added"); }} />}
+      <div className="flex justify-end"><Button onClick={() => setEditing(editing === "new" ? null : "new")}>{editing === "new" ? t("Cancel") : t("+ New retailer")}</Button></div>
+      {editing === "new" && <RetailerForm initial={EMPTY} onSaved={() => { setEditing(null); load(); toast(t("Retailer added")); }} />}
       <div className="card divide-y divide-slate-100">
         {items.map((r) => (
           <div key={r.id} className={r.active ? "" : "opacity-60"}>
@@ -33,12 +36,12 @@ export default function RetailersData() {
                 <p className="text-sm font-semibold">{r.name}</p>
                 <p className="text-[11px] text-slate-500 truncate" title={r.access_note || ""}>{r.base_url}{r.access_note ? ` · ${r.access_note}` : ""}</p>
               </div>
-              <button onClick={() => setEditing(editing === r.id ? null : r.id)} className="text-xs text-brand font-semibold cursor-pointer">{editing === r.id ? "Close" : "Edit"}</button>
+              <IconButton title={t(editing === r.id ? "Close" : "Edit")} onClick={() => setEditing(editing === r.id ? null : r.id)}><EditIcon /></IconButton>
               <Toggle checked={r.active} onChange={(v) => toggle(r, v)} />
             </div>
             {editing === r.id && (
               <div className="px-4 pb-4">
-                <RetailerForm initial={r} onSaved={() => { setEditing(null); load(); toast(`${r.name} saved`); }} />
+                <RetailerForm initial={r} onSaved={() => { setEditing(null); load(); toast(t("{name} saved", { name: r.name })); }} />
               </div>
             )}
           </div>
@@ -68,6 +71,7 @@ export function productPatternFrom(example) {
 }
 
 function RetailerForm({ initial, onSaved }) {
+  const t = useT();
   const toast = useToast();
   const v = (k) => initial[k] ?? "";
   const [f, setF] = useState({ name: v("name"), base_url: v("base_url") || "https://", brand_page_url: v("brand_page_url"),
@@ -94,26 +98,26 @@ function RetailerForm({ initial, onSaved }) {
   return (
     <div className="card p-5 space-y-4 bg-slate-50/60">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Field label="Name" required><input value={f.name} onChange={set("name")} placeholder="e.g. Elektroplus" className={inputCls} /></Field>
+        <Field label="Name" required><input value={f.name} onChange={set("name")} placeholder={t("e.g. Elektroplus")} className={inputCls} /></Field>
         <Field label="Shop website" required><input value={f.base_url} onChange={set("base_url")} placeholder="https://www.shop.de" className={inputCls} /></Field>
-        <Field label="Search results for “Liebherr”" tip="Needed for automatic audits. In the shop, search for Liebherr and paste the address of the results page here; HeLPR uses it to find each model.">
-          <input value={f.search_example} onChange={set("search_example")} placeholder={f.search_url ? "✓ set (paste a new one to change)" : "https://www.shop.de/search?q=Liebherr"} className={inputCls} />
-          {searchBad && <span className="text-[11px] text-red-600">The address must contain the word “Liebherr”.</span>}
+        <Field label="Search results for “Liebherr”" tip={t("Needed for automatic audits. In the shop, search for Liebherr and paste the address of the results page here; HeLPR uses it to find each model.")}>
+          <input value={f.search_example} onChange={set("search_example")} placeholder={f.search_url ? t("✓ set (paste a new one to change)") : "https://www.shop.de/search?q=Liebherr"} className={inputCls} />
+          {searchBad && <span className="text-[11px] text-red-600">{t("The address must contain the word “Liebherr”.")}</span>}
         </Field>
-        <Field label="Any product page" tip="Paste the address of any product page in this shop, so HeLPR recognises product links.">
-          <input value={f.product_example} onChange={set("product_example")} placeholder={f.product_link_pattern ? "✓ set (paste a new one to change)" : "https://www.shop.de/p/123/liebherr-cnc-5203"} className={inputCls} />
+        <Field label="Any product page" tip={t("Paste the address of any product page in this shop, so HeLPR recognises product links.")}>
+          <input value={f.product_example} onChange={set("product_example")} placeholder={f.product_link_pattern ? t("✓ set (paste a new one to change)") : "https://www.shop.de/p/123/liebherr-cnc-5203"} className={inputCls} />
         </Field>
         <Field label="Liebherr brand page"><input value={f.brand_page_url} onChange={set("brand_page_url")} placeholder="https://www.shop.de/liebherr" className={inputCls} /></Field>
-        <Field label="Note"><input value={f.access_note} onChange={set("access_note")} placeholder="e.g. blocks automated checks" className={inputCls} /></Field>
+        <Field label="Note"><input value={f.access_note} onChange={set("access_note")} placeholder={t("e.g. blocks automated checks")} className={inputCls} /></Field>
       </div>
-      <button onClick={() => setAdvanced(!advanced)} className="text-xs text-slate-500 hover:text-slate-800 cursor-pointer">{advanced ? "▾" : "▸"} Advanced</button>
+      <button onClick={() => setAdvanced(!advanced)} className="text-xs text-slate-500 hover:text-slate-800 cursor-pointer">{advanced ? "▾" : "▸"} {t("Advanced")}</button>
       {advanced && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Field label="Search address template"><input value={f.search_url} onChange={set("search_url")} className={`${inputCls} font-mono text-xs`} /></Field>
           <Field label="Product link pattern"><input value={f.product_link_pattern} onChange={set("product_link_pattern")} className={`${inputCls} font-mono text-xs`} /></Field>
         </div>
       )}
-      <div className="flex justify-end"><Button onClick={save} disabled={!f.name.trim() || f.base_url.length < 10 || searchBad}>Save</Button></div>
+      <div className="flex justify-end"><Button onClick={save} disabled={!f.name.trim() || f.base_url.length < 10 || searchBad}>{t("Save")}</Button></div>
     </div>
   );
 }

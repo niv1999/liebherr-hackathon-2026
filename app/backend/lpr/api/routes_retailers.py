@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
@@ -65,8 +67,9 @@ def deactivate_retailer(rid: int, s: Session = Depends(get_session)):
 
 
 @router.get("/{rid}/overview")
-def overview(rid: int, s: Session = Depends(get_session)):
-    return retailer_overview(s, _get(s, rid))
+def overview(rid: int, run_id: Optional[int] = None, s: Session = Depends(get_session)):
+    """Scorecard of the latest audit, or of an older one with ?run_id=."""
+    return retailer_overview(s, _get(s, rid), run_id)
 
 
 @router.get("/{rid}/history")

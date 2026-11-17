@@ -43,7 +43,7 @@ HNU's design-thinking briefing frames it customer-side: help shoppers choose the
 - During the build: get one retailer working end-to-end first, cache audit results, and keep a recorded backup of the demo.
 
 ## Repo layout
-- **HeLPR** (app name). `app/backend/` — FastAPI + SQLite backend (`lpr/` package, `scripts/`, `tests/`). `app/frontend/` — React + Vite + Tailwind UI (based on `docs/design/` mockup). Start: `app/start.cmd` or see `app/README.md`. `app/runtime/` — local DB + screenshots (git-ignored). Decisions: `knowledge/tech_decisions.md`.
+- **HeLPR** (app name; state + decisions: `knowledge/tech_decisions.md` → "Updates 17 Nov"; how to use: `app/README.md`). `app/backend/` — FastAPI + SQLite backend (`lpr/` package, `scripts/`, `tests/`). `app/frontend/` — React + Vite + Tailwind UI (based on `docs/design/` mockup). Start: `app/start.cmd` or see `app/README.md`. `app/runtime/` — local DB + screenshots (git-ignored). Decisions: `knowledge/tech_decisions.md`.
 - `knowledge/` — markdown knowledge base, transcripts, criteria text.
 - `docs/` — original PDFs/Excel from Liebherr and HNU, plus our deliverables.
 - `tools/` — helper scripts (Colab transcription).

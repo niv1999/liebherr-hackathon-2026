@@ -1,5 +1,13 @@
 # Feature plan: LPR audit tool (Phase 4 idea pool, agreed 17 Nov 2026)
 
+## Build status (17 Nov 2026, evening): HeLPR v2
+Built and tested on EP:, MediaMarkt, expert (Euronics/OTTO shown as blocked): everything in A–G below **except**
+EmpCo flag (#21, bonus) and a dedicated SK3 "premium" vision check of lower page parts. Also built beyond the list:
+brand-page checks incl. technology subpage, shop search tests, per-SK scores, escalation to the vision judge,
+AI connections UI, EN/DE, dark mode, Data section (criteria/models/retailers), viewing older audits.
+Open: real AI judge quality (needs a valid Gemini/Claude key), OTTO/Elektroplus URLs, deployment.
+
+
 **Focus: purely the internal tool for Liebherr employees.** No shopper-facing features and no retailer portal (for now).
 Based on the team's idea pool (numbers = original idea numbers) plus additions from Liebherr's answers (`liebherr_answers.md`).
 

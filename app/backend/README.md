@@ -15,7 +15,7 @@ app/.venv/Scripts/python.exe -X utf8 -m uvicorn lpr.api:app --app-dir app/backen
 ```
 API docs (try every endpoint in the browser): http://localhost:8000/docs
 
-Without a Gemini key everything works, but AI-judged criteria come back as "needs human".
+Without an AI connection (Settings → AI judge) everything works, but AI-judged criteria come back as "needs human".
 
 Useful scripts:
 - `scripts/run_audit.py "EP:" [--listing] [--codes PDP-01,PDP-04]`: run one audit synchronously and print the verdicts.
@@ -74,4 +74,10 @@ Testing without an API key: `LPR_LLM_PROVIDER=file` writes each AI request to `a
 | Notifications | `GET /api/notifications`, `POST /api/notifications/{id}/read`, `POST /api/notifications/read-all` |
 | Schedule / audit defaults | `GET/PUT /api/settings/schedule`, `GET/PUT /api/settings/audit-defaults` |
 | AI shopper simulator / AI status | `POST /api/ai/simulate`, `GET /api/ai/status` |
+| AI connections (saved keys; tested before saving) | `GET/POST /api/ai/connections`, `POST /api/ai/connections/test`, `POST /api/ai/connections/{id}/activate`, `DELETE /api/ai/connections/{id}` |
+| Models (reference assortment) CRUD | `GET/POST /api/products`, `PATCH/DELETE /api/products/{id}` |
+| Older audit on the scorecard | `GET /api/retailers/{id}/overview?run_id=` |
+| Mark a to-do item fixed | `POST /api/audits/{run_id}/todo/{criterion_id}/fixed` |
+| Retailer logo | `GET /api/retailers/{id}/logo` |
+| Web app | everything else is served from `app/frontend/dist` (build it first) |
 | Screenshots | `/artifacts/run_<id>/<file>.jpg` (URLs are included in responses) |

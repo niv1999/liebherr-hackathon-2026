@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api.js";
+import { useT } from "../prefs.jsx";
 import { Bar, Button, Delta, Empty, HelpTip, LabelBadge, OverviewSkeleton, RetailerLogo, fmtDate } from "../components/ui.jsx";
 
 const TIPS = {
@@ -12,10 +13,11 @@ const TIPS = {
 };
 
 function Kpi({ label, value, tip }) {
+  const t = useT();
   return (
     <div className="card p-4">
       <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-        {label} <HelpTip text={tip} />
+        {t(label)} <HelpTip text={t(tip)} />
       </p>
       <p className="text-2xl font-bold tracking-tight mt-1 tabular">{value}</p>
     </div>
@@ -23,6 +25,7 @@ function Kpi({ label, value, tip }) {
 }
 
 export default function Overview({ refreshKey, onRunAudit }) {
+  const t = useT();
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const nav = useNavigate();
@@ -36,13 +39,13 @@ export default function Overview({ refreshKey, onRunAudit }) {
     return () => clearInterval(t);
   }, [running]);
 
-  if (error) return <Empty title="Can't reach the HeLPR server">{error}</Empty>;
+  if (error) return <Empty title={t("Can't reach the HeLPR server")}>{error}</Empty>;
   if (!data) return <OverviewSkeleton />;
   const k = data.kpis;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold tracking-tight">Overview</h1>
+      <h1 className="text-2xl font-bold tracking-tight">{t("Overview")}</h1>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <Kpi label="Average LPR score" value={k.average_lpr_score == null ? "–" : `${k.average_lpr_score}%`} tip={TIPS.score} />
@@ -53,11 +56,11 @@ export default function Overview({ refreshKey, onRunAudit }) {
 
       <div className="card overflow-hidden">
         <div className="hidden md:grid grid-cols-12 gap-3 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-200 bg-slate-50/80">
-          <span className="col-span-3">Retailer</span>
-          <span className="col-span-3">LPR score</span>
-          <span className="col-span-2">AI-ready</span>
-          <span className="col-span-2">Return risks</span>
-          <span className="col-span-2 flex justify-end items-center gap-1.5">Status <HelpTip text={TIPS.status} className="normal-case" /></span>
+          <span className="col-span-3">{t("Retailer")}</span>
+          <span className="col-span-3">{t("LPR score")}</span>
+          <span className="col-span-2">{t("AI-ready")}</span>
+          <span className="col-span-2">{t("Return risks")}</span>
+          <span className="col-span-2 flex justify-end items-center gap-1.5">{t("Status")} <HelpTip text={t(TIPS.status)} className="normal-case" /></span>
         </div>
         <div className="divide-y divide-slate-100">
           {data.retailers.map(({ retailer, latest_run: run, running: live }) => (
@@ -67,7 +70,7 @@ export default function Overview({ refreshKey, onRunAudit }) {
                 <RetailerLogo retailer={retailer} />
                 <div className="min-w-0">
                   <p className="font-semibold text-sm truncate">{retailer.name}</p>
-                  <p className="text-[11px] text-slate-400 truncate">{run ? fmtDate(run.finished_at) : "Not audited"}</p>
+                  <p className="text-[11px] text-slate-400 truncate">{run ? fmtDate(run.finished_at) : t("Not audited")}</p>
                 </div>
               </div>
               <div className="md:col-span-3 flex items-center gap-3">
@@ -84,7 +87,7 @@ export default function Overview({ refreshKey, onRunAudit }) {
               <div className="md:col-span-2 flex md:justify-end">
                 {live ? (
                   <span className="inline-flex items-center gap-1.5 text-xs text-sky-700 font-semibold">
-                    <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" /> {live.status === "queued" ? "Queued" : "Auditing…"}
+                    <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" /> {t(live.status === "queued" ? "Queued" : "Auditing…")}
                   </span>
                 ) : (
                   <LabelBadge label={run ? run.status_label : retailer.access_note ? "Blocked · manual assessment" : "Not audited"} />
@@ -96,7 +99,7 @@ export default function Overview({ refreshKey, onRunAudit }) {
       </div>
 
       {data.retailers.every((r) => !r.latest_run) && (
-        <Empty title="No audits yet"><div className="mt-3"><Button onClick={() => onRunAudit()}>Run the first audit</Button></div></Empty>
+        <Empty title={t("No audits yet")}><div className="mt-3"><Button onClick={() => onRunAudit()}>{t("Run the first audit")}</Button></div></Empty>
       )}
     </div>
   );

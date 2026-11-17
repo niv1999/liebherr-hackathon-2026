@@ -1,0 +1,10 @@
+data/
+docs/
+knowledge/
+tools/
+app/.venv/
+app/runtime/
+app/frontend/node_modules/
+app/frontend/dist/
+app/.env
+**/__pycache__/

@@ -1,4 +1,5 @@
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
+import { useT } from "../prefs.jsx";
 import CriteriaData from "./data/CriteriaData.jsx";
 import ModelsData from "./data/ModelsData.jsx";
 import RetailersData from "./data/RetailersData.jsx";
@@ -10,15 +11,16 @@ const TABS = [
 ];
 
 export default function Data() {
+  const t = useT();
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <h1 className="text-2xl font-bold tracking-tight">Data</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t("Data")}</h1>
         <div className="inline-flex p-1 rounded-lg bg-slate-100 border border-slate-200 gap-1">
           {TABS.map(([k, label]) => (
             <NavLink key={k} to={`/data/${k}`}
               className={({ isActive }) => `px-3 py-1.5 rounded-md text-xs font-semibold ${isActive ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-800"}`}>
-              {label}
+              {t(label)}
             </NavLink>
           ))}
         </div>

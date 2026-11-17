@@ -18,11 +18,13 @@ const NAV = [
 ];
 
 export function LogoMark({ className = "w-7 h-7" }) {
+  // Score ring around an "L": the LPR score at a glance.
   return (
     <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
-      <rect width="32" height="32" rx="5" fill="#002F56" />
-      <path fill="#FFFFFF" d="M8 7h4.5v7h7V7H24v18h-4.5v-7h-7v7H8z" />
-      <rect x="19.5" y="21.5" width="4.5" height="3.5" fill="#80B3DF" />
+      <rect width="32" height="32" rx="6" fill="#002F56" />
+      <circle cx="16" cy="16" r="10" fill="none" stroke="rgba(255,255,255,.25)" strokeWidth="2.6" />
+      <path d="M16 6a10 10 0 1 1-9.5 13.1" fill="none" stroke="#80B3DF" strokeWidth="2.6" strokeLinecap="round" />
+      <path d="M12 10.5h2.8v4.1h2.4v-4.1H20v11h-2.8v-4.3h-2.4v4.3H12z" fill="#FFFFFF" />
     </svg>
   );
 }
@@ -51,7 +53,7 @@ function Shell() {
           <div className="flex items-center gap-6 min-w-0">
             <Link to="/" className="flex items-center gap-2.5 shrink-0">
               <LogoMark />
-              <span className="font-head text-xl font-semibold tracking-wide text-white leading-none">HeLPR</span>
+              <span className="font-head text-xl font-semibold tracking-wide text-white leading-none">He<span className="text-[#80B3DF]">LPR</span></span>
             </Link>
             <nav className="hidden md:flex items-center gap-1 h-14">
               {NAV.map((n) => (
@@ -75,7 +77,7 @@ function Shell() {
               {theme === "dark" ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
             </button>
             <Notifications refreshKey={refreshKey} />
-            <Button variant="light" onClick={() => setAuditOpen({})}>{t("Run audit")}</Button>
+            <Button variant="light" className="ml-3" onClick={() => setAuditOpen({})}>{t("Run audit")}</Button>
           </div>
         </div>
         <nav className="flex md:hidden gap-1 px-4 pb-2 overflow-x-auto text-xs">

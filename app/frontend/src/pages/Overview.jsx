@@ -76,7 +76,7 @@ export default function Overview({ refreshKey, onRunAudit }) {
               <div className="md:col-span-3 flex items-center gap-3">
                 <span className="text-sm font-bold w-12 tabular">{run?.lpr_score != null ? `${Math.round(run.lpr_score)}%` : "–"}</span>
                 <Bar value={run?.lpr_score} className="max-w-40" />
-                <Delta value={run?.lpr_score_change} />
+                <Delta value={run?.lpr_score_change} compact />
               </div>
               <div className="md:col-span-2 text-sm tabular">{run?.ai_readiness_score != null ? `${Math.round(run.ai_readiness_score)}%` : "–"}</div>
               <div className="md:col-span-2 text-sm tabular">

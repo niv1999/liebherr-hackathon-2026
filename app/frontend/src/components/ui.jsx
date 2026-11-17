@@ -90,13 +90,13 @@ export function SourceTag({ source }) {
   return <span className="text-[11px] text-slate-500">{t(label)}</span>;
 }
 
-export function Delta({ value }) {
+export function Delta({ value, compact = false }) {
   const t = useT();
   if (value == null) return null;
   const up = value >= 0;
   return (
-    <span className="inline-flex items-center gap-1 text-xs font-medium tabular whitespace-nowrap" style={{ color: up ? "var(--color-ok)" : "var(--color-bad)" }}>
-      {up ? "▲" : "▼"} {Math.abs(value)} <span className="text-slate-500 font-normal">{t("vs last")}</span>
+    <span title={compact ? t("vs last") : undefined} className="inline-flex items-center gap-1 text-xs font-medium tabular whitespace-nowrap" style={{ color: up ? "var(--color-ok)" : "var(--color-bad)" }}>
+      {up ? "▲" : "▼"} {Math.abs(value)}{!compact && <span className="text-slate-500 font-normal">{t("vs last")}</span>}
     </span>
   );
 }

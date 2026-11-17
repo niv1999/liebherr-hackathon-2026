@@ -92,3 +92,12 @@ def test_scoring_excludes_unchecked_and_weights():
     assert r["lpr_score"] == 90.0  # 9 / (9 + 1)
     assert r["checked_count"] == 2 and r["applicable_count"] == 3
     assert r["ai_readiness_score"] == 0.0
+
+
+def test_green_claims_empco():
+    vague = "<html><body><main><p>Dieser Kühlschrank ist besonders umweltfreundlich und klimaneutral.</p></main></body></html>"
+    backed = "<html><body><main><p>Nachhaltig: Energieeffizienzklasse A, nur 109 kWh pro Jahr.</p></main></body></html>"
+    label = "<html><body><main><p>Go Green Vertriebskennzeichen</p></main></body></html>"
+    assert run(vague, "green_claims") == "fail"
+    assert run(backed, "green_claims") == "pass"
+    assert run(label, "green_claims") == "needs_human"

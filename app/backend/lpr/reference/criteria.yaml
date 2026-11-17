@@ -594,3 +594,26 @@
   rule_key: available_per_sk
   priority: high
   fix_hint: Keep at least 10 Liebherr models per SK class in stock and orderable.
+
+# ---------------- EmpCo: generic green claims (bonus) ----------------
+- code: EMP-01
+  block: visibility
+  section: Legal / EmpCo
+  title: No vague environmental claims on the product page (EmpCo)
+  description: Generic green claims like "umweltfreundlich" or "klimaneutral" without proof are banned since 27 Sep 2026.
+  lpr_ref: "EmpCo"
+  method: rule
+  rule_key: green_claims
+  priority: low
+  fix_hint: Remove generic green claims or back them with specific facts (energy class, consumption, certified label).
+- code: EMP-02
+  block: visibility
+  section: Legal / EmpCo
+  title: No vague environmental claims on the brand page (EmpCo)
+  description: Generic green claims like "nachhaltig" or "klimaneutral" without proof are banned since 27 Sep 2026.
+  lpr_ref: "EmpCo"
+  page_type: brand
+  method: rule
+  rule_key: green_claims
+  priority: low
+  fix_hint: Use the EmpCo-compliant texts from Liebherr's 2026_09 asset update instead of generic green claims.

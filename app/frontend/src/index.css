@@ -1,10 +1,9 @@
 @import "tailwindcss";
 
-/* Liebherr appliances CI: black, white and Arctic blue (#002F56). Headings in a condensed grotesque
-   close to "Liebherr Head" (Barlow Semi Condensed), body text in Inter. */
+/* Liebherr appliances CI: black, white and Arctic blue (#002F56). Typeface: Source Sans 3. */
 @theme {
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-head: "Barlow Semi Condensed", "Inter", system-ui, sans-serif;
+  --font-sans: "Source Sans 3", system-ui, -apple-system, sans-serif;
+  --font-head: "Source Sans 3", system-ui, sans-serif;
   --color-ink: #111111;
   --color-brand: #002f56;
   --color-brand-hover: #0a3f6e;

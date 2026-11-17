@@ -531,3 +531,41 @@ def video_advice(ctx: CheckContext) -> CheckResult:
 @register("available_per_sk")
 def available_per_sk(ctx: CheckContext) -> CheckResult:
     return human("Decided by the listing count (run an audit with 'count listed & available models').")
+
+
+# ------------------------------------------------------------ EmpCo (EU green-claims rules, in force since 27 Sep 2026)
+GREEN_CLAIMS = [r"umweltfreundlich\w*", r"klimaneutral\w*", r"klimafreundlich\w*", r"co2-?neutral\w*",
+                r"\bnachhaltig(?:e|er|es|en|em)?\b", r"\bökologisch(?:e|er|es|en|em)?\b", r"\böko-?\w+", r"ressourcenschonend\w*",
+                r"umweltschonend\w*", r"eco-?friendly"]
+# retailer-own sustainability labels: allowed only if based on a certification scheme -> a human should check
+OWN_LABELS = [r"go green", r"betterway", r"green ?choice", r"eco ?label", r"nachhaltigkeitssiegel"]
+EVIDENCE = (r"energieeffizien|stromverbrauch|energieverbrauch|kwh|\d+\s?%|zertifi|siegel|ecolabel|blauer engel|eprel|"
+            r"gemäß|laut |nach (?:norm|din|iso)|studie|ersatzteil|reparatur")
+
+
+def _sentence(text: str, start: int, end: int) -> str:
+    a = max(text.rfind(". ", 0, start), text.rfind("! ", 0, start), start - 140)
+    b = text.find(". ", end)
+    b = b + 1 if 0 <= b < end + 160 else min(len(text), end + 120)
+    return text[a + 2 if a >= 0 else 0: b].strip()
+
+
+@register("green_claims")
+def green_claims(ctx: CheckContext) -> CheckResult:
+    """Vague environmental claims without nearby evidence (EmpCo directive). Liebherr's 2026 asset update is 'EmpCo-Update'."""
+    text = ctx.page.get("content_text") or ctx.page.get("text") or ""
+    low = text.lower()
+    unproven, proven = [], []
+    for rx in GREEN_CLAIMS:
+        for m in re.finditer(rx, low):
+            window = low[max(0, m.start() - 160): m.end() + 160]
+            (proven if re.search(EVIDENCE, window) else unproven).append(_sentence(text, m.start(), m.end()))
+    labels = sorted({m.group(0) for rx in OWN_LABELS for m in re.finditer(rx, low)})
+    if unproven:
+        return fail(f"{len(unproven)} vague environmental claim(s) without evidence, e.g. “{unproven[0]}”. "
+                    "Since 27 Sep 2026 (EmpCo) generic green claims are not allowed.", claims=unproven[:5], labels=labels)
+    if labels:
+        return human(f"The shop uses its own sustainability label ({', '.join(labels)}). Under EmpCo such labels must be "
+                     "based on a certification scheme; please check.", labels=labels, substantiated=proven[:3])
+    return ok("No vague environmental claims without evidence." if not proven else
+              "Environmental claims are backed by specific facts (e.g. energy efficiency, repairability).", substantiated=proven[:3])

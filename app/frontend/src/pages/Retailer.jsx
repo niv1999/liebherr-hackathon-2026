@@ -193,7 +193,7 @@ function Tabs({ tab, setTab, data }) {
 
 function CriteriaTab({ data, onChanged }) {
   const t = useT();
-  const [filter, setFilter] = useState("fail");
+  const [filter, setFilter] = useState("all");
   const [block, setBlock] = useState("all");
   const [open, setOpen] = useState(null);
   const rows = useMemo(() => {
@@ -206,7 +206,7 @@ function CriteriaTab({ data, onChanged }) {
   }, [data, filter, block]);
   const counts = { fail: data.missing.length, needs_human: data.needs_human.length, pass: data.good.length };
   counts.all = counts.fail + counts.needs_human + counts.pass;
-  const filters = [["fail", "Failed"], ["needs_human", "Needs human"], ["pass", "Passed"], ["all", "All"]];
+  const filters = [["all", "All"], ["fail", "Failed"], ["needs_human", "Needs human"], ["pass", "Passed"]];
 
   return (
     <div>

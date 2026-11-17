@@ -96,7 +96,7 @@ function RetailerForm({ initial, onSaved }) {
     }
   };
   return (
-    <div className="card p-5 space-y-4 bg-slate-50/60">
+    <div className="card p-5 space-y-4 bg-slate-50">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Field label="Name" required><input value={f.name} onChange={set("name")} placeholder={t("e.g. Elektroplus")} className={inputCls} /></Field>
         <Field label="Shop website" required><input value={f.base_url} onChange={set("base_url")} placeholder="https://www.shop.de" className={inputCls} /></Field>

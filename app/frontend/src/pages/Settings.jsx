@@ -53,7 +53,7 @@ export default function Settings() {
     <div className="space-y-5 max-w-3xl">
       <h1 className="text-2xl font-bold tracking-tight">{t("Settings")}</h1>
 
-      {!conns && [0, 1, 2].map((i) => <Skeleton key={i} className="h-28 rounded-xl" />)}
+      {!conns && [0, 1, 2].map((i) => <Skeleton key={i} className="h-28 rounded-md" />)}
       {conns && <AiConnections conns={conns} setConns={setConns} />}
 
       {schedule && (
@@ -159,10 +159,10 @@ function AiConnections({ conns, setConns }) {
       </div>
 
       {conns.length > 0 && (
-        <div className="divide-y divide-slate-100 border border-slate-200 rounded-lg">
+        <div className="divide-y divide-slate-100 border border-slate-200 rounded-md">
           {conns.map((c) => (
-            <label key={c.id} className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer ${c.active ? "bg-sky-50" : "hover:bg-slate-50"}`}>
-              <input type="radio" name="ai-conn" checked={c.active} onChange={() => use(c)} className="accent-sky-600" />
+            <label key={c.id} className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer ${c.active ? "bg-brand-tint" : "hover:bg-slate-50"}`}>
+              <input type="radio" name="ai-conn" checked={c.active} onChange={() => use(c)} className="accent-brand" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold truncate">{c.name}</p>
                 <p className="text-[11px] text-slate-500">
@@ -170,7 +170,7 @@ function AiConnections({ conns, setConns }) {
                   {COST_OF[c.model] && <> · {t(COST_OF[c.model])} {t("per audit")}</>}
                 </p>
               </div>
-              {c.active && <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">{t("In use")}</span>}
+              {c.active && <span className="text-[11px] font-semibold" style={{ color: "var(--color-ok)" }}>{t("In use")}</span>}
               <span onClick={(e) => e.preventDefault()}><IconButton title={t("Remove")} danger onClick={() => remove(c)}><TrashIcon /></IconButton></span>
             </label>
           ))}
@@ -178,7 +178,7 @@ function AiConnections({ conns, setConns }) {
       )}
 
       {adding && (
-        <div className="rounded-lg border border-slate-200 p-4 space-y-3 bg-slate-50">
+        <div className="rounded-md border border-slate-200 p-4 space-y-3 bg-slate-50">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <Field label="Provider" required>
               <select value={f.provider} onChange={(e) => { setF({ ...f, provider: e.target.value, model: MODELS[e.target.value][0][0] }); setCheck(null); }} className={fieldCls}>
@@ -198,7 +198,7 @@ function AiConnections({ conns, setConns }) {
             </Field>
           </div>
           {check && check !== "checking" && (
-            <p className={`text-xs font-semibold ${check.valid ? "text-emerald-700" : "text-red-600"}`}>{check.valid ? "✓ " : "⚠ "}{t(check.message)}</p>
+            <p className="text-xs font-semibold" style={{ color: check.valid ? "var(--color-ok)" : "var(--color-bad)" }}>{check.valid ? "✓ " : "⚠ "}{t(check.message)}</p>
           )}
           <div className="flex justify-end gap-2">
             {conns.length > 0 && <Button variant="ghost" onClick={() => { setAdding(false); setCheck(null); }}>{t("Cancel")}</Button>}

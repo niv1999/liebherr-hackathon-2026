@@ -62,8 +62,8 @@ export default function ModelsData() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("Search model")} className="text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 w-48" />
-          <div className="flex gap-1 p-1 rounded-lg bg-slate-100 border border-slate-200">
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("Search model")} className="text-xs border border-slate-300 rounded-md px-2.5 py-1.5 w-48" />
+          <div className="flex gap-1 p-1 rounded-md bg-slate-100 border border-slate-200">
             {["all", "1", "2", "3", "frei"].map((k) => (
               <button key={k} onClick={() => setSk(k)} className={`px-2.5 py-1 rounded-md text-xs font-semibold cursor-pointer ${sk === k ? "bg-white shadow-sm" : "text-slate-500"}`}>
                 {k === "all" ? t("All") : k === "frei" ? t("No SK") : `SK${k}`}
@@ -80,7 +80,7 @@ export default function ModelsData() {
       <div className="card overflow-x-auto">
         <table className="w-full text-xs">
           <thead>
-            <tr className="text-left text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-200 bg-slate-50/80">
+            <tr className="text-left text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-200 bg-slate-50">
               {FIELDS.map(([k, l]) => <th key={k} className="px-2 py-2 font-semibold">{t(l)}</th>)}
               <th className="px-2 py-2 font-semibold">{t("Audited")}</th><th />
             </tr>
@@ -91,7 +91,7 @@ export default function ModelsData() {
                 {FIELDS.map(([k, , w]) => (
                   <td key={k} className="px-1 py-1">
                     <input defaultValue={NUM.has(k) && p[k] != null ? Math.round(p[k]) : p[k] ?? ""} onBlur={(e) => save(p, k, e.target.value)}
-                      className={`${w} px-1.5 py-1 rounded border border-transparent hover:border-slate-200 focus:border-sky-300 focus:outline-none bg-transparent ${k === "model" ? "font-semibold" : ""}`} />
+                      className={`${w} px-1.5 py-1 rounded border border-transparent hover:border-slate-200 focus:border-brand-line focus:outline-none bg-transparent ${k === "model" ? "font-semibold" : ""}`} />
                   </td>
                 ))}
                 <td className="px-2"><Toggle checked={p.active} onChange={(v) => toggle(p, v)} /></td>

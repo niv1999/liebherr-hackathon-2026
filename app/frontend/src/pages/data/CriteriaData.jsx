@@ -6,7 +6,7 @@ import { useT } from "../../prefs.jsx";
 
 const METHOD = {
   rule: ["Rule", "bg-slate-100 text-slate-700"],
-  ai: ["AI judge", "bg-sky-50 text-sky-700"],
+  ai: ["AI judge", "bg-brand-tint text-brand"],
   manual: ["Manual", "bg-amber-50 text-amber-800"],
 };
 const PAGE = { product: "Product page", brand: "Brand page", shop: "Shop-wide" };
@@ -53,7 +53,7 @@ export default function CriteriaData() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-1 p-1 rounded-lg bg-slate-100 border border-slate-200 w-fit">
+        <div className="flex flex-wrap gap-1 p-1 rounded-md bg-slate-100 border border-slate-200 w-fit">
           {[["all", "All"], ...Object.entries(BLOCKS).map(([k, v]) => [k, v.label])].map(([k, label]) => (
             <button key={k} onClick={() => setBlock(k)}
               className={`px-2.5 py-1 rounded-md text-xs font-semibold cursor-pointer ${block === k ? "bg-white shadow-sm" : "text-slate-500"}`}>
@@ -67,7 +67,7 @@ export default function CriteriaData() {
       {adding && <NewCriterion existing={items.map((c) => c.code)} onCreated={() => { setAdding(false); load(); toast(t("Criterion added")); }} />}
 
       <div className="card">
-        <div className="hidden md:grid grid-cols-12 gap-3 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-200 bg-slate-50/80 rounded-t-xl">
+        <div className="hidden md:grid grid-cols-12 gap-3 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-200 bg-slate-50 rounded-t-xl">
           <span className="col-span-6 flex items-center gap-1.5">{t("Criterion")} <HelpTip text={t(METHOD_TIP)} /></span>
           <span className="col-span-2">{t("Block")}</span>
           <span className="col-span-2 flex items-center gap-1.5">{t("Priority")} <HelpTip text={t(WEIGHT_TIP)} /></span>
@@ -75,18 +75,16 @@ export default function CriteriaData() {
         </div>
         <div className="divide-y divide-slate-100">
           {shown.map((c) => {
-            const [mLabel, mCls] = METHOD[c.method] || METHOD.rule;
+            const [mLabel] = METHOD[c.method] || METHOD.rule;
             const isOpen = open === c.id;
             return (
               <div key={c.id} className={c.active ? "" : "opacity-50"}>
                 <div className="px-4 py-3 grid grid-cols-12 gap-3 items-center">
                   <button onClick={() => setOpen(isOpen ? null : c.id)} className="col-span-12 md:col-span-6 min-w-0 text-left cursor-pointer">
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-[10px] font-mono font-semibold text-slate-400">{c.code}</span>
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-semibold ${mCls}`}>{t(mLabel)}</span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-50 text-slate-500 border border-slate-200">{t(PAGE[c.page_type])}</span>
-                      <span className="text-[10px] text-slate-400">SK {c.sk_levels.replaceAll(",", "/")}</span>
-                      {c.return_risk && <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 font-semibold">{t("return risk")}</span>}
+                      <span className="text-[11px] font-mono text-slate-400">{c.code}</span>
+                      <span className="text-[11px] text-slate-500">{t(mLabel)} · {t(PAGE[c.page_type])} · SK {c.sk_levels.replaceAll(",", "/")}</span>
+                      {c.return_risk && <span className="text-[11px] font-medium" style={{ color: "var(--color-bad)" }}>· {t("return risk")}</span>}
                     </div>
                     <p className="text-sm font-semibold mt-0.5">{c.title}</p>
                   </button>
@@ -126,7 +124,7 @@ function EditPanel({ c, onSave, onDelete }) {
   const [sk, setSk] = useState(c.sk_levels);
   const [risk, setRisk] = useState(c.return_risk);
   return (
-    <div className="px-4 pb-4 pt-1 space-y-4 bg-slate-50/60">
+    <div className="px-4 pb-4 pt-1 space-y-4 bg-slate-50">
       {c.description && <p className="text-xs text-slate-600">{c.description}</p>}
       {c.method === "ai" && (
         <Field label="AI instruction" required tip={t(PROMPT_TIP)}>

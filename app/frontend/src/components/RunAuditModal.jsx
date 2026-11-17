@@ -48,10 +48,10 @@ export default function RunAuditModal({ preselected, onClose, onStarted }) {
         <div className="space-y-1.5">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t("Retailers")}</p>
           {retailers.map((r) => (
-            <label key={r.id} className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
-              <input type="checkbox" checked={selected.has(r.id)} onChange={() => toggle(r.id)} className="accent-sky-600" />
+            <label key={r.id} className="flex items-center gap-2.5 px-2.5 py-2 rounded-md border border-slate-200 hover:bg-slate-50 cursor-pointer">
+              <input type="checkbox" checked={selected.has(r.id)} onChange={() => toggle(r.id)} className="accent-brand" />
               <span className="text-sm font-medium">{r.name}</span>
-              {r.access_note && <span className="ml-auto text-[10px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{t("blocks bots")}</span>}
+              {r.access_note && <span className="ml-auto text-[11px] text-slate-500">{t("blocks bots")}</span>}
             </label>
           ))}
         </div>
@@ -65,7 +65,7 @@ export default function RunAuditModal({ preselected, onClose, onStarted }) {
         <label className="block text-sm">
           <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t("Your name")} <span className="normal-case font-normal tracking-normal">({t("optional")})</span></span>
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("e.g. Dominik")}
-            className="mt-1 w-full text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-200" />
+            className="mt-1 w-full text-sm border border-slate-300 rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-line" />
         </label>
         {error && <p className="text-xs text-red-600">{error}</p>}
         <div className="flex justify-end gap-2">

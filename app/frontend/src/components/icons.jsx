@@ -37,7 +37,7 @@ export function MoonIcon({ className = "w-4 h-4" }) {
 export function IconButton({ title, onClick, children, danger = false }) {
   return (
     <button type="button" title={title} aria-label={title} onClick={onClick}
-      className={`p-1.5 rounded-md cursor-pointer transition text-slate-400 ${danger ? "hover:text-red-600 hover:bg-red-50" : "hover:text-brand hover:bg-sky-50"}`}>
+      className={`p-1.5 rounded-md cursor-pointer transition text-slate-400 ${danger ? "hover:text-red-600 hover:bg-red-50" : "hover:text-brand hover:bg-brand-tint"}`}>
       {children}
     </button>
   );

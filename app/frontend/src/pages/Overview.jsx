@@ -55,7 +55,7 @@ export default function Overview({ refreshKey, onRunAudit }) {
       </div>
 
       <div className="card overflow-hidden">
-        <div className="hidden md:grid grid-cols-12 gap-3 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-200 bg-slate-50/80">
+        <div className="hidden md:grid grid-cols-12 gap-3 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-200 bg-slate-50">
           <span className="col-span-3">{t("Retailer")}</span>
           <span className="col-span-3">{t("LPR score")}</span>
           <span className="col-span-2">{t("AI-ready")}</span>
@@ -86,8 +86,8 @@ export default function Overview({ refreshKey, onRunAudit }) {
               </div>
               <div className="md:col-span-2 flex md:justify-end">
                 {live ? (
-                  <span className="inline-flex items-center gap-1.5 text-xs text-sky-700 font-semibold">
-                    <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" /> {t(live.status === "queued" ? "Queued" : "Auditing…")}
+                  <span className="inline-flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+                    <span className="w-2 h-2 rounded-full bg-brand-tint0 animate-pulse" /> {t(live.status === "queued" ? "Queued" : "Auditing…")}
                   </span>
                 ) : (
                   <LabelBadge label={run ? run.status_label : retailer.access_note ? "Blocked · manual assessment" : "Not audited"} />

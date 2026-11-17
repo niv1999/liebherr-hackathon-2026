@@ -17,9 +17,27 @@ from . import routes_audits, routes_criteria, routes_misc, routes_retailers
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
 
+def _load_demo_snapshot() -> None:
+    """Hosted demo: if the runtime folder is empty, start from the bundled snapshot (app/demo)."""
+    import os
+    import shutil
+    from pathlib import Path
+
+    snap = Path(os.getenv("LPR_DEMO_SNAPSHOT", settings.APP_DIR / "demo"))
+    db = settings.RUNTIME_DIR / "lpr.db"
+    if db.exists() or not (snap / "lpr.db").exists():
+        return
+    shutil.copy2(snap / "lpr.db", db)
+    for sub in ("artifacts", "logos"):
+        if (snap / sub).exists():
+            shutil.copytree(snap / sub, settings.RUNTIME_DIR / sub, dirs_exist_ok=True)
+    logging.getLogger("lpr").info("loaded demo snapshot from %s", snap)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     settings.ensure_dirs()
+    _load_demo_snapshot()
     init_db()
     with session_scope() as s:
         logging.getLogger("lpr").info("seed: %s", seed_all(s))

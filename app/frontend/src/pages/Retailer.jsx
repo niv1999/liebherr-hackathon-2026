@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { api, reportUrl, reviewerName } from "../api.js";
 import {
-  BLOCKS, Bar, Button, Delta, Empty, HelpTip, LabelBadge, RetailerLogo, ScoreRing, ScorecardSkeleton, Skeleton,
+  BLOCKS, Bar, Button, Delta, Dot, Empty, ExtLink, HelpTip, LabelBadge, RetailerLogo, ScoreRing, ScorecardSkeleton, Skeleton,
   SourceTag, StatusPill, fmtDate, scoreColor, useToast,
 } from "../components/ui.jsx";
 import { useT } from "../prefs.jsx";
@@ -40,16 +40,16 @@ export default function Retailer({ refreshKey, onRunAudit }) {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-2">
-        {retailers.length === 0 && [0, 1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-8 w-28 rounded-lg" />)}
+        {retailers.length === 0 && [0, 1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-8 w-28 rounded-md" />)}
         {retailers.map((r) => {
           const active = String(r.id) === String(id);
           const s = r.latest_run?.lpr_score;
           return (
             <button key={r.id} onClick={() => nav(`/retailers/${r.id}`)}
-              className={`inline-flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-lg text-xs font-semibold border transition cursor-pointer ${active ? "bg-[#0F172A] text-white border-[#0F172A]" : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"}`}>
+              className={`inline-flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded text-xs font-semibold border transition cursor-pointer ${active ? "bg-ink text-white border-ink" : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"}`}>
               <RetailerLogo retailer={r} className="w-5 h-5" />
               {r.name}
-              <span className="tabular px-1.5 rounded" style={{ background: active ? "rgba(255,255,255,.12)" : "var(--color-slate-100)", color: active ? "#fff" : scoreColor(s) }}>
+              <span className="tabular font-semibold" style={{ color: active ? "#fff" : s != null ? scoreColor(s) : "var(--color-slate-400)" }}>
                 {s != null ? `${Math.round(s)}%` : r.access_note ? t("blocked") : "–"}
               </span>
             </button>
@@ -70,7 +70,7 @@ export default function Retailer({ refreshKey, onRunAudit }) {
       ) : (
         <>
           {!data.is_latest && (
-            <div className="flex items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm text-amber-800">
+            <div className="flex items-center justify-between gap-3 rounded border border-slate-300 bg-white border-l-4 border-l-[var(--color-warn)] px-4 py-2.5 text-sm text-slate-700">
               <span>{t("You are viewing an older audit from {date}.", { date: fmtDate(data.latest_run.finished_at) })}</span>
               <Button variant="ghost" onClick={() => selectRun(null)}>{t("Show latest")}</Button>
             </div>
@@ -109,13 +109,9 @@ function Hero({ data, onRunAudit, onSelectRun }) {
           <RetailerLogo retailer={r} className="w-14 h-14" />
           <div className="space-y-2 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-2xl font-bold tracking-tight">{r.name}</h1>
-              <a href={r.base_url} target="_blank" rel="noreferrer"
-                className="px-2 py-0.5 rounded-md text-xs font-medium bg-sky-50 text-brand border border-sky-200 hover:bg-sky-100">{domain} ↗</a>
-              {run.brand_page_url && (
-                <a href={run.brand_page_url} target="_blank" rel="noreferrer"
-                  className="px-2 py-0.5 rounded-md text-xs font-medium bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100">{t("Brand page")} ↗</a>
-              )}
+              <h1 className="text-3xl font-semibold tracking-tight mr-2">{r.name}</h1>
+              <ExtLink href={r.base_url}>{domain}</ExtLink>
+              {run.brand_page_url && <ExtLink href={run.brand_page_url}>{t("Brand page")}</ExtLink>}
             </div>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 tabular">
               <label className="flex items-center gap-1.5">{t("Audit")}
@@ -126,13 +122,14 @@ function Hero({ data, onRunAudit, onSelectRun }) {
               </label>
               <span>{t("Decided")} <b className="text-slate-800">{run.checked_count} / {run.applicable_count}</b> {t("checks")}</span>
             </div>
-            <div className="flex flex-wrap gap-1.5 pt-1">
+            <div className="flex flex-wrap gap-5 pt-1">
               {["1", "2", "3"].map((sk) => {
                 const v = run.sk_scores?.[sk];
                 return (
-                  <span key={sk} className="px-2 py-0.5 rounded-md text-xs font-semibold border border-slate-200 bg-slate-50 tabular">
-                    SK{sk} <span style={{ color: scoreColor(v?.score) }}>{v?.score != null ? `${Math.round(v.score)}%` : "–"}</span>
-                  </span>
+                  <div key={sk} className="tabular leading-tight">
+                    <div className="text-[11px] text-slate-500">SK{sk}</div>
+                    <div className="text-sm font-semibold" style={{ color: scoreColor(v?.score) }}>{v?.score != null ? `${Math.round(v.score)}%` : "–"}</div>
+                  </div>
                 );
               })}
             </div>
@@ -154,7 +151,7 @@ function Hero({ data, onRunAudit, onSelectRun }) {
           {["visibility", "services", "advice", "ai_readiness"].map((b) => {
             const s = run.block_scores?.[b];
             return (
-              <div key={b} className="rounded-lg border border-slate-200 p-3"
+              <div key={b} className="border border-slate-200 rounded p-3"
                 title={s ? t("{p} passed · {f} failed · {u} need a human", { p: s.passed, f: s.failed, u: s.unchecked }) : ""}>
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-xs font-semibold">{t(BLOCKS[b].label)}</span>
@@ -183,7 +180,7 @@ function Tabs({ tab, setTab, data }) {
     ["todo", `${t("To-do")} (${data.missing.length})`],
   ];
   return (
-    <div className="px-4 pt-3 bg-slate-50/80 border-b border-slate-200 flex flex-wrap gap-1">
+    <div className="px-4 pt-3 bg-slate-50 border-b border-slate-200 flex flex-wrap gap-1">
       {items.map(([k, label]) => (
         <button key={k} onClick={() => setTab(k)}
           className={`px-3.5 py-2.5 text-xs border-b-2 rounded-t-lg cursor-pointer transition ${tab === k ? "border-brand text-brand bg-white font-semibold" : "border-transparent text-slate-600 hover:text-slate-900 font-medium"}`}>
@@ -214,7 +211,7 @@ function CriteriaTab({ data, onChanged }) {
   return (
     <div>
       <div className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100">
-        <div className="inline-flex p-1 rounded-lg bg-slate-100 border border-slate-200/80 gap-1">
+        <div className="inline-flex p-1 rounded-md bg-slate-100 border border-slate-200/80 gap-1">
           {filters.map(([k, label]) => (
             <button key={k} onClick={() => setFilter(k)}
               className={`px-2.5 py-1 rounded-md text-xs font-semibold cursor-pointer ${filter === k ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-800"}`}>
@@ -222,7 +219,7 @@ function CriteriaTab({ data, onChanged }) {
             </button>
           ))}
         </div>
-        <select value={block} onChange={(e) => setBlock(e.target.value)} className="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 cursor-pointer">
+        <select value={block} onChange={(e) => setBlock(e.target.value)} className="text-xs bg-slate-50 border border-slate-300 rounded-md px-2.5 py-1.5 cursor-pointer">
           <option value="all">{t("All blocks")}</option>
           {Object.entries(BLOCKS).map(([k, v]) => <option key={k} value={k}>{t(v.label)}</option>)}
         </select>
@@ -238,9 +235,9 @@ function CriteriaTab({ data, onChanged }) {
               <button onClick={() => setOpen(isOpen ? null : c.id)} className="w-full text-left px-4 py-3 hover:bg-slate-50 cursor-pointer grid grid-cols-12 gap-3 items-center">
                 <div className="col-span-12 sm:col-span-7 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono font-semibold text-slate-400">{c.code}</span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">{t(BLOCKS[c.block]?.label)}</span>
-                    {c.return_risk && <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 font-semibold">{t("return risk")}</span>}
+                    <span className="text-[11px] font-mono text-slate-400">{c.code}</span>
+                    <span className="text-[11px] text-slate-500">{t(BLOCKS[c.block]?.label)}</span>
+                    {c.return_risk && <span className="text-[11px] font-medium" style={{ color: "var(--color-bad)" }}>· {t("return risk")}</span>}
                   </div>
                   <p className="text-sm font-semibold mt-0.5">{c.title}</p>
                 </div>
@@ -253,7 +250,7 @@ function CriteriaTab({ data, onChanged }) {
                 </div>
               </button>
               {isOpen && (
-                <div className="px-4 pb-4 space-y-2 bg-slate-50/60">
+                <div className="px-4 pb-4 space-y-2 bg-slate-50">
                   {row.verdicts.map((v) => <VerdictCard key={v.id} v={v} onChanged={onChanged} />)}
                 </div>
               )}
@@ -305,7 +302,7 @@ function VerdictCard({ v, onChanged }) {
           <StatusPill status={v.status} />
           <SourceTag source={v.source} />
           {v.confidence != null && v.source === "ai" && <span className="text-[10px] text-slate-400 tabular">{t("{n}% sure", { n: Math.round(v.confidence * 100) })}</span>}
-          {v.overridden && <span className="text-[10px] px-1.5 py-0.5 rounded bg-violet-50 text-violet-700 font-semibold">{t("changed by {name}", { name: v.override_by })}</span>}
+          {v.overridden && <span className="text-[11px] text-slate-500 italic">{t("changed by {name}", { name: v.override_by })}</span>}
         </div>
         <p className="text-sm text-slate-700">{v.reasoning}</p>
         {quotes.length > 0 && <ul className="text-xs text-slate-500 list-disc pl-4 space-y-0.5">{quotes.slice(0, 4).map((q, i) => <li key={i}>{q}</li>)}</ul>}
@@ -315,7 +312,7 @@ function VerdictCard({ v, onChanged }) {
             <pre className="mt-1 whitespace-pre-wrap break-all bg-slate-50 rounded p-2">{JSON.stringify(Object.fromEntries(facts), null, 1)}</pre>
           </details>
         )}
-        {v.override_comment && <p className="text-xs text-violet-700">“{v.override_comment}”</p>}
+        {v.override_comment && <p className="text-xs text-slate-600 border-l-2 border-slate-300 pl-2">“{v.override_comment}”</p>}
         <div className="flex flex-wrap gap-1.5 pt-1">
           <Button variant="subtle" onClick={() => setMode(mode === "override" ? null : "override")}>{t("Change result")}</Button>
           {v.source === "ai" && <Button variant="subtle" onClick={() => setMode(mode === "feedback" ? null : "feedback")}>{t("Teach the AI")}</Button>}
@@ -324,7 +321,7 @@ function VerdictCard({ v, onChanged }) {
           <div className="space-y-2 pt-1">
             <textarea value={comment} onChange={(e) => setComment(e.target.value)} rows={2}
               placeholder={t(mode === "feedback" ? "What should the AI do differently?" : "Reason (optional)")}
-              className="w-full text-xs border border-slate-300 rounded-lg p-2 bg-white focus:outline-none focus:ring-2 focus:ring-sky-200" />
+              className="w-full text-xs border border-slate-300 rounded-md p-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-line" />
             <div className="flex gap-1.5">
               {mode === "override" ? (
                 <>
@@ -373,7 +370,7 @@ function AssortmentTab({ data }) {
     <div className="p-4 space-y-4">
       <div className="grid grid-cols-3 gap-3">
         {[["Reference models", l.reference_count], ["Listed", l.listed_count], ["Available", l.available_count]].map(([k, v]) => (
-          <div key={k} className="rounded-lg border border-slate-200 p-3"><p className="text-[11px] text-slate-500">{t(k)}</p><p className="text-xl font-bold tabular">{v ?? "?"}</p></div>
+          <div key={k} className="rounded-md border border-slate-200 p-3"><p className="text-[11px] text-slate-500">{t(k)}</p><p className="text-xl font-bold tabular">{v ?? "?"}</p></div>
         ))}
       </div>
       <p className="text-[11px] text-slate-400">{t("Counted {date}", { date: fmtDate(l.counted_at) })}</p>
@@ -411,17 +408,17 @@ function TodoTab({ run, onChanged }) {
     }
   };
 
-  if (!items) return <div className="p-4 space-y-3">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-20 rounded-lg" />)}</div>;
+  if (!items) return <div className="p-4 space-y-3">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-20 rounded-md" />)}</div>;
   if (!items.length) return <p className="p-6 text-sm text-slate-500 text-center">{t("Nothing to fix.")}</p>;
   return (
-    <div className="p-4 space-y-3">
+    <div className="px-4 pb-2 pt-4">
       <div className="flex justify-end"><a href={reportUrl(run.id, "pdf")}><Button>{t("Download PDF")}</Button></a></div>
       {items.map((item, i) => (
-        <div key={item.criterion.id} className="rounded-lg border border-slate-200 p-3 flex gap-3 items-start">
+        <div key={item.criterion.id} className="border-b border-slate-100 last:border-0 py-3 flex gap-3 items-start">
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-semibold">{i + 1}. {item.criterion.title}</span>
-              <span className={`text-[10px] px-1.5 py-0.5 rounded font-semibold ${item.criterion.priority === "high" ? "bg-red-50 text-red-700" : item.criterion.priority === "medium" ? "bg-amber-50 text-amber-800" : "bg-slate-100 text-slate-600"}`}>{t(item.criterion.priority)}</span>
+              <span className="inline-flex items-center gap-1.5 text-[11px] text-slate-600"><Dot color={item.criterion.priority === "high" ? "var(--color-bad)" : item.criterion.priority === "medium" ? "var(--color-warn)" : "var(--color-slate-400)"} />{t(`${item.criterion.priority} priority`)}</span>
               {item.due_date && <span className="text-[11px] text-slate-500 tabular">{t("due {date}", { date: item.due_date })}</span>}
             </div>
             <p className="text-xs text-slate-500 mt-1">{item.products.filter(Boolean).join(", ") || t("Shop-wide")}</p>
@@ -456,14 +453,14 @@ function TrendCard({ history, currentRun, onSelect }) {
               <text x={W - padX + 2} y={y(g) + 3} fontSize="8" fill="var(--color-slate-400)">{g}</text>
             </g>
           ))}
-          <polyline fill="none" stroke="#0284C7" strokeWidth="2" points={pts.map((p, i) => `${x(i)},${y(p.lpr_score)}`).join(" ")} />
+          <polyline fill="none" stroke="var(--color-brand)" strokeWidth="2" points={pts.map((p, i) => `${x(i)},${y(p.lpr_score)}`).join(" ")} />
           {pts.map((p, i) => {
             const cur = p.run_id === currentRun;
             return (
               <g key={p.run_id} onClick={() => onSelect(p.run_id)} style={{ cursor: "pointer" }}>
                 <title>{`${label(p.date)} ${time(p.date)} · ${Math.round(p.lpr_score)}%`}</title>
                 <circle cx={x(i)} cy={y(p.lpr_score)} r="10" fill="transparent" />
-                <circle cx={x(i)} cy={y(p.lpr_score)} r={cur ? 5 : 3.5} fill={cur ? "#0284C7" : "var(--color-slate-50)"} stroke="#0284C7" strokeWidth="2" />
+                <circle cx={x(i)} cy={y(p.lpr_score)} r={cur ? 5 : 3.5} fill={cur ? "var(--color-brand)" : "var(--color-slate-50)"} stroke="var(--color-brand)" strokeWidth="2" />
                 <text x={x(i)} y={y(p.lpr_score) - 9} textAnchor="middle" fontSize="9" fontWeight={cur ? 700 : 400} fill="var(--color-slate-600)">{Math.round(p.lpr_score)}%</text>
                 {(i % step === 0 || i === pts.length - 1) && (
                   <>
@@ -502,9 +499,9 @@ function SimulatorCard({ retailer }) {
         <HelpTip text={t("Ask like a shopper. The AI answers using only {name}'s audited pages, showing whether AI assistants can recommend Liebherr products from this shop.", { name: retailer.name })} />
       </h2>
       <textarea value={q} onChange={(e) => setQ(e.target.value)} rows={3}
-        className="w-full text-xs border border-slate-300 rounded-lg p-2 bg-white focus:outline-none focus:ring-2 focus:ring-sky-200" />
+        className="w-full text-xs border border-slate-300 rounded-md p-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-line" />
       <Button onClick={ask} disabled={busy || !q}>{busy ? t("Asking…") : t("Ask")}</Button>
-      {answer && <div className="text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 whitespace-pre-wrap">{answer}</div>}
+      {answer && <div className="text-xs bg-slate-50 border border-slate-200 rounded-md p-2.5 whitespace-pre-wrap">{answer}</div>}
     </div>
   );
 }

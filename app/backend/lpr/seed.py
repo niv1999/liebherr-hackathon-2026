@@ -83,6 +83,10 @@ def migrate_env_ai_keys(s: Session) -> None:
 
     from .models import AIConnection
 
+    if s.get(AppSetting, "ai_env_migrated"):
+        return  # only ever once, so a removed connection doesn't come back
+    s.add(AppSetting(key="ai_env_migrated", value={"done": True}))
+    s.commit()
     if s.exec(select(AIConnection)).first():
         return
     names = {"gemini-2.5-flash": "Gemini 2.5 Flash", "claude-opus-5-5": "Claude Opus 5.5",

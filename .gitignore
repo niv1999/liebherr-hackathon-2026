@@ -13,3 +13,6 @@ __pycache__/
 *.pyc
 app/runs/
 app/cache/
+
+# demo snapshot for hosting (built by scripts/export_demo.py; too big for GitHub)
+app/demo/

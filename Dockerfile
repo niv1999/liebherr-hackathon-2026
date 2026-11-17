@@ -13,7 +13,8 @@ COPY app/backend/requirements.txt app/backend/requirements.txt
 RUN pip install --no-cache-dir -r app/backend/requirements.txt
 COPY app/backend app/backend
 COPY --from=web /web/dist app/frontend/dist
-ENV LPR_RUNTIME_DIR=/data PYTHONUNBUFFERED=1
+COPY app/demo app/demo
+ENV LPR_RUNTIME_DIR=/data LPR_DEMO_SNAPSHOT=/srv/app/demo PYTHONUNBUFFERED=1
 RUN mkdir -p /data && chmod 777 /data
 EXPOSE 7860
 CMD ["python", "-m", "uvicorn", "lpr.api:app", "--app-dir", "app/backend", "--host", "0.0.0.0", "--port", "7860"]

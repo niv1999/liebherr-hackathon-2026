@@ -20,6 +20,8 @@ New machine: `uv venv app/.venv --python 3.11`, `uv pip install --python app/.ve
 
 **Docker (one container, API + web app):** `docker build -t helpr .` then `docker run -p 7860:7860 helpr` → http://localhost:7860
 
+**Share with a public link (free, for demos):** double-click `app/share.cmd`. It builds the web app, starts the server and opens a Cloudflare quick tunnel; the link (`https://….trycloudflare.com`) appears in that window. It works only while this computer runs both windows and changes on every start. Anyone with the link has full access (incl. Settings and the active AI key), so share it only with the audience. (Hugging Face Docker Spaces are paid since Nov 2026; `tools/deploy_hf.py` is kept for a paid Space.)
+
 ## Using HeLPR
 | Where | What |
 |---|---|

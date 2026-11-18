@@ -16,3 +16,6 @@ app/cache/
 
 # demo snapshot for hosting (built by scripts/export_demo.py; too big for GitHub)
 app/demo/
+
+# local tools (e.g. cloudflared.exe for sharing the app)
+/tools/bin/

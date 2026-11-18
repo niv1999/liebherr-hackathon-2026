@@ -19,6 +19,7 @@ export const api = {
   overview: () => request("GET", "/api/dashboard/overview"),
   retailers: () => request("GET", "/api/retailers"),
   retailerOverview: (id, runId) => request("GET", `/api/retailers/${id}/overview${runId ? `?run_id=${runId}` : ""}`),
+  stopAudit: (id) => request("POST", `/api/audits/${id}/stop`),
   audits: (retailerId) => request("GET", `/api/audits${retailerId ? `?retailer_id=${retailerId}` : ""}`),
   todo: (runId) => request("GET", `/api/audits/${runId}/todo`),
   startAudit: (body) => request("POST", "/api/audits", body),

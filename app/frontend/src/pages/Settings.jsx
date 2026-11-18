@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, reviewerName, setReviewerName } from "../api.js";
-import { EditIcon, IconButton, TrashIcon } from "../components/icons.jsx";
+import { EditIcon, IconButton, StopIcon, TrashIcon } from "../components/icons.jsx";
 import { Button, Field, HelpTip, Skeleton, Switch, fmtDate, inputCls as fieldCls, useToast } from "../components/ui.jsx";
 import { useT } from "../prefs.jsx";
 
@@ -38,6 +38,31 @@ export default function Settings() {
     api.audits().then(setAudits);
     api.aiConnections().then(setConns);
   }, []);
+
+  // refresh the audit log while audits are queued or running
+  const busy = audits.some((a) => a.status === "queued" || a.status === "running");
+  useEffect(() => {
+    if (!busy) return;
+    const id = setInterval(() => api.audits().then(setAudits), 4000);
+    return () => clearInterval(id);
+  }, [busy]);
+
+  const stopAll = async () => {
+    const live = audits.filter((a) => a.status === "queued" || a.status === "running");
+    await Promise.allSettled(live.map((a) => api.stopAudit(a.id)));
+    toast(t("Stopping all audits…"));
+    api.audits().then(setAudits);
+  };
+
+  const stop = async (a) => {
+    try {
+      await api.stopAudit(a.id);
+      toast(t(a.status === "queued" ? "Audit cancelled" : "Stopping the audit…"));
+      api.audits().then(setAudits);
+    } catch (e) {
+      toast(e.message, "error");
+    }
+  };
 
   const run = async (fn, msg) => {
     try {
@@ -101,7 +126,12 @@ export default function Settings() {
       </section>
 
       <section className="card overflow-hidden">
-        <div className="px-5 py-3 border-b border-slate-200"><h2 className="text-sm font-bold">{t("Audit history")}</h2></div>
+        <div className="px-5 py-3 border-b border-slate-200 flex items-center justify-between">
+          <h2 className="text-sm font-bold">{t("Audit history")}</h2>
+          {audits.filter((a) => a.status === "queued" || a.status === "running").length > 1 && (
+            <Button variant="ghost" onClick={stopAll}>{t("Stop all")}</Button>
+          )}
+        </div>
         <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto">
           {audits.map((a) => (
             <a key={a.id} href={`/retailers/${a.retailer_id}?run=${a.id}`} className="px-5 py-2.5 grid grid-cols-12 gap-2 text-xs items-center hover:bg-slate-50">
@@ -109,7 +139,18 @@ export default function Settings() {
               <span className="col-span-3 font-semibold">{a.retailer}</span>
               <span className="col-span-4 text-slate-500">{fmtDate(a.created_at)} · {t(a.trigger)}{a.started_by ? ` · ${a.started_by}` : ""}</span>
               <span className="col-span-1 tabular">{a.lpr_score != null ? `${Math.round(a.lpr_score)}%` : "–"}</span>
-              <span className="col-span-3 text-slate-500 truncate text-right">{a.status === "done" ? t(a.status_label) : t(a.status)}</span>
+              <span className="col-span-3 flex items-center justify-end gap-1 min-w-0">
+                {a.status === "running" || a.status === "queued" ? (
+                  <>
+                    <span className="truncate font-medium" style={{ color: "var(--color-brand)" }} title={a.progress || ""}>
+                      {a.status === "queued" ? t("queued") : a.progress ? t(a.progress) : t("running")}
+                    </span>
+                    <span onClick={(e) => e.preventDefault()}><IconButton title={t("Stop audit")} danger onClick={() => stop(a)}><StopIcon /></IconButton></span>
+                  </>
+                ) : (
+                  <span className="truncate text-slate-500">{t(a.status_label)}</span>
+                )}
+              </span>
             </a>
           ))}
         </div>

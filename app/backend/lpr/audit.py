@@ -20,8 +20,23 @@ from .scoring import score
 log = logging.getLogger("lpr.audit")
 
 
+# ------------------------------------------------------------------ stopping
+_stop_requested: set[int] = set()
+
+
+class AuditStopped(Exception):
+    pass
+
+
+def request_stop(run_id: int) -> None:
+    """Ask a running audit to stop; it stops at its next step (one page at most)."""
+    _stop_requested.add(run_id)
+
+
 # ------------------------------------------------------------------ helpers
 def _progress(s: Session, run: AuditRun, msg: str) -> None:
+    if run.id in _stop_requested:
+        raise AuditStopped()
     run.progress = msg
     s.add(run)
     s.commit()
@@ -69,14 +84,22 @@ def _availability(page: dict) -> bool | None:
 def run_audit(run_id: int) -> None:
     with session_scope() as s:
         run = s.get(AuditRun, run_id)
-        if not run:
-            return
+        if not run or run.status == "cancelled" or run_id in _stop_requested:
+            _stop_requested.discard(run_id)
+            return  # stopped while still queued
         run.status, run.started_at = "running", now()
         s.add(run)
         s.commit()
         try:
             _execute(s, run)
             run.status, run.error = "done", None
+        except AuditStopped:
+            log.info("run %s stopped by user", run_id)
+            _stop_requested.discard(run_id)
+            run.status, run.error, run.progress, run.finished_at = "cancelled", None, "Stopped", now()
+            s.add(run)
+            s.commit()
+            return  # no score, no notification
         except Exception as e:  # keep the error visible in the UI
             log.exception("run %s failed", run_id)
             run.status = "failed"

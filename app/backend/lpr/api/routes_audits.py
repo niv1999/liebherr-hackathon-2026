@@ -34,6 +34,22 @@ def start_audit(body: AuditIn):
     return {"run_ids": ids}
 
 
+@router.post("/api/audits/{run_id}/stop")
+def stop_audit(run_id: int, s: Session = Depends(get_session)):
+    """Stop a queued audit at once, or a running one at its next step."""
+    from ..audit import request_stop
+    from ..models import now
+    run = _run(s, run_id)
+    if run.status not in ("queued", "running"):
+        raise HTTPException(400, "This audit is not running.")
+    request_stop(run_id)
+    if run.status == "queued":
+        run.status, run.progress, run.finished_at = "cancelled", "Stopped", now()
+        s.add(run)
+        s.commit()
+    return run_summary(run)
+
+
 @router.get("/api/audits")
 def list_audits(retailer_id: Optional[int] = None, limit: int = 50, s: Session = Depends(get_session)):
     q = select(AuditRun).order_by(AuditRun.id.desc()).limit(limit)

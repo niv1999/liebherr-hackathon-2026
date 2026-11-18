@@ -28,6 +28,8 @@ def status_label(run: AuditRun | None) -> str:
         return "Audit running"
     if run.status == "failed":
         return "Audit failed"
+    if run.status == "cancelled":
+        return "Stopped"
     if run.blocked:
         return "Blocked · manual assessment"
     if run.lpr_score is None:

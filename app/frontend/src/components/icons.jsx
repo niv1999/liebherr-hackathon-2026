@@ -17,6 +17,14 @@ export function EditIcon({ className = "w-4 h-4" }) {
   );
 }
 
+export function StopIcon({ className = "w-4 h-4" }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <circle cx="12" cy="12" r="9" /><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function SunIcon({ className = "w-4 h-4" }) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
